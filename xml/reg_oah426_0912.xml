@@ -1,0 +1,4029 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RegisterDescription xmlns="http://www.genicam.org/GenApi/Version_1_1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.genicam.org/GenApi/Version_1_1 http://www.genicam.org/GenApi/GenApiSchema_Version_1_1.xsd" ModelName="Ez" VendorName="Ez" ToolTip="Ez" StandardNameSpace="None" SchemaMajorVersion="1" SchemaMinorVersion="1" SchemaSubMinorVersion="0" MajorVersion="1" MinorVersion="0" SubMinorVersion="0" ProductGuid="11111111-2222-3333-4444-555555555555" VersionGuid="AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE">
+    <Category Name="Root" NameSpace="Standard">
+        <pFeature>ImageFormatControl</pFeature>
+        <pFeature>AcquisitionControl</pFeature>
+        <pFeature>TransportLayerControl</pFeature>
+        <pFeature>FileAccessControl</pFeature>
+        <pFeature>SystemControl</pFeature>
+        <pFeature>SCCBControl</pFeature>
+        <pFeature>SPIControl</pFeature>
+        <pFeature>ADCsync</pFeature>
+        <pFeature>BLC</pFeature>
+        <pFeature>FrameControl</pFeature>
+        <pFeature>DVPControl</pFeature>
+        <pFeature>ISPTop</pFeature>
+        <pFeature>WhiteBalance</pFeature>
+        <pFeature>AverageControl</pFeature>
+        <pFeature>WindowControl</pFeature>
+        <pFeature>AECAGC</pFeature>
+    </Category>
+    <Category Name="ImageFormatControl" NameSpace="Standard">
+        <ToolTip>Image format control.</ToolTip>
+        <Description>Image format control.</Description>
+        <DisplayName>ImageFormatControl</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pFeature>Edition</pFeature>
+        <pFeature>Width</pFeature>
+        <pFeature>Height</pFeature>
+        <pFeature>PixelFormat</pFeature>
+    </Category>
+    <Category Name="AcquisitionControl" NameSpace="Standard">
+        <ToolTip>Acquisition control.</ToolTip>
+        <Description>Acquisition control.</Description>
+        <DisplayName>AcquisitionControl</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pFeature>TriggerMode</pFeature>
+        <pFeature>AcquisitionMode</pFeature>
+        <pFeature>AcquisitionFrameCount</pFeature>
+        <pFeature>AcquisitionFlag</pFeature>
+        <pFeature>AcquisitionStart</pFeature>
+        <pFeature>AcquisitionStop</pFeature>
+    </Category>
+    <Category Name="TransportLayerControl" NameSpace="Standard">
+        <ToolTip>Category that contains the transport Layer control features.</ToolTip>
+        <Description>Category that contains the transport Layer control features.</Description>
+        <DisplayName>TransportLayerControl</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pFeature>PayloadSize</pFeature>
+        <pFeature>TLParamsLocked</pFeature>
+    </Category>
+    <Category Name="FileAccessControl">
+        <ToolTip>Category that contains the File Access control features.</ToolTip>
+        <Description>Category that contains the File Access control features.</Description>
+        <DisplayName>File Access Control</DisplayName>
+        <Visibility>Expert</Visibility>
+        <ImposedAccessMode>RO</ImposedAccessMode>
+        <pFeature>FileSelector</pFeature>
+        <pFeature>FileOperationSelector</pFeature>
+        <pFeature>FileOpenMode</pFeature>
+        <pFeature>FileOperationExecute</pFeature>
+        <pFeature>FileAccessBuffer</pFeature>
+        <pFeature>FileAccessOffset</pFeature>
+        <pFeature>FileAccessLength</pFeature>
+        <pFeature>FileOperationStatus</pFeature>
+        <pFeature>FileOperationResult</pFeature>
+        <pFeature>FileSize</pFeature>
+        <pFeature>DeviceModelName</pFeature>
+    </Category>
+    <Category Name="SystemControl" NameSpace="Custom">
+        <DisplayName>SystemControl</DisplayName>
+        <pFeature>StreamingCtrl</pFeature>
+        <pFeature>SoftwareReset</pFeature>
+        <pFeature>ScCmmnPadOen1</pFeature>
+        <pFeature>ScCmmnPadOen2</pFeature>
+        <pFeature>ScCmmn3</pFeature>
+        <pFeature>ScCmmn4</pFeature>
+        <pFeature>ScCmmnPadOut1</pFeature>
+        <pFeature>ScCmmnChipIdA</pFeature>
+        <pFeature>ScCmmnChipIdB</pFeature>
+        <pFeature>ScCmmnChipSplitId</pFeature>
+        <pFeature>ScCmmnPadOut2</pFeature>
+        <pFeature>ScCmmnPadSel1</pFeature>
+        <pFeature>ScCmmnPadSel2</pFeature>
+        <pFeature>ScCmmnAPadPkO</pFeature>
+        <pFeature>ScCmmnAdcReg1</pFeature>
+        <pFeature>ScCmmnAdcReg2</pFeature>
+        <pFeature>ScCmmnAdcReg3</pFeature>
+        <pFeature>ScCmmnAdcReg4</pFeature>
+        <pFeature>ScCmmnAdcReg5</pFeature>
+        <pFeature>ScCmmnPllsCtrl1</pFeature>
+        <pFeature>ScCmmnPllsCtrl2</pFeature>
+        <pFeature>ScCmmnPwcReg1</pFeature>
+        <pFeature>ScCmmnPwcReg2</pFeature>
+        <pFeature>ScCmmnAnaReg3</pFeature>
+        <pFeature>ScCmmnAnaReg4</pFeature>
+    </Category>
+    <Category Name="SCCBControl" NameSpace="Custom">
+        <DisplayName>SCCBControl</DisplayName>
+        <pFeature>SccbCtrl</pFeature>
+        <pFeature>SccbOpt</pFeature>
+        <pFeature>SccbFilter</pFeature>
+        <pFeature>SccbSysreg</pFeature>
+    </Category>
+    <Category Name="SPIControl" NameSpace="Custom">
+        <DisplayName>SPIControl</DisplayName>
+        <pFeature>SpiReg0</pFeature>
+        <pFeature>SpiReg1</pFeature>
+        <pFeature>SpiReg2</pFeature>
+        <pFeature>SpiReg3</pFeature>
+        <pFeature>SpiReg4</pFeature>
+        <pFeature>SpiReg5</pFeature>
+        <pFeature>SpiReg6</pFeature>
+        <pFeature>SpiReg7</pFeature>
+        <pFeature>SpiReg8</pFeature>
+        <pFeature>SpiReg9</pFeature>
+    </Category>
+    <Category Name="ADCsync" NameSpace="Custom">
+        <DisplayName>ADCsync</DisplayName>
+        <pFeature>Async0</pFeature>
+        <pFeature>Async1</pFeature>
+        <pFeature>Async2</pFeature>
+        <pFeature>Async3</pFeature>
+        <pFeature>Async4</pFeature>
+        <pFeature>Async5</pFeature>
+        <pFeature>Async6</pFeature>
+        <pFeature>Async7</pFeature>
+        <pFeature>Async8</pFeature>
+        <pFeature>Async9</pFeature>
+        <pFeature>AsyncA</pFeature>
+        <pFeature>AsyncB</pFeature>
+        <pFeature>AsyncC</pFeature>
+        <pFeature>AsyncD</pFeature>
+        <pFeature>Async10</pFeature>
+        <pFeature>Async11</pFeature>
+        <pFeature>Async12</pFeature>
+        <pFeature>Async13</pFeature>
+        <pFeature>Async14</pFeature>
+        <pFeature>Async15</pFeature>
+        <pFeature>Async16</pFeature>
+    </Category>
+    <Category Name="BLC" NameSpace="Custom">
+        <DisplayName>BLC</DisplayName>
+        <pFeature>BlcCtrl00</pFeature>
+        <pFeature>BlcCtrl01</pFeature>
+        <pFeature>BlcCtrl02</pFeature>
+        <pFeature>BlcCtrl03</pFeature>
+        <pFeature>BlcCtrl04</pFeature>
+        <pFeature>BlcCtrl05</pFeature>
+        <pFeature>BlcCtrl06</pFeature>
+        <pFeature>BlcCtrl07</pFeature>
+        <pFeature>BlcCtrl08</pFeature>
+        <pFeature>BlackLevel</pFeature>
+        <pFeature>BlcMan0B</pFeature>
+        <pFeature>BlcMan0A</pFeature>
+        <pFeature>BlcMan1B</pFeature>
+        <pFeature>BlcMan1A</pFeature>
+        <pFeature>BlcMan2B</pFeature>
+        <pFeature>BlcMan2A</pFeature>
+        <pFeature>BlcMan3B</pFeature>
+        <pFeature>BlcMan3A</pFeature>
+        <pFeature>BlackLevel00B</pFeature>
+        <pFeature>BlackLevel00A</pFeature>
+        <pFeature>BlackLevel01B</pFeature>
+        <pFeature>BlackLevel01A</pFeature>
+        <pFeature>BlackLevel10B</pFeature>
+        <pFeature>BlackLevel10A</pFeature>
+        <pFeature>BlackLevel11B</pFeature>
+        <pFeature>BlackLevel11A</pFeature>
+        <pFeature>BlcMax</pFeature>
+        <pFeature>StableRange</pFeature>
+        <pFeature>OneChannel</pFeature>
+        <pFeature>BlcBrThre0</pFeature>
+        <pFeature>BlcBrThre1</pFeature>
+        <pFeature>BlcBrThre2</pFeature>
+        <pFeature>BlcBrThre3</pFeature>
+        <pFeature>BlcBrThre4</pFeature>
+        <pFeature>BlcBrThre5</pFeature>
+        <pFeature>BlcGThre0</pFeature>
+        <pFeature>BlcGThre1</pFeature>
+        <pFeature>BlcGThre2</pFeature>
+        <pFeature>BlcGThre3</pFeature>
+        <pFeature>BlcGThre4</pFeature>
+        <pFeature>BlcGThre5</pFeature>
+        <pFeature>BlcBrgCompEn</pFeature>
+    </Category>
+    <Category Name="FrameControl" NameSpace="Custom">
+        <DisplayName>FrameControl</DisplayName>
+        <pFeature>FrameCtrl0</pFeature>
+        <pFeature>FrameOnNumber1</pFeature>
+        <pFeature>FrameOffNumber2</pFeature>
+        <pFeature>FrameCtrl1</pFeature>
+    </Category>
+    <Category Name="DVPControl" NameSpace="Custom">
+        <DisplayName>DVPControl</DisplayName>
+        <pFeature>ModeSelect</pFeature>
+        <pFeature>VsyncWidth</pFeature>
+        <pFeature>VsyncNegWidthH</pFeature>
+        <pFeature>VsyncNegWidthL</pFeature>
+        <pFeature>VsyncMode</pFeature>
+        <pFeature>EofVsyncDelay2</pFeature>
+        <pFeature>EofVsyncDelay1</pFeature>
+        <pFeature>EofVsyncDelay0</pFeature>
+        <pFeature>PolarityCtrl</pFeature>
+        <pFeature>BitTestOrder</pFeature>
+        <pFeature>BypCtrl1</pFeature>
+        <pFeature>BypCtrl0</pFeature>
+        <pFeature>BypSel</pFeature>
+    </Category>
+    <Category Name="ISPTop" NameSpace="Custom">
+        <DisplayName>ISPTop</DisplayName>
+        <pFeature>IspCtrl01</pFeature>
+        <pFeature>IspCtrl03</pFeature>
+        <pFeature>IspCtrl04</pFeature>
+        <pFeature>IspCtrl05</pFeature>
+        <pFeature>IspCtrl06</pFeature>
+        <pFeature>IspCtrl07</pFeature>
+        <pFeature>IspCtrl08</pFeature>
+        <pFeature>IspCtrl09</pFeature>
+        <pFeature>IspCtrl0A</pFeature>
+    </Category>
+    <Category Name="WhiteBalance" NameSpace="Custom">
+        <DisplayName>WhiteBalance</DisplayName>
+        <pFeature>ManualRedGainMsb</pFeature>
+        <pFeature>ManualRedGainLsb</pFeature>
+        <pFeature>ManualGreenGainMsb</pFeature>
+        <pFeature>ManualGreenGainLsb</pFeature>
+        <pFeature>ManualBlueGainMsb</pFeature>
+        <pFeature>ManualBlueGainLsb</pFeature>
+    </Category>
+    <Category Name="AverageControl" NameSpace="Custom">
+        <DisplayName>AverageControl</DisplayName>
+        <pFeature>XStart1</pFeature>
+        <pFeature>XStart0</pFeature>
+        <pFeature>YStart1</pFeature>
+        <pFeature>YStart0</pFeature>
+        <pFeature>XWindow1</pFeature>
+        <pFeature>Xwindow0</pFeature>
+        <pFeature>YWindow1</pFeature>
+        <pFeature>YWindow0</pFeature>
+        <pFeature>Weight00</pFeature>
+        <pFeature>Weight01</pFeature>
+        <pFeature>Weight02</pFeature>
+        <pFeature>Weight03</pFeature>
+        <pFeature>Weight04</pFeature>
+        <pFeature>Weight05</pFeature>
+        <pFeature>Weight06</pFeature>
+        <pFeature>Weight07</pFeature>
+        <pFeature>AvgCtrl10</pFeature>
+        <pFeature>AvgWeightSum</pFeature>
+        <pFeature>AvgReadout</pFeature>
+    </Category>
+    <Category Name="WindowControl" NameSpace="Custom">
+        <DisplayName>WindowControl</DisplayName>
+        <pFeature>WindowXstart1</pFeature>
+        <pFeature>WindowXstart0</pFeature>
+        <pFeature>WindowYstart1</pFeature>
+        <pFeature>WindowYstart0</pFeature>
+        <pFeature>WinXWin1</pFeature>
+        <pFeature>WinXWin0</pFeature>
+        <pFeature>WinYWin1</pFeature>
+        <pFeature>WinYWin0</pFeature>
+        <pFeature>WinMan</pFeature>
+    </Category>
+    <Category Name="AECAGC" NameSpace="Custom">
+        <DisplayName>AECAGC</DisplayName>
+        <pFeature>AecPkExpo2</pFeature>
+        <pFeature>AecPkExpo1</pFeature>
+        <pFeature>AecPkExpo0</pFeature>
+        <pFeature>AecPkCtrl0</pFeature>
+        <pFeature>AecPkGain1</pFeature>
+        <pFeature>AecPkGain2</pFeature>
+        <pFeature>AecPkVts1</pFeature>
+        <pFeature>AecPkVts0</pFeature>
+        <pFeature>AecCtrl00</pFeature>
+        <pFeature>AecCtrl01</pFeature>
+        <pFeature>AecCtrl05</pFeature>
+        <pFeature>Wpt</pFeature>
+        <pFeature>Bpt</pFeature>
+        <pFeature>HighVpt</pFeature>
+        <pFeature>ManualAvg</pFeature>
+        <pFeature>AecGainCeiling1</pFeature>
+        <pFeature>AecGainCeiling2</pFeature>
+        <pFeature>DiffMax</pFeature>
+        <pFeature>Wpt2</pFeature>
+        <pFeature>Bpt2</pFeature>
+        <pFeature>LowVpt</pFeature>
+        <pFeature>AecCtrl20</pFeature>
+        <pFeature>AecCtrl21</pFeature>
+        <pFeature>DigcCtrl0</pFeature>
+        <pFeature>DigCompMan1</pFeature>
+        <pFeature>DigCompMan2</pFeature>
+        <pFeature>SnrGainMan1</pFeature>
+        <pFeature>SnrGainMan2</pFeature>
+        <pFeature>DigGainMan1</pFeature>
+        <pFeature>DigGainMan2</pFeature>
+        <pFeature>GaincCtrl0</pFeature>
+        <pFeature>GaincDgRdout1</pFeature>
+        <pFeature>GaincDgRdout0</pFeature>
+        <pFeature>GaincSgRdoutA1</pFeature>
+        <pFeature>GaincSgRdoutA0</pFeature>
+        <pFeature>GaincSgRdoutB1</pFeature>
+        <pFeature>GaincSgRdoutB0</pFeature>
+        <pFeature>GainfAnaNum</pFeature>
+        <pFeature>GainfDigGain</pFeature>
+    </Category>
+    <String Name="Edition">
+        <DisplayName>Edition</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pEditionReg</pValue>
+    </String>
+    <StringReg Name="pEditionReg">
+        <Address>0x30A00</Address>
+        <Length>16</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+    </StringReg>
+    <Integer Name="Width" NameSpace="Standard">
+        <ToolTip>Image width.</ToolTip>
+        <Description>Image width.</Description>
+        <DisplayName>Width</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <ImposedAccessMode>RO</ImposedAccessMode>
+        <pValue>Width_Val</pValue>
+    </Integer>
+    <Integer Name="Height" NameSpace="Standard">
+        <ToolTip>Image height.</ToolTip>
+        <Description>Image height.</Description>
+        <DisplayName>Height</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <ImposedAccessMode>RO</ImposedAccessMode>
+        <pValue>Height_Val</pValue>
+    </Integer>
+    <Enumeration Name="PixelFormat" NameSpace="Standard">
+        <ToolTip>Format of the pixels provided by the device.</ToolTip>
+        <Description>CommonFeature.Format of the pixels provided by the device.</Description>
+        <DisplayName>PixelFormat</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <ImposedAccessMode>RO</ImposedAccessMode>
+        <EnumEntry Name="Mono8" NameSpace="Standard">
+            <ToolTip>Mono8.</ToolTip>
+            <Description>Mono8.</Description>
+            <DisplayName>Mono8</DisplayName>
+            <Value>0x01080001</Value>
+        </EnumEntry>
+        <EnumEntry Name="Mono10" NameSpace="Standard">
+            <ToolTip>Mono10.</ToolTip>
+            <Description>Mono10.</Description>
+            <DisplayName>Mono10</DisplayName>
+            <Value>0x01100003</Value>
+        </EnumEntry>
+        <EnumEntry Name="Mono10p" NameSpace="Standard">
+            <ToolTip>Mono10p.</ToolTip>
+            <Description>Mono10p.</Description>
+            <DisplayName>Mono10P</DisplayName>
+            <Value>0x010A0046</Value>
+        </EnumEntry>
+        <EnumEntry Name="Mono12" NameSpace="Standard">
+            <ToolTip>Mono12.</ToolTip>
+            <Description>Mono12.</Description>
+            <DisplayName>Mono12</DisplayName>
+            <Value>0x01100005</Value>
+        </EnumEntry>
+        <EnumEntry Name="Mono12p" NameSpace="Standard">
+            <ToolTip>Mono12p.</ToolTip>
+            <Description>Mono12p.</Description>
+            <DisplayName>Mono12P</DisplayName>
+            <Value>0x010C0047</Value>
+        </EnumEntry>
+        <EnumEntry Name="Mono14" NameSpace="Standard">
+            <ToolTip>Mono14.</ToolTip>
+            <Description>Mono14.</Description>
+            <DisplayName>Mono14</DisplayName>
+            <Value>0x01100025</Value>
+        </EnumEntry>
+        <EnumEntry Name="Mono14p" NameSpace="Standard">
+            <ToolTip>Mono14p.</ToolTip>
+            <Description>Mono14p.</Description>
+            <DisplayName>Mono14P</DisplayName>
+            <Value>0x010E0104</Value>
+        </EnumEntry>
+        <EnumEntry Name="Mono16" NameSpace="Standard">
+            <ToolTip>Mono16.</ToolTip>
+            <Description>Mono16.</Description>
+            <DisplayName>Mono16</DisplayName>
+            <Value>0x01100007</Value>
+        </EnumEntry>
+        <pValue>PixelFormat_Val</pValue>
+    </Enumeration>
+    <Integer Name="TriggerMode">
+        <DisplayName>TriggerMode</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pTriggerModeReg</pValue>
+        <Min>0</Min>
+        <Max>1</Max>
+    </Integer>
+    <Integer Name="AcquisitionMode">
+        <DisplayName>AcquisitionMode</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAcquisitionModeReg</pValue>
+        <Min>0</Min>
+        <Max>3</Max>
+    </Integer>
+    <Integer Name="AcquisitionFrameCount">
+        <DisplayName>AcquisitionFrameCount</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAcquisitionFrameCountReg</pValue>
+        <Min>0</Min>
+        <Max>4294967295</Max>
+    </Integer>
+    <Command Name="AcquisitionFlag" NameSpace="Standard">
+        <ToolTip>AcquisitionFlag</ToolTip>
+        <Description>AcquisitionFlag</Description>
+        <DisplayName>AcquisitionFlag</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAcquisitionFlagReg</pValue>
+        <CommandValue>1</CommandValue>
+    </Command>
+    <Command Name="AcquisitionStart" NameSpace="Standard">
+        <ToolTip>Start Acquisition.</ToolTip>
+        <Description>Start Acquisition.</Description>
+        <DisplayName>Acquisition Start</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <ImposedAccessMode>WO</ImposedAccessMode>
+        <pValue>AcquisitionStart_Val</pValue>
+        <CommandValue>1</CommandValue>
+    </Command>
+    <Command Name="AcquisitionStop" NameSpace="Standard">
+        <ToolTip>Stop Acquisition.</ToolTip>
+        <Description>Stop Acquisition.</Description>
+        <DisplayName>Acquisition Stop</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <ImposedAccessMode>WO</ImposedAccessMode>
+        <pValue>AcquisitionStop_Val</pValue>
+        <CommandValue>0</CommandValue>
+    </Command>
+    <Group Comment="TransportLayerControl">
+        <Integer Name="PayloadSize" NameSpace="Standard">
+            <ToolTip>Provides the number of bytes transferred for each image or chunk on the stream channel.</ToolTip>
+            <Description>Provides the number of bytes transferred for each image or chunk on the stream channel. This includes any end-of-line, end-of-frame statistics or other stamp data. This is the total size of data payload for a data block.</Description>
+            <DisplayName>Payload Size</DisplayName>
+            <Visibility>Expert</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <pValue>PayloadSize_Val</pValue>
+            <Unit>B</Unit>
+        </Integer>
+        <Integer Name="TLParamsLocked" NameSpace="Standard">
+            <Visibility>Invisible</Visibility>
+            <Value>0</Value>
+        </Integer>
+    </Group>
+    <Enumeration Name="FileSelector" NameSpace="Standard">
+        <ToolTip>Selects the target file in the device.</ToolTip>
+        <Description>Selects the target file in the device.</Description>
+        <DisplayName>File Selector</DisplayName>
+        <Visibility>Expert</Visibility>
+        <ImposedAccessMode>RW</ImposedAccessMode>
+        <Streamable>Yes</Streamable>
+        <EnumEntry Name="FPGA_Program" NameSpace="Custom">
+            <ToolTip>FPGA_Program.</ToolTip>
+            <Description>FPGA_Program.</Description>
+            <DisplayName>FPGA_Program</DisplayName>
+            <Value>0</Value>
+        </EnumEntry>
+        <EnumEntry Name="XML" NameSpace="Custom">
+            <ToolTip>XML.</ToolTip>
+            <Description>XML.</Description>
+            <DisplayName>XML</DisplayName>
+            <Value>1</Value>
+        </EnumEntry>
+        <EnumEntry Name="DPC" NameSpace="Custom">
+            <ToolTip>DPC.</ToolTip>
+            <Description>DPC.</Description>
+            <DisplayName>DPC</DisplayName>
+            <Value>2</Value>
+        </EnumEntry>
+        <pValue>FileSelector_Reg</pValue>
+        <pSelected>FileOperationSelector</pSelected>
+        <pSelected>FileOperationExecute</pSelected>
+        <pSelected>FileOpenMode</pSelected>
+        <pSelected>FileAccessOffset</pSelected>
+        <pSelected>FileAccessLength</pSelected>
+        <pSelected>FileOperationStatus</pSelected>
+        <pSelected>FileOperationResult</pSelected>
+        <pSelected>FileSize</pSelected>
+    </Enumeration>
+    <Enumeration Name="FileOperationSelector" NameSpace="Standard">
+        <ToolTip>Selects the target operation for the selected file in the device. </ToolTip>
+        <Description>Selects the target operation for the selected file in the device. </Description>
+        <DisplayName>File Operation Selector</DisplayName>
+        <Visibility>Expert</Visibility>
+        <ImposedAccessMode>RW</ImposedAccessMode>
+        <Streamable>Yes</Streamable>
+        <EnumEntry Name="Open" NameSpace="Standard">
+            <ToolTip>Opens the file selected by FileSelector in the device. </ToolTip>
+            <Description>Opens the file selected by FileSelector in the device. </Description>
+            <DisplayName>Open</DisplayName>
+            <Value>0</Value>
+        </EnumEntry>
+        <EnumEntry Name="Close" NameSpace="Standard">
+            <ToolTip>Closes the file selected by FileSelector in the device. </ToolTip>
+            <Description>Closes the file selected by FileSelector in the device. </Description>
+            <DisplayName>Close</DisplayName>
+            <Value>1</Value>
+        </EnumEntry>
+        <EnumEntry Name="Read" NameSpace="Standard">
+            <ToolTip>Reads the file selected by FileSelector in the device. </ToolTip>
+            <Description>Reads the file selected by FileSelector in the device. </Description>
+            <DisplayName>Read</DisplayName>
+            <Value>2</Value>
+        </EnumEntry>
+        <EnumEntry Name="Write" NameSpace="Standard">
+            <ToolTip>Writes the file selected by FileSelector in the device. </ToolTip>
+            <Description>Writes the file selected by FileSelector in the device. </Description>
+            <DisplayName>Write</DisplayName>
+            <Value>3</Value>
+        </EnumEntry>
+        <EnumEntry Name="Delete" NameSpace="Standard">
+            <ToolTip>Deletes the file selected by FileSelector in the device. </ToolTip>
+            <Description>Deletes the file selected by FileSelector in the device. </Description>
+            <DisplayName>Delete</DisplayName>
+            <Value>4</Value>
+        </EnumEntry>
+        <pValue>FileOperationSelector_Reg</pValue>
+    </Enumeration>
+    <Enumeration Name="FileOpenMode" NameSpace="Standard">
+        <ToolTip>Selects the access mode in which a file is opened in the device.</ToolTip>
+        <Description>Selects the access mode in which a file is opened in the device.</Description>
+        <DisplayName>File Open Mode</DisplayName>
+        <Visibility>Expert</Visibility>
+        <ImposedAccessMode>RW</ImposedAccessMode>
+        <Streamable>Yes</Streamable>
+        <EnumEntry Name="Read" NameSpace="Standard">
+            <ToolTip>This mode selects read-only open mode.</ToolTip>
+            <Description>This mode selects read-only open mode.</Description>
+            <DisplayName>Read</DisplayName>
+            <Value>0</Value>
+        </EnumEntry>
+        <EnumEntry Name="Write" NameSpace="Standard">
+            <ToolTip>This mode selects write-only open mode.</ToolTip>
+            <Description>This mode selects write-only open mode.</Description>
+            <DisplayName>Write</DisplayName>
+            <Value>1</Value>
+        </EnumEntry>
+        <EnumEntry Name="ReadWrite" NameSpace="Standard">
+            <ToolTip>This mode selects read and write open mode.</ToolTip>
+            <Description>This mode selects read and write open mode.</Description>
+            <DisplayName>Read/Write</DisplayName>
+            <Value>2</Value>
+        </EnumEntry>
+        <pValue>FileOpenMode_Reg</pValue>
+    </Enumeration>
+    <Command Name="FileOperationExecute" NameSpace="Standard">
+        <ToolTip>Executes the operation selected by FileOperationSelector on the selected file.</ToolTip>
+        <Description>Executes the operation selected by FileOperationSelector on the selected file.</Description>
+        <DisplayName>File Operation Excute</DisplayName>
+        <Visibility>Expert</Visibility>
+        <ImposedAccessMode>WO</ImposedAccessMode>
+        <pValue>FileOperationExecute_Reg</pValue>
+        <CommandValue>1</CommandValue>
+    </Command>
+    <Integer Name="FileAccessOffset" NameSpace="Standard">
+        <ToolTip>Represents the file access offset.</ToolTip>
+        <Description>Represents the file access offset.</Description>
+        <DisplayName>File Access Offset</DisplayName>
+        <Visibility>Expert</Visibility>
+        <ImposedAccessMode>RW</ImposedAccessMode>
+        <pValue>FileAccessOffset_Reg</pValue>
+    </Integer>
+    <Integer Name="FileAccessLength" NameSpace="Standard">
+        <ToolTip>Represents the file access length.</ToolTip>
+        <Description>Represents the file access length.</Description>
+        <DisplayName>File Access Length</DisplayName>
+        <Visibility>Expert</Visibility>
+        <ImposedAccessMode>RW</ImposedAccessMode>
+        <pValue>FileAccessLength_Reg</pValue>
+    </Integer>
+    <Enumeration Name="FileOperationStatus" NameSpace="Standard">
+        <ToolTip>Represents the file operation execution status.</ToolTip>
+        <Description>Represents the file operation execution status.</Description>
+        <DisplayName>File Operation Status</DisplayName>
+        <Visibility>Expert</Visibility>
+        <ImposedAccessMode>RO</ImposedAccessMode>
+        <EnumEntry Name="Success" NameSpace="Standard">
+            <ToolTip>File Operation was sucessful.</ToolTip>
+            <Description>File Operation was sucessful.</Description>
+            <DisplayName>Success</DisplayName>
+            <Value>0</Value>
+        </EnumEntry>
+        <EnumEntry Name="Failure" NameSpace="Standard">
+            <ToolTip>File Operation failed.</ToolTip>
+            <Description>File Operation failed.</Description>
+            <DisplayName>Failure</DisplayName>
+            <Value>1</Value>
+        </EnumEntry>
+        <pValue>FileOperationStatus_Reg</pValue>
+    </Enumeration>
+    <Integer Name="FileOperationResult" NameSpace="Standard">
+        <ToolTip>Represents the file operation result.</ToolTip>
+        <Description>Represents the file operation result.</Description>
+        <DisplayName>File Operation Result</DisplayName>
+        <Visibility>Expert</Visibility>
+        <ImposedAccessMode>RO</ImposedAccessMode>
+        <pValue>FileOperationResult_Reg</pValue>
+    </Integer>
+    <Integer Name="FileSize" NameSpace="Standard">
+        <ToolTip>Represents the size of the selected file in bytes.</ToolTip>
+        <Description>Represents the size of the selected file in bytes.</Description>
+        <DisplayName>File Size(B)</DisplayName>
+        <Visibility>Expert</Visibility>
+        <ImposedAccessMode>RO</ImposedAccessMode>
+        <pValue>FileSize_Reg</pValue>
+    </Integer>
+    <String Name="DeviceModelName">
+        <DisplayName>Device Model Name</DisplayName>
+        <Visibility>Expert</Visibility>
+        <pValue>pDeviceModelNameReg</pValue>
+    </String>
+    <StringReg Name="pDeviceModelNameReg">
+        <Address>0x3A028</Address>
+        <Length>32</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+    </StringReg>
+    <Integer Name="StreamingCtrl">
+        <DisplayName>StreamingCtrl</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pStreamingCtrlReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SoftwareReset">
+        <DisplayName>SoftwareReset</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSoftwareResetReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnPadOen1">
+        <DisplayName>ScCmmnPadOen1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnPadOen1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnPadOen2">
+        <DisplayName>ScCmmnPadOen2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnPadOen2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmn3">
+        <DisplayName>ScCmmn3</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmn3Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmn4">
+        <DisplayName>ScCmmn4</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmn4Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnPadOut1">
+        <DisplayName>ScCmmnPadOut1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnPadOut1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnChipIdA">
+        <DisplayName>ScCmmnChipIdA</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnChipIdAReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnChipIdB">
+        <DisplayName>ScCmmnChipIdB</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnChipIdBReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnChipSplitId">
+        <DisplayName>ScCmmnChipSplitId</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnChipSplitIdReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnPadOut2">
+        <DisplayName>ScCmmnPadOut2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnPadOut2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnPadSel1">
+        <DisplayName>ScCmmnPadSel1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnPadSel1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnPadSel2">
+        <DisplayName>ScCmmnPadSel2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnPadSel2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnAPadPkO">
+        <DisplayName>ScCmmnAPadPkO</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnAPadPkOReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnAdcReg1">
+        <DisplayName>ScCmmnAdcReg1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnAdcReg1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnAdcReg2">
+        <DisplayName>ScCmmnAdcReg2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnAdcReg2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnAdcReg3">
+        <DisplayName>ScCmmnAdcReg3</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnAdcReg3Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnAdcReg4">
+        <DisplayName>ScCmmnAdcReg4</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnAdcReg4Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnAdcReg5">
+        <DisplayName>ScCmmnAdcReg5</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnAdcReg5Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnPllsCtrl1">
+        <DisplayName>ScCmmnPllsCtrl1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnPllsCtrl1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnPllsCtrl2">
+        <DisplayName>ScCmmnPllsCtrl2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnPllsCtrl2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnPwcReg1">
+        <DisplayName>ScCmmnPwcReg1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnPwcReg1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnPwcReg2">
+        <DisplayName>ScCmmnPwcReg2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnPwcReg2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnAnaReg3">
+        <DisplayName>ScCmmnAnaReg3</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnAnaReg3Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ScCmmnAnaReg4">
+        <DisplayName>ScCmmnAnaReg4</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pScCmmnAnaReg4Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SccbCtrl">
+        <DisplayName>SccbCtrl</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSccbCtrlReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SccbOpt">
+        <DisplayName>SccbOpt</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSccbOptReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SccbFilter">
+        <DisplayName>SccbFilter</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSccbFilterReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SccbSysreg">
+        <DisplayName>SccbSysreg</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSccbSysregReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SpiReg0">
+        <DisplayName>SpiReg0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSpiReg0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SpiReg1">
+        <DisplayName>SpiReg1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSpiReg1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SpiReg2">
+        <DisplayName>SpiReg2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSpiReg2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SpiReg3">
+        <DisplayName>SpiReg3</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSpiReg3Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SpiReg4">
+        <DisplayName>SpiReg4</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSpiReg4Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SpiReg5">
+        <DisplayName>SpiReg5</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSpiReg5Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SpiReg6">
+        <DisplayName>SpiReg6</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSpiReg6Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SpiReg7">
+        <DisplayName>SpiReg7</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSpiReg7Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SpiReg8">
+        <DisplayName>SpiReg8</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSpiReg8Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SpiReg9">
+        <DisplayName>SpiReg9</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSpiReg9Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async0">
+        <DisplayName>Async0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async1">
+        <DisplayName>Async1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async2">
+        <DisplayName>Async2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async3">
+        <DisplayName>Async3</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync3Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async4">
+        <DisplayName>Async4</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync4Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async5">
+        <DisplayName>Async5</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync5Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async6">
+        <DisplayName>Async6</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync6Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async7">
+        <DisplayName>Async7</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync7Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async8">
+        <DisplayName>Async8</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync8Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async9">
+        <DisplayName>Async9</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync9Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AsyncA">
+        <DisplayName>AsyncA</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsyncAReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AsyncB">
+        <DisplayName>AsyncB</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsyncBReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AsyncC">
+        <DisplayName>AsyncC</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsyncCReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AsyncD">
+        <DisplayName>AsyncD</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsyncDReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async10">
+        <DisplayName>Async10</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync10Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async11">
+        <DisplayName>Async11</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync11Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async12">
+        <DisplayName>Async12</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync12Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async13">
+        <DisplayName>Async13</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync13Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async14">
+        <DisplayName>Async14</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync14Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async15">
+        <DisplayName>Async15</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync15Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Async16">
+        <DisplayName>Async16</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAsync16Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcCtrl00">
+        <DisplayName>BlcCtrl00</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcCtrl00Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcCtrl01">
+        <DisplayName>BlcCtrl01</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcCtrl01Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcCtrl02">
+        <DisplayName>BlcCtrl02</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcCtrl02Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcCtrl03">
+        <DisplayName>BlcCtrl03</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcCtrl03Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcCtrl04">
+        <DisplayName>BlcCtrl04</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcCtrl04Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcCtrl05">
+        <DisplayName>BlcCtrl05</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcCtrl05Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcCtrl06">
+        <DisplayName>BlcCtrl06</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcCtrl06Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcCtrl07">
+        <DisplayName>BlcCtrl07</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcCtrl07Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcCtrl08">
+        <DisplayName>BlcCtrl08</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcCtrl08Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlackLevel">
+        <DisplayName>BlackLevel</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlackLevelReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcMan0B">
+        <DisplayName>BlcMan0B</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcMan0BReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcMan0A">
+        <DisplayName>BlcMan0A</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcMan0AReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcMan1B">
+        <DisplayName>BlcMan1B</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcMan1BReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcMan1A">
+        <DisplayName>BlcMan1A</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcMan1AReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcMan2B">
+        <DisplayName>BlcMan2B</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcMan2BReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcMan2A">
+        <DisplayName>BlcMan2A</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcMan2AReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcMan3B">
+        <DisplayName>BlcMan3B</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcMan3BReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcMan3A">
+        <DisplayName>BlcMan3A</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcMan3AReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlackLevel00B">
+        <DisplayName>BlackLevel00B</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlackLevel00BReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlackLevel00A">
+        <DisplayName>BlackLevel00A</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlackLevel00AReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlackLevel01B">
+        <DisplayName>BlackLevel01B</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlackLevel01BReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlackLevel01A">
+        <DisplayName>BlackLevel01A</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlackLevel01AReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlackLevel10B">
+        <DisplayName>BlackLevel10B</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlackLevel10BReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlackLevel10A">
+        <DisplayName>BlackLevel10A</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlackLevel10AReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlackLevel11B">
+        <DisplayName>BlackLevel11B</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlackLevel11BReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlackLevel11A">
+        <DisplayName>BlackLevel11A</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlackLevel11AReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcMax">
+        <DisplayName>BlcMax</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcMaxReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="StableRange">
+        <DisplayName>StableRange</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pStableRangeReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="OneChannel">
+        <DisplayName>OneChannel</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pOneChannelReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcBrThre0">
+        <DisplayName>BlcBrThre0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcBrThre0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcBrThre1">
+        <DisplayName>BlcBrThre1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcBrThre1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcBrThre2">
+        <DisplayName>BlcBrThre2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcBrThre2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcBrThre3">
+        <DisplayName>BlcBrThre3</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcBrThre3Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcBrThre4">
+        <DisplayName>BlcBrThre4</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcBrThre4Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcBrThre5">
+        <DisplayName>BlcBrThre5</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcBrThre5Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcGThre0">
+        <DisplayName>BlcGThre0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcGThre0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcGThre1">
+        <DisplayName>BlcGThre1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcGThre1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcGThre2">
+        <DisplayName>BlcGThre2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcGThre2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcGThre3">
+        <DisplayName>BlcGThre3</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcGThre3Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcGThre4">
+        <DisplayName>BlcGThre4</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcGThre4Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcGThre5">
+        <DisplayName>BlcGThre5</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcGThre5Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BlcBrgCompEn">
+        <DisplayName>BlcBrgCompEn</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBlcBrgCompEnReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="FrameCtrl0">
+        <DisplayName>FrameCtrl0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pFrameCtrl0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="FrameOnNumber1">
+        <DisplayName>FrameOnNumber1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pFrameOnNumber1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="FrameOffNumber2">
+        <DisplayName>FrameOffNumber2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pFrameOffNumber2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="FrameCtrl1">
+        <DisplayName>FrameCtrl1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pFrameCtrl1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ModeSelect">
+        <DisplayName>ModeSelect</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pModeSelectReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="VsyncWidth">
+        <DisplayName>VsyncWidth</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pVsyncWidthReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="VsyncNegWidthH">
+        <DisplayName>VsyncNegWidthH</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pVsyncNegWidthHReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="VsyncNegWidthL">
+        <DisplayName>VsyncNegWidthL</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pVsyncNegWidthLReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="VsyncMode">
+        <DisplayName>VsyncMode</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pVsyncModeReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="EofVsyncDelay2">
+        <DisplayName>EofVsyncDelay2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pEofVsyncDelay2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="EofVsyncDelay1">
+        <DisplayName>EofVsyncDelay1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pEofVsyncDelay1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="EofVsyncDelay0">
+        <DisplayName>EofVsyncDelay0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pEofVsyncDelay0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="PolarityCtrl">
+        <DisplayName>PolarityCtrl</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pPolarityCtrlReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BitTestOrder">
+        <DisplayName>BitTestOrder</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBitTestOrderReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BypCtrl1">
+        <DisplayName>BypCtrl1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBypCtrl1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BypCtrl0">
+        <DisplayName>BypCtrl0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBypCtrl0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="BypSel">
+        <DisplayName>BypSel</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBypSelReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="IspCtrl01">
+        <DisplayName>IspCtrl01</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pIspCtrl01Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="IspCtrl03">
+        <DisplayName>IspCtrl03</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pIspCtrl03Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="IspCtrl04">
+        <DisplayName>IspCtrl04</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pIspCtrl04Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="IspCtrl05">
+        <DisplayName>IspCtrl05</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pIspCtrl05Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="IspCtrl06">
+        <DisplayName>IspCtrl06</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pIspCtrl06Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="IspCtrl07">
+        <DisplayName>IspCtrl07</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pIspCtrl07Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="IspCtrl08">
+        <DisplayName>IspCtrl08</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pIspCtrl08Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="IspCtrl09">
+        <DisplayName>IspCtrl09</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pIspCtrl09Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="IspCtrl0A">
+        <DisplayName>IspCtrl0A</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pIspCtrl0AReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ManualRedGainMsb">
+        <DisplayName>ManualRedGainMsb</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pManualRedGainMsbReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ManualRedGainLsb">
+        <DisplayName>ManualRedGainLsb</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pManualRedGainLsbReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ManualGreenGainMsb">
+        <DisplayName>ManualGreenGainMsb</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pManualGreenGainMsbReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ManualGreenGainLsb">
+        <DisplayName>ManualGreenGainLsb</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pManualGreenGainLsbReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ManualBlueGainMsb">
+        <DisplayName>ManualBlueGainMsb</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pManualBlueGainMsbReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ManualBlueGainLsb">
+        <DisplayName>ManualBlueGainLsb</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pManualBlueGainLsbReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="XStart1">
+        <DisplayName>XStart1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pXStart1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="XStart0">
+        <DisplayName>XStart0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pXStart0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="YStart1">
+        <DisplayName>YStart1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pYStart1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="YStart0">
+        <DisplayName>YStart0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pYStart0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="XWindow1">
+        <DisplayName>XWindow1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pXWindow1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Xwindow0">
+        <DisplayName>Xwindow0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pXwindow0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="YWindow1">
+        <DisplayName>YWindow1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pYWindow1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="YWindow0">
+        <DisplayName>YWindow0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pYWindow0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Weight00">
+        <DisplayName>Weight00</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWeight00Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Weight01">
+        <DisplayName>Weight01</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWeight01Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Weight02">
+        <DisplayName>Weight02</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWeight02Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Weight03">
+        <DisplayName>Weight03</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWeight03Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Weight04">
+        <DisplayName>Weight04</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWeight04Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Weight05">
+        <DisplayName>Weight05</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWeight05Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Weight06">
+        <DisplayName>Weight06</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWeight06Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Weight07">
+        <DisplayName>Weight07</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWeight07Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AvgCtrl10">
+        <DisplayName>AvgCtrl10</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAvgCtrl10Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AvgWeightSum">
+        <DisplayName>AvgWeightSum</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAvgWeightSumReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AvgReadout">
+        <DisplayName>AvgReadout</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAvgReadoutReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="WindowXstart1">
+        <DisplayName>WindowXstart1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWindowXstart1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="WindowXstart0">
+        <DisplayName>WindowXstart0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWindowXstart0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="WindowYstart1">
+        <DisplayName>WindowYstart1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWindowYstart1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="WindowYstart0">
+        <DisplayName>WindowYstart0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWindowYstart0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="WinXWin1">
+        <DisplayName>WinXWin1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWinXWin1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="WinXWin0">
+        <DisplayName>WinXWin0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWinXWin0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="WinYWin1">
+        <DisplayName>WinYWin1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWinYWin1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="WinYWin0">
+        <DisplayName>WinYWin0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWinYWin0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="WinMan">
+        <DisplayName>WinMan</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWinManReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecPkExpo2">
+        <DisplayName>AecPkExpo2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecPkExpo2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecPkExpo1">
+        <DisplayName>AecPkExpo1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecPkExpo1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecPkExpo0">
+        <DisplayName>AecPkExpo0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecPkExpo0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecPkCtrl0">
+        <DisplayName>AecPkCtrl0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecPkCtrl0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecPkGain1">
+        <DisplayName>AecPkGain1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecPkGain1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecPkGain2">
+        <DisplayName>AecPkGain2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecPkGain2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecPkVts1">
+        <DisplayName>AecPkVts1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecPkVts1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecPkVts0">
+        <DisplayName>AecPkVts0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecPkVts0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecCtrl00">
+        <DisplayName>AecCtrl00</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecCtrl00Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecCtrl01">
+        <DisplayName>AecCtrl01</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecCtrl01Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecCtrl05">
+        <DisplayName>AecCtrl05</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecCtrl05Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Wpt">
+        <DisplayName>Wpt</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWptReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Bpt">
+        <DisplayName>Bpt</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBptReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="HighVpt">
+        <DisplayName>HighVpt</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pHighVptReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="ManualAvg">
+        <DisplayName>ManualAvg</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pManualAvgReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecGainCeiling1">
+        <DisplayName>AecGainCeiling1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecGainCeiling1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecGainCeiling2">
+        <DisplayName>AecGainCeiling2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecGainCeiling2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="DiffMax">
+        <DisplayName>DiffMax</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pDiffMaxReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Wpt2">
+        <DisplayName>Wpt2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pWpt2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="Bpt2">
+        <DisplayName>Bpt2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pBpt2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="LowVpt">
+        <DisplayName>LowVpt</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pLowVptReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecCtrl20">
+        <DisplayName>AecCtrl20</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecCtrl20Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="AecCtrl21">
+        <DisplayName>AecCtrl21</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pAecCtrl21Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="DigcCtrl0">
+        <DisplayName>DigcCtrl0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pDigcCtrl0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="DigCompMan1">
+        <DisplayName>DigCompMan1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pDigCompMan1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="DigCompMan2">
+        <DisplayName>DigCompMan2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pDigCompMan2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SnrGainMan1">
+        <DisplayName>SnrGainMan1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSnrGainMan1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="SnrGainMan2">
+        <DisplayName>SnrGainMan2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pSnrGainMan2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="DigGainMan1">
+        <DisplayName>DigGainMan1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pDigGainMan1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="DigGainMan2">
+        <DisplayName>DigGainMan2</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pDigGainMan2Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="GaincCtrl0">
+        <DisplayName>GaincCtrl0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pGaincCtrl0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="GaincDgRdout1">
+        <DisplayName>GaincDgRdout1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pGaincDgRdout1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="GaincDgRdout0">
+        <DisplayName>GaincDgRdout0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pGaincDgRdout0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="GaincSgRdoutA1">
+        <DisplayName>GaincSgRdoutA1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pGaincSgRdoutA1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="GaincSgRdoutA0">
+        <DisplayName>GaincSgRdoutA0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pGaincSgRdoutA0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="GaincSgRdoutB1">
+        <DisplayName>GaincSgRdoutB1</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pGaincSgRdoutB1Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="GaincSgRdoutB0">
+        <DisplayName>GaincSgRdoutB0</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pGaincSgRdoutB0Reg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="GainfAnaNum">
+        <DisplayName>GainfAnaNum</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pGainfAnaNumReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <Integer Name="GainfDigGain">
+        <DisplayName>GainfDigGain</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pValue>pGainfDigGainReg</pValue>
+        <Min>0</Min>
+        <Max>255</Max>
+    </Integer>
+    <IntReg Name="Width_Val">
+        <Visibility>Invisible</Visibility>
+        <Address>0x30C04</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="Height_Val">
+        <Visibility>Invisible</Visibility>
+        <Address>0x30C00</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="PixelFormat_Val">
+        <Visibility>Invisible</Visibility>
+        <Address>0x30C08</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pTriggerModeReg">
+        <Address>0x30DA0</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+        <IntReg Name="pAcquisitionModeReg">
+        <Address>0x30DA4</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAcquisitionFrameCountReg">
+        <Address>0x30DA8</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+        <IntReg Name="pAcquisitionFlagReg">
+        <Visibility>Invisible</Visibility>
+        <Address>0x30DAC</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="AcquisitionStart_Val">
+        <Visibility>Invisible</Visibility>
+        <Address>0x30BC0</Address>
+        <Length>4</Length>
+        <AccessMode>WO</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="AcquisitionStop_Val">
+        <Visibility>Invisible</Visibility>
+        <Address>0x30BC0</Address>
+        <Length>4</Length>
+        <AccessMode>WO</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <Group Comment="TransportLayerControl">
+        <IntReg Name="PayloadSize_Val">
+            <Visibility>Invisible</Visibility>
+            <Address>0x30C40</Address>
+            <Length>4</Length>
+            <AccessMode>RO</AccessMode>
+            <pPort>Device</pPort>
+            <pInvalidator>PixelFormat_Val</pInvalidator>
+            <pInvalidator>Width_Val</pInvalidator>
+            <pInvalidator>Height_Val</pInvalidator>
+            <Sign>Unsigned</Sign>
+            <Endianess>LittleEndian</Endianess>
+        </IntReg>
+    </Group>
+    <IntReg Name="FileSelector_Reg" NameSpace="Custom">
+        <Address>0x3A000</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="FileOperationSelector_Reg" NameSpace="Custom">
+        <Address>0x3A004</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="FileOpenMode_Reg" NameSpace="Custom">
+        <Address>0x3A008</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="FileOperationExecute_Reg" NameSpace="Custom">
+        <Address>0x3A00C</Address>
+        <Length>4</Length>
+        <AccessMode>WO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>FileSelector</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <Register Name="FileAccessBuffer" NameSpace="Standard">
+        <ToolTip>Represents the file access buffer.</ToolTip>
+        <Description>Represents the file access buffer.</Description>
+        <DisplayName>File Access Buffer</DisplayName>
+        <Visibility>Expert</Visibility>
+        <Address>0x3E000</Address>
+        <Length>1024</Length>
+        <AccessMode>WO</AccessMode>
+        <pPort>Device</pPort>
+    </Register>
+    <IntReg Name="FileAccessOffset_Reg" NameSpace="Custom">
+        <Address>0x3A014</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="FileAccessLength_Reg" NameSpace="Custom">
+        <Address>0x3A018</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="FileOperationStatus_Reg" NameSpace="Custom">
+        <Address>0x3A01C</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="FileOperationResult_Reg" NameSpace="Custom">
+        <Address>0x3A020</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>FileOperationExecute_Reg</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="FileSize_Reg" NameSpace="Custom">
+        <Address>0x3A024</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pStreamingCtrlReg">
+        <Address>0x30100</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSoftwareResetReg">
+        <Address>0x30103</Address>
+        <Length>4</Length>
+        <AccessMode>WO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnPadOen1Reg">
+        <Address>0x33001</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnPadOen2Reg">
+        <Address>0x33002</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmn3Reg">
+        <Address>0x33003</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmn4Reg">
+        <Address>0x33004</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnPadOut1Reg">
+        <Address>0x33009</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnChipIdAReg">
+        <Address>0x3300a</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnChipIdBReg">
+        <Address>0x3300b</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnChipSplitIdReg">
+        <Address>0x3300c</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnPadOut2Reg">
+        <Address>0x3300d</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnPadSel1Reg">
+        <Address>0x3300f</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnPadSel2Reg">
+        <Address>0x33010</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnAPadPkOReg">
+        <Address>0x33011</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnAdcReg1Reg">
+        <Address>0x33020</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnAdcReg2Reg">
+        <Address>0x33021</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnAdcReg3Reg">
+        <Address>0x33022</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnAdcReg4Reg">
+        <Address>0x33023</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnAdcReg5Reg">
+        <Address>0x33024</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnPllsCtrl1Reg">
+        <Address>0x33025</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnPllsCtrl2Reg">
+        <Address>0x33026</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnPwcReg1Reg">
+        <Address>0x33027</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnPwcReg2Reg">
+        <Address>0x33028</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnAnaReg3Reg">
+        <Address>0x33029</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pScCmmnAnaReg4Reg">
+        <Address>0x3302a</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSccbCtrlReg">
+        <Address>0x33100</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSccbOptReg">
+        <Address>0x33101</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSccbFilterReg">
+        <Address>0x33102</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSccbSysregReg">
+        <Address>0x33103</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSpiReg0Reg">
+        <Address>0x33200</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSpiReg1Reg">
+        <Address>0x33201</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSpiReg2Reg">
+        <Address>0x33202</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSpiReg3Reg">
+        <Address>0x33203</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSpiReg4Reg">
+        <Address>0x33204</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSpiReg5Reg">
+        <Address>0x33205</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSpiReg6Reg">
+        <Address>0x33206</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSpiReg7Reg">
+        <Address>0x33207</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSpiReg8Reg">
+        <Address>0x33208</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSpiReg9Reg">
+        <Address>0x33209</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync0Reg">
+        <Address>0x33700</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync1Reg">
+        <Address>0x33701</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync2Reg">
+        <Address>0x33702</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync3Reg">
+        <Address>0x33703</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync4Reg">
+        <Address>0x33704</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync5Reg">
+        <Address>0x33705</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync6Reg">
+        <Address>0x33706</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync7Reg">
+        <Address>0x33707</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync8Reg">
+        <Address>0x33708</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync9Reg">
+        <Address>0x33709</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsyncAReg">
+        <Address>0x3370a</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsyncBReg">
+        <Address>0x3370b</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsyncCReg">
+        <Address>0x3370c</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsyncDReg">
+        <Address>0x3370d</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync10Reg">
+        <Address>0x33710</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync11Reg">
+        <Address>0x33711</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync12Reg">
+        <Address>0x33712</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync13Reg">
+        <Address>0x33713</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync14Reg">
+        <Address>0x33714</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync15Reg">
+        <Address>0x33715</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAsync16Reg">
+        <Address>0x33716</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcCtrl00Reg">
+        <Address>0x34000</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcCtrl01Reg">
+        <Address>0x34001</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcCtrl02Reg">
+        <Address>0x34002</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcCtrl03Reg">
+        <Address>0x34003</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcCtrl04Reg">
+        <Address>0x34004</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcCtrl05Reg">
+        <Address>0x34005</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcCtrl06Reg">
+        <Address>0x34006</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcCtrl07Reg">
+        <Address>0x34007</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcCtrl08Reg">
+        <Address>0x34008</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlackLevelReg">
+        <Address>0x34009</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcMan0BReg">
+        <Address>0x3400c</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcMan0AReg">
+        <Address>0x3400d</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcMan1BReg">
+        <Address>0x3400e</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcMan1AReg">
+        <Address>0x3400f</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcMan2BReg">
+        <Address>0x34010</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcMan2AReg">
+        <Address>0x34011</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcMan3BReg">
+        <Address>0x34012</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcMan3AReg">
+        <Address>0x34013</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlackLevel00BReg">
+        <Address>0x3402c</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlackLevel00AReg">
+        <Address>0x3402d</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlackLevel01BReg">
+        <Address>0x3402e</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlackLevel01AReg">
+        <Address>0x3402f</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlackLevel10BReg">
+        <Address>0x34030</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlackLevel10AReg">
+        <Address>0x34031</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlackLevel11BReg">
+        <Address>0x34032</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlackLevel11AReg">
+        <Address>0x34033</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcMaxReg">
+        <Address>0x34050</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pStableRangeReg">
+        <Address>0x34051</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pOneChannelReg">
+        <Address>0x34052</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcBrThre0Reg">
+        <Address>0x34060</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcBrThre1Reg">
+        <Address>0x34061</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcBrThre2Reg">
+        <Address>0x34062</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcBrThre3Reg">
+        <Address>0x34063</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcBrThre4Reg">
+        <Address>0x34064</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcBrThre5Reg">
+        <Address>0x34065</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcGThre0Reg">
+        <Address>0x34066</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcGThre1Reg">
+        <Address>0x34067</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcGThre2Reg">
+        <Address>0x34068</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcGThre3Reg">
+        <Address>0x34069</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcGThre4Reg">
+        <Address>0x3406a</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcGThre5Reg">
+        <Address>0x3406b</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBlcBrgCompEnReg">
+        <Address>0x3406c</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pFrameCtrl0Reg">
+        <Address>0x34200</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pFrameOnNumber1Reg">
+        <Address>0x34201</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pFrameOffNumber2Reg">
+        <Address>0x34202</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pFrameCtrl1Reg">
+        <Address>0x34203</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pModeSelectReg">
+        <Address>0x34700</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pVsyncWidthReg">
+        <Address>0x34701</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pVsyncNegWidthHReg">
+        <Address>0x34702</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pVsyncNegWidthLReg">
+        <Address>0x34703</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pVsyncModeReg">
+        <Address>0x34704</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pEofVsyncDelay2Reg">
+        <Address>0x34705</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pEofVsyncDelay1Reg">
+        <Address>0x34706</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pEofVsyncDelay0Reg">
+        <Address>0x34707</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pPolarityCtrlReg">
+        <Address>0x34708</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBitTestOrderReg">
+        <Address>0x34709</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBypCtrl1Reg">
+        <Address>0x3470a</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBypCtrl0Reg">
+        <Address>0x3470b</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBypSelReg">
+        <Address>0x3470c</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pIspCtrl01Reg">
+        <Address>0x35001</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pIspCtrl03Reg">
+        <Address>0x35003</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pIspCtrl04Reg">
+        <Address>0x35004</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pIspCtrl05Reg">
+        <Address>0x35005</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pIspCtrl06Reg">
+        <Address>0x35006</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pIspCtrl07Reg">
+        <Address>0x35007</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pIspCtrl08Reg">
+        <Address>0x35008</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pIspCtrl09Reg">
+        <Address>0x35009</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pIspCtrl0AReg">
+        <Address>0x3500a</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pManualRedGainMsbReg">
+        <Address>0x35186</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pManualRedGainLsbReg">
+        <Address>0x35187</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pManualGreenGainMsbReg">
+        <Address>0x35188</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pManualGreenGainLsbReg">
+        <Address>0x35189</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pManualBlueGainMsbReg">
+        <Address>0x3518a</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pManualBlueGainLsbReg">
+        <Address>0x3518b</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pXStart1Reg">
+        <Address>0x35680</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pXStart0Reg">
+        <Address>0x35681</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pYStart1Reg">
+        <Address>0x35682</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pYStart0Reg">
+        <Address>0x35683</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pXWindow1Reg">
+        <Address>0x35684</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pXwindow0Reg">
+        <Address>0x35685</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pYWindow1Reg">
+        <Address>0x35686</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pYWindow0Reg">
+        <Address>0x35687</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWeight00Reg">
+        <Address>0x35688</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWeight01Reg">
+        <Address>0x35689</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWeight02Reg">
+        <Address>0x3568a</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWeight03Reg">
+        <Address>0x3568b</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWeight04Reg">
+        <Address>0x3568c</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWeight05Reg">
+        <Address>0x3568d</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWeight06Reg">
+        <Address>0x3568e</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWeight07Reg">
+        <Address>0x3568f</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAvgCtrl10Reg">
+        <Address>0x35690</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAvgWeightSumReg">
+        <Address>0x35691</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAvgReadoutReg">
+        <Address>0x35693</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWindowXstart1Reg">
+        <Address>0x35980</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWindowXstart0Reg">
+        <Address>0x35981</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWindowYstart1Reg">
+        <Address>0x35982</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWindowYstart0Reg">
+        <Address>0x35983</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWinXWin1Reg">
+        <Address>0x35984</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWinXWin0Reg">
+        <Address>0x35985</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWinYWin1Reg">
+        <Address>0x35986</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWinYWin0Reg">
+        <Address>0x35987</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWinManReg">
+        <Address>0x35988</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecPkExpo2Reg">
+        <Address>0x33500</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecPkExpo1Reg">
+        <Address>0x33501</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecPkExpo0Reg">
+        <Address>0x33502</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecPkCtrl0Reg">
+        <Address>0x33503</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecPkGain1Reg">
+        <Address>0x3350a</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecPkGain2Reg">
+        <Address>0x3350b</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecPkVts1Reg">
+        <Address>0x3350c</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecPkVts0Reg">
+        <Address>0x3350d</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecCtrl00Reg">
+        <Address>0x33a00</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecCtrl01Reg">
+        <Address>0x33a01</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecCtrl05Reg">
+        <Address>0x33a05</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWptReg">
+        <Address>0x33a0f</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBptReg">
+        <Address>0x33a10</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pHighVptReg">
+        <Address>0x33a11</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pManualAvgReg">
+        <Address>0x33a12</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecGainCeiling1Reg">
+        <Address>0x33a18</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecGainCeiling2Reg">
+        <Address>0x33a19</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pDiffMaxReg">
+        <Address>0x33a1a</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pWpt2Reg">
+        <Address>0x33a1b</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pBpt2Reg">
+        <Address>0x33a1e</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pLowVptReg">
+        <Address>0x33a1f</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecCtrl20Reg">
+        <Address>0x33a20</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pAecCtrl21Reg">
+        <Address>0x33a21</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pDigcCtrl0Reg">
+        <Address>0x35a00</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pDigCompMan1Reg">
+        <Address>0x35a02</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pDigCompMan2Reg">
+        <Address>0x35a03</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSnrGainMan1Reg">
+        <Address>0x35a20</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pSnrGainMan2Reg">
+        <Address>0x35a21</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pDigGainMan1Reg">
+        <Address>0x35a22</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pDigGainMan2Reg">
+        <Address>0x35a23</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pGaincCtrl0Reg">
+        <Address>0x35a24</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pGaincDgRdout1Reg">
+        <Address>0x35a25</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pGaincDgRdout0Reg">
+        <Address>0x35a26</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pGaincSgRdoutA1Reg">
+        <Address>0x35a27</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pGaincSgRdoutA0Reg">
+        <Address>0x35a28</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pGaincSgRdoutB1Reg">
+        <Address>0x35a29</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pGaincSgRdoutB0Reg">
+        <Address>0x35a2a</Address>
+        <Length>4</Length>
+        <AccessMode>RO</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pGainfAnaNumReg">
+        <Address>0x35a40</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <IntReg Name="pGainfDigGainReg">
+        <Address>0x35a41</Address>
+        <Length>4</Length>
+        <AccessMode>RW</AccessMode>
+        <pPort>Device</pPort>
+        <pInvalidator>RefreshDeviceStatus</pInvalidator>
+        <Sign>Unsigned</Sign>
+        <Endianess>LittleEndian</Endianess>
+    </IntReg>
+    <Command Name="RefreshDeviceStatus">
+        <DisplayName>Refresh Device Status</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <ImposedAccessMode>WO</ImposedAccessMode>
+        <Value>1</Value>
+        <CommandValue>1</CommandValue>
+    </Command>
+    <Port Name="Device" NameSpace="Standard">
+        <ToolTip>Access to GenCP device</ToolTip>
+    </Port>
+</RegisterDescription>

@@ -1,0 +1,1409 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include "uart.h"
+#include "gencp.h"
+#include "common.h"
+#include "crc.h"
+#include "flash.h"
+#include "packet_sr.h"
+#include "cmd.h"
+
+#ifdef MODULE_GENCP
+
+/*                                 command addr                                 |                      device addr
+    --------------------------------------------------------------------------- | ----------------------------------------------------
+    0 ~ sizeof(g_gencpRegMap)                                                   |            &g_gencpRegMap + sizeof(g_gencpRegMap)
+    sizeof(g_gencpRegMap) ~ sizeof(g_gencpRegMap) + sizeof(g_gencpCustomRegMap) | &g_gencpCustomRegMap + sizeof(g_gencpCustomRegMap)
+*/
+GencpRegMap g_gencpRegMap; /* size is 0x250 */
+GencpCustomRegMap g_gencpCustomRegMap;
+GencpManifestTable g_gencpManifestTable;
+GencpSpecifyBootstrapRegMap g_gencpSbrm;
+GencpXmlFile g_gencpXmlFile;
+GencpRegMapZone g_gencpRegMapZone;
+U3vStreamInterfaceRegMap g_u3vStreamInterfaceRegMap;
+U3vFileAccessCtrlItem g_u3vFileAccessCtrl;
+uint8_t g_xmlBuf[GENCP_DAT_LEN_MAX];
+uint32_t g_gencpGeneralXmlReg[] = {
+	/* image format control */
+	GENCP_USER_IMAGE_REG_EDITION,
+	GENCP_USER_IMAGE_REG_WIDTH,
+	GENCP_USER_IMAGE_REG_HEIGHT,
+	GENCP_USER_IMAGE_REG_PIXEL_FORMAT,
+	/* acquisition control */
+#ifdef ENDOSCOPE
+	GENCP_USER_IMAGE_TRIGGER_MODE,
+	GENCP_USER_IMAGE_ACQ_MODE,
+	GENCP_USER_IMAGE_ACQ_FRAME_CNT,
+	GENCP_USER_IMAGE_ACQ_FLAG_EN,
+#endif
+	GENCP_USER_IMAGE_REG_START_EN,
+
+/* sensor control */
+#ifdef CAM2929
+	GENCP_USER_SENSOR_PGA_GAIN,
+	GENCP_USER_SENSOR_DIGI_GAIN,
+	GENCP_USER_SENSOR_TEST_IMAGE,
+	GENCP_USER_SENSOR_X_MIRROR,
+	GENCP_USER_SENSOR_Y_MIRROR,
+#endif
+	/* transport layer control */
+	GENCP_USER_IMAGE_REG_PAYLOAD_SIZE,
+	/* ffc */
+	GENCP_USER_IMAGE_CMD_FFC_DARK_CALIB,
+	GENCP_USER_IMAGE_CMD_FFC_BRIGHT_CALIB
+};
+GencpPeriodData g_gencpPeriodData;
+/* The minimum size of erasing nor flash is 4KB, so before rewriting each sub-packet data of 128B,
+   the entire block with size of 4KB should be erased.
+   erase block: 4KB,
+   receive data packet: 128B,
+   read or write nor flash packet: 128B */
+static uint8_t g_readBlockBuf[NOR_FLASH_ERASE_BLOCK_SIZE_4K];
+
+uint8_t gencp_xml_file[] = {
+0x50, 0x4B, 0x03, 0x04, 0x14, 0x00, 0x02, 0x00,		0x08, 0x00, 0x69, 0x78, 0x3A, 0x5B, 0xA8, 0x44,
+0x9E, 0x5D, 0x39, 0x0C, 0x00, 0x00, 0x6F, 0x70,		0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x33, 0x34,
+0x30, 0x35, 0x2E, 0x78, 0x6D, 0x6C, 0xED, 0x5D,		0x6D, 0x73, 0xE2, 0x38, 0x12, 0xFE, 0xBE, 0xBF,
+0xC2, 0xC5, 0xA7, 0xBD, 0xAA, 0x23, 0x18, 0xC2,		0x64, 0x33, 0x53, 0x0C, 0x5B, 0x84, 0x90, 0x2C,
+0x55, 0xC9, 0x84, 0x05, 0x66, 0x92, 0x7C, 0xA2,		0x14, 0x5B, 0x80, 0x6F, 0x8C, 0xE5, 0xB3, 0xCD,
+0x24, 0x99, 0x5F, 0x7F, 0xB2, 0xE4, 0x17, 0xD9,		0x96, 0x91, 0x84, 0x4D, 0x32, 0x4B, 0x9D, 0xAB,
+0xB6, 0xB2, 0x88, 0xEE, 0x76, 0xF7, 0xD3, 0x52,		0xAB, 0x5B, 0x2F, 0x4C, 0xEF, 0xCF, 0x97, 0x8D,
+0xAD, 0xFD, 0x80, 0x9E, 0x6F, 0x21, 0xE7, 0x73,		0xA3, 0x7D, 0xA2, 0x37, 0x34, 0xE8, 0x18, 0xC8,
+0xB4, 0x9C, 0xD5, 0xE7, 0xC6, 0x36, 0x58, 0x36,		0xCF, 0x1B, 0x7F, 0xF6, 0x7F, 0xEB, 0x4D, 0xE1,
+0xCA, 0xF2, 0x03, 0xE8, 0x5D, 0x42, 0xDF, 0xF0,		0x2C, 0x37, 0xC0, 0xD4, 0x1A, 0xE6, 0x74, 0xFC,
+0xCF, 0x8D, 0x75, 0x10, 0xB8, 0x9F, 0x5A, 0xAD,		0xE7, 0xE7, 0xE7, 0x93, 0x15, 0x74, 0x2C, 0x03,
+0x6C, 0x4E, 0x90, 0xB7, 0x6A, 0x5D, 0x43, 0x67,		0xE0, 0x5A, 0xAD, 0x6F, 0x54, 0xF4, 0xA2, 0xBD,
+0x68, 0x37, 0x28, 0xC7, 0xA7, 0x17, 0xDF, 0xCA,		0x70, 0x3D, 0x9F, 0x12, 0x86, 0x8E, 0xAE, 0xB7,
+0x5B, 0x0F, 0xB7, 0x37, 0x33, 0x63, 0x0D, 0x37,		0xA0, 0x69, 0x39, 0x7E, 0x00, 0x1C, 0x03, 0x62,
+0x2E, 0xDF, 0xFA, 0xE4, 0x93, 0xC6, 0x1B, 0x64,		0x80, 0x80, 0x28, 0x2A, 0xFD, 0x52, 0x6D, 0x37,
+0x25, 0xFD, 0x43, 0x5F, 0xB9, 0x60, 0xD8, 0x4E,		0x5E, 0x7C, 0xB3, 0xA1, 0xDD, 0x22, 0x13, 0xDA,
+0x5F, 0xC0, 0x06, 0x7E, 0x6E, 0x8C, 0x7E, 0x36,		0xB4, 0x6F, 0xD0, 0x31, 0x91, 0x97, 0x7E, 0x9E,
+0x23, 0x64, 0xCF, 0x2D, 0x97, 0x7E, 0x98, 0x61,		0x6D, 0x4D, 0xE0, 0x99, 0xE1, 0xD7, 0x33, 0x17,
+0x18, 0x98, 0xE6, 0x0B, 0x72, 0xB0, 0xFA, 0x54,		0xF8, 0x2D, 0xF8, 0x0F, 0xF2, 0xBE, 0x25, 0x38,
+0x27, 0xCD, 0x96, 0xC3, 0x6B, 0x9E, 0x6D, 0x9F,		0xB2, 0xDF, 0x60, 0xB7, 0x14, 0x24, 0x14, 0x28,
+0x78, 0x5C, 0x13, 0x0F, 0x99, 0x5B, 0x23, 0xB8,		0xDE, 0x5A, 0x26, 0x66, 0x8A, 0x9E, 0x66, 0x07,
+0x3F, 0xCD, 0x53, 0xFC, 0x34, 0xBB, 0xF8, 0x69,		0x7E, 0x60, 0x9E, 0xD0, 0x4C, 0xC2, 0x4E, 0x59,
+0x06, 0xD1, 0xD3, 0xBC, 0xC0, 0x4F, 0x73, 0x88,		0x9F, 0xE6, 0x25, 0x7E, 0x9A, 0x23, 0xE6, 0x69,
+0xF4, 0x7F, 0xD3, 0xF0, 0xD3, 0x1B, 0x82, 0x00,		0xAE, 0x90, 0xF7, 0xAA, 0x51, 0x88, 0xA6, 0x08,
+0x05, 0x0D, 0x8D, 0xC1, 0x23, 0x86, 0x28, 0xA2,		0x27, 0x3C, 0xEE, 0x15, 0x04, 0xC1, 0xD6, 0x83,
+0xFD, 0xE8, 0xAD, 0xBD, 0x56, 0xD2, 0xC2, 0x21,		0x9A, 0x7B, 0xD6, 0x6A, 0x05, 0xBD, 0xDD, 0x44,
+0x03, 0xE3, 0xBF, 0x5B, 0xCB, 0xB7, 0xC2, 0x8E,		0x32, 0x44, 0x4E, 0xE0, 0x21, 0x7B, 0x37, 0xFD,
+0x78, 0x03, 0x56, 0xF0, 0x0A, 0x79, 0x1B, 0x10,		0x48, 0xD1, 0xCF, 0x3D, 0xE0, 0xF8, 0x2E, 0xF2,
+0x82, 0x1B, 0xF0, 0x0A, 0x3D, 0x29, 0x96, 0x2B,		0xCB, 0x86, 0x03, 0xC3, 0x80, 0xBE, 0x2F, 0x45,
+0x3E, 0x83, 0x8E, 0x8F, 0xBC, 0x61, 0xE0, 0x15,		0xE8, 0x7A, 0xAD, 0x18, 0x64, 0x3E, 0xE6, 0x11,
+0x8A, 0x19, 0xD8, 0x87, 0x5B, 0x3F, 0x40, 0x1B,		0x16, 0xF4, 0x4B, 0xCB, 0x77, 0x6D, 0xF0, 0x1A,
+0xD2, 0xA4, 0xB8, 0xB3, 0x8D, 0x29, 0xE9, 0x37,		0x8C, 0xE4, 0x93, 0x65, 0x5B, 0xC1, 0x6B, 0xFF,
+0x02, 0xC7, 0x00, 0xC7, 0x09, 0xD1, 0x67, 0x1A,		0x79, 0xC6, 0xBA, 0x2B, 0x20, 0xE5, 0xCD, 0x5B,
+0xCB, 0xF0, 0xD0, 0x93, 0x0D, 0x7E, 0xC2, 0x12,		0x72, 0x91, 0xB5, 0x51, 0x77, 0x10, 0x76, 0xB2,
+0x68, 0xA0, 0xC6, 0xDD, 0xE7, 0xA4, 0xD7, 0x8A,		0x5B, 0x18, 0x4C, 0xD2, 0xC8, 0xC6, 0xD0, 0xB1,
+0xAD, 0x7C, 0xFC, 0x92, 0x2E, 0x59, 0x1B, 0x7E,		0xE3, 0x2F, 0xF3, 0xD1, 0x74, 0x31, 0x7A, 0x98,
+0x8F, 0x16, 0x57, 0x37, 0x83, 0xEB, 0xDD, 0x18,		0x4E, 0xBE, 0xDE, 0xCC, 0x46, 0x8B, 0xFB, 0xF1,
+0xE5, 0xFC, 0xAF, 0xDD, 0x84, 0xA3, 0x87, 0xD1,		0x74, 0xBE, 0xB8, 0x9A, 0x0E, 0x6E, 0xB1, 0xD8,
+0xE9, 0xE8, 0x6F, 0xC1, 0x98, 0xF8, 0x32, 0x53,		0x26, 0xC7, 0x2A, 0x4F, 0x16, 0xF3, 0x31, 0x66,
+0x98, 0x8D, 0xE6, 0xAA, 0xAE, 0x2C, 0x0E, 0x5A,		0x69, 0xAF, 0x32, 0xAC, 0x9A, 0x41, 0x79, 0x85,
+0x1E, 0xE6, 0xF3, 0x88, 0xBD, 0xCD, 0x8B, 0x2D,		0xB5, 0x39, 0x9E, 0x11, 0x8E, 0xED, 0xF5, 0x02,
+0xE9, 0x30, 0x37, 0x0B, 0x90, 0xAB, 0x0A, 0x78,		0x31, 0xEA, 0x49, 0x03, 0x4E, 0x58, 0xB5, 0x25,
+0xE1, 0x95, 0x46, 0xBC, 0x84, 0x49, 0x0C, 0x39,		0x2F, 0x3C, 0xD7, 0x06, 0xF9, 0x5F, 0xD0, 0x5A,
+0xAD, 0x05, 0x40, 0xDF, 0x5B, 0x66, 0xB0, 0x16,		0x8C, 0x42, 0xEB, 0x05, 0xDA, 0x54, 0x47, 0xF5,
+0x18, 0xC6, 0x99, 0x4D, 0xA4, 0x5D, 0x91, 0x08,		0x0B, 0xD6, 0x11, 0xAC, 0x00, 0x27, 0x4E, 0xF8,
+0x13, 0xD4, 0x82, 0x58, 0xB0, 0x46, 0x24, 0xC7,		0x98, 0x6B, 0x4B, 0xAA, 0x9D, 0x2F, 0xF4, 0x58,
+0x35, 0xD9, 0x32, 0x91, 0x93, 0x3B, 0x8F, 0xD6,		0xE6, 0xDB, 0x09, 0x78, 0xB5, 0x11, 0x30, 0x67,
+0xD6, 0x4F, 0x28, 0x98, 0xD0, 0x6F, 0x26, 0xC0,		0x03, 0x1B, 0x1F, 0xA7, 0x97, 0xDF, 0xA1, 0xA9,
+0xEA, 0xC0, 0xC2, 0xDC, 0xAE, 0xE8, 0xA7, 0x90,		0x5F, 0xA3, 0x02, 0x6A, 0xF5, 0x91, 0x40, 0xAE,
+0xD8, 0x3F, 0xAC, 0x00, 0x79, 0xEF, 0x8C, 0x5E,		0x5C, 0x18, 0x86, 0x2E, 0xAE, 0x6F, 0xC6, 0x1B,
+0x17, 0xF9, 0xD0, 0xA4, 0x42, 0xC3, 0xEC, 0xBA,		0x3F, 0xBD, 0xEB, 0xB5, 0x8A, 0xAD, 0x25, 0x29,
+0xD4, 0x0C, 0xDA, 0xD0, 0x08, 0x90, 0x27, 0x4E,		0xB6, 0xEE, 0xB0, 0x12, 0xA4, 0x54, 0x50, 0x62,
+0x71, 0xC2, 0x97, 0x2B, 0x08, 0x1F, 0xBD, 0x40,		0x63, 0x1B, 0x40, 0xD9, 0xDC, 0xEF, 0x62, 0xBB,
+0x5C, 0x42, 0x4F, 0x96, 0xFA, 0x6E, 0xB9, 0xF4,		0x61, 0x20, 0x4B, 0x7D, 0x03, 0x9D, 0x95, 0x28,
+0x4A, 0x65, 0x81, 0x09, 0x70, 0xA3, 0xAF, 0xC0,		0x30, 0x85, 0xFE, 0xD6, 0x96, 0xD0, 0x47, 0x3C,
+0xDE, 0x2E, 0xE1, 0x0F, 0xCB, 0x80, 0x49, 0x71,		0xA5, 0x3A, 0xE0, 0xD2, 0xEC, 0x98, 0x37, 0xD2,
+0xD2, 0x6F, 0x85, 0x83, 0x27, 0x43, 0x2A, 0x1E,		0x0F, 0x6C, 0x56, 0xFE, 0x6E, 0xC3, 0x60, 0x72,
+0x3D, 0x58, 0x5C, 0x0F, 0xC6, 0x5F, 0x04, 0x08,		0x8F, 0xAF, 0xC7, 0x12, 0x64, 0xF3, 0xD1, 0x6C,
+0xBE, 0x18, 0xDF, 0x0E, 0xAE, 0x47, 0xBB, 0xE9,		0x1E, 0x16, 0xB7, 0xE3, 0xE9, 0xF4, 0x6E, 0xBA,
+0x9B, 0xEA, 0xB1, 0x84, 0xAA, 0xE0, 0xCF, 0x59,		0xE0, 0x59, 0xCE, 0x2A, 0x0E, 0x9F, 0x69, 0xB5,
+0x50, 0x56, 0xA2, 0x64, 0x0A, 0x8A, 0xCA, 0xD3,		0xC3, 0x37, 0x60, 0x6F, 0x61, 0xDF, 0x65, 0x84,
+0x4E, 0xE1, 0x0A, 0xEB, 0x4C, 0xDB, 0x23, 0x8D,		0xA9, 0x8A, 0x3C, 0x7D, 0x0B, 0x45, 0x4B, 0x99,
+0xD6, 0x29, 0xA1, 0x56, 0xBB, 0xF2, 0x05, 0x25,		0xE4, 0x4C, 0xC0, 0x54, 0x91, 0x15, 0x39, 0xF3,
+0x59, 0x1B, 0x06, 0xA6, 0x89, 0x67, 0x08, 0xBF,		0xAF, 0xBF, 0x9C, 0xEA, 0x03, 0x5D, 0xEF, 0xB5,
+0xE2, 0x86, 0x94, 0x84, 0x06, 0x9B, 0x7E, 0xFB,		0xAC, 0xD7, 0x8A, 0xFE, 0x97, 0x61, 0xCF, 0x76,
+0x6A, 0x7E, 0x6F, 0x9E, 0xE0, 0x59, 0x3F, 0x0A,		0x03, 0x58, 0x6D, 0xF2, 0x29, 0xA3, 0x35, 0x56,
+0xA9, 0x4C, 0x71, 0x9E, 0xE9, 0xA5, 0xEA, 0xB7,		0x77, 0xA9, 0x7F, 0xDA, 0x39, 0xBC, 0xFA, 0x63,
+0x07, 0xF7, 0x7C, 0x9C, 0x20, 0x45, 0x39, 0x77,		0xB6, 0xB2, 0x2B, 0xEB, 0x39, 0x85, 0x02, 0xB0,
+0xAE, 0x6E, 0x93, 0x13, 0x5C, 0xE8, 0x34, 0x84,		0xF8, 0xD6, 0x72, 0xFA, 0x18, 0xB6, 0xF0, 0x0F,
+0xD3, 0x08, 0x5E, 0xFA, 0x6D, 0xDC, 0x88, 0xFF,		0x44, 0x96, 0x46, 0x96, 0x71, 0xED, 0x64, 0x8A,
+0xD2, 0x32, 0x1B, 0x33, 0x75, 0x6B, 0x5D, 0xF6,		0x31, 0x42, 0x15, 0x6D, 0xEB, 0x76, 0x3E, 0x76,
+0x3F, 0x9E, 0xFD, 0xD1, 0xF9, 0xF8, 0x41, 0xDA,		0xC8, 0x7C, 0x41, 0x5D, 0x66, 0x69, 0xB1, 0xF0,
+0xAE, 0xCB, 0xDC, 0xBC, 0xE4, 0xC3, 0xDB, 0x5C,		0x58, 0x16, 0x28, 0xEF, 0xC2, 0xB3, 0x43, 0x59,
+0x5D, 0x10, 0xFD, 0x46, 0x66, 0x67, 0x96, 0x37,		0x76, 0xDA, 0x9D, 0x5B, 0x08, 0xA9, 0xD5, 0xF0,
+0x8C, 0xEC, 0x43, 0x58, 0x3E, 0x44, 0x9B, 0x0D,		0xAE, 0x37, 0x8B, 0xCB, 0x32, 0x64, 0x49, 0x42,
+0xBA, 0x30, 0x25, 0xD4, 0x1A, 0xC3, 0x2E, 0xCE,		0xC6, 0x38, 0x1C, 0x4A, 0x0B, 0x32, 0x5A, 0xB4,
+0x68, 0x52, 0x15, 0x6F, 0x4E, 0x76, 0x76, 0x2F,		0xC8, 0xCE, 0xA8, 0x0B, 0xF2, 0x60, 0x2D, 0x70,
+0x33, 0xC7, 0x3F, 0x11, 0xC2, 0xB4, 0x19, 0x07,		0xD5, 0xCC, 0xE7, 0x38, 0x63, 0xA2, 0x6D, 0x62,
+0x9F, 0x20, 0x57, 0xC1, 0x25, 0xC8, 0x55, 0xF4,		0x48, 0x81, 0x41, 0xD5, 0x21, 0xE1, 0xBA, 0xD4,
+0xAF, 0xE1, 0x0F, 0xE4, 0xCA, 0xB8, 0x43, 0x97,		0x71, 0x47, 0x36, 0x38, 0xD0, 0x25, 0x24, 0xC5,
+0xC5, 0xB3, 0x35, 0x61, 0x92, 0x5C, 0x34, 0x4B,		0x88, 0xC5, 0xE8, 0xC7, 0xEB, 0x59, 0xEF, 0x86,
+0x39, 0x55, 0xA0, 0x08, 0xF5, 0xEE, 0x00, 0x4B,		0x96, 0xD8, 0x14, 0x21, 0x7C, 0x0E, 0x79, 0x24,
+0x11, 0x8C, 0x69, 0xC5, 0x00, 0x46, 0x8B, 0x7D,		0xEF, 0x86, 0x1F, 0x79, 0xBF, 0x18, 0xBE, 0x91,
+0xB3, 0xDD, 0x44, 0x75, 0x79, 0x9C, 0x73, 0xA5,		0x4B, 0x90, 0xD2, 0x40, 0x52, 0x72, 0x0D, 0x2D,
+0xC9, 0x82, 0x91, 0x1B, 0x4A, 0xF0, 0x35, 0xD7,		0x43, 0x3F, 0x2C, 0x13, 0x9A, 0xDA, 0xD3, 0x2B,
+0x69, 0x36, 0x49, 0x9E, 0x2B, 0x5E, 0x89, 0xC2,		0x43, 0x04, 0x39, 0x51, 0xE1, 0x77, 0xA2, 0x26,
+0x59, 0xEC, 0x96, 0xCC, 0x02, 0xEB, 0xDB, 0x3B,		0x27, 0x84, 0x7B, 0xE4, 0x04, 0xC9, 0x12, 0xC4,
+0x2D, 0x72, 0xD0, 0xB9, 0x08, 0xE6, 0x0C, 0xD4,		0x84, 0x83, 0x07, 0x62, 0x01, 0xC8, 0x98, 0x92,
+0x0B, 0x4A, 0xB1, 0xCA, 0x0C, 0xA9, 0x4B, 0x20,		0xA1, 0xB0, 0xD0, 0xB8, 0xF6, 0xA2, 0xB7, 0xF5,
+0x73, 0x5D, 0xD7, 0xF1, 0x7C, 0x93, 0x0F, 0x80,		0xAD, 0xC4, 0x3A, 0x81, 0xC5, 0x6D, 0x5D, 0xD9,
+0xE4, 0xB6, 0x2E, 0x6D, 0x33, 0x21, 0x95, 0x37,		0x3A, 0x2C, 0xED, 0x64, 0xAC, 0x6E, 0x63, 0xA3,
+0xF5, 0xD3, 0x4A, 0x56, 0xBB, 0x7B, 0x98, 0xED,		0x2A, 0xD8, 0xED, 0x2A, 0x1A, 0x3E, 0x91, 0xF4,
+0x37, 0xAE, 0xDE, 0xBB, 0x67, 0x55, 0x2C, 0xEF,		0xA8, 0x1B, 0xDE, 0x91, 0xB7, 0xBB, 0xA3, 0x66,
+0x76, 0x47, 0xC1, 0xDF, 0x1F, 0x2A, 0x59, 0xBD,		0x87, 0xBF, 0x3B, 0x0A, 0xFE, 0xEE, 0x28, 0xFA,
+0xBB, 0x23, 0xEB, 0xEF, 0x21, 0xF6, 0xF7, 0x1F,		0x55, 0x2C, 0xEF, 0xAA, 0x1B, 0xDE, 0x95, 0xB7,
+0xBB, 0xAB, 0x66, 0x76, 0x57, 0xDE, 0xDF, 0x9D,		0x4A, 0xFE, 0xEE, 0xEE, 0xE1, 0xEF, 0xAE, 0x82,
+0xBF, 0xBB, 0x8A, 0xFE, 0xEE, 0xCA, 0xFA, 0x7B,		0x84, 0xFF, 0xEB, 0x56, 0xB1, 0xFC, 0x4C, 0xDD,
+0xF0, 0x33, 0x79, 0xBB, 0xCF, 0xD4, 0xCC, 0x3E,		0x53, 0x18, 0xDF, 0xB2, 0xBD, 0x3C, 0x4A, 0xA1,
+0x98, 0xEC, 0x81, 0x97, 0x5A, 0x31, 0xC9, 0x54,		0xD4, 0x74, 0xED, 0xA1, 0xAD, 0xAB, 0x85, 0x29,
+0x0D, 0x74, 0x82, 0xB2, 0x3D, 0x5A, 0x36, 0xA3,		0xC8, 0x2E, 0x7F, 0xA5, 0x1B, 0x8F, 0x4A, 0x00,
+0x4F, 0x68, 0x7E, 0x44, 0xB7, 0xEF, 0xB0, 0x4E,		0x4F, 0x58, 0x22, 0xCE, 0xA0, 0x9E, 0x5E, 0x83,
+0xB0, 0x2D, 0xD4, 0x61, 0x09, 0x3D, 0x0F, 0xE7,		0x4F, 0x4B, 0xE4, 0x69, 0x10, 0x18, 0x6B, 0xCD,
+0x22, 0xD9, 0x2D, 0xFE, 0x64, 0xAC, 0xB7, 0xCE,		0x77, 0x0D, 0x27, 0x83, 0x21, 0xAB, 0x1F, 0x78,
+0x10, 0x6C, 0x70, 0x1B, 0xC0, 0x49, 0x90, 0x2D,		0xE5, 0xB0, 0x03, 0xBD, 0x5A, 0x9B, 0xAF, 0x2D,
+0x5F, 0xB3, 0x1C, 0xC3, 0xDE, 0x86, 0xC2, 0x81,		0xF3, 0xAA, 0x41, 0xC7, 0x6C, 0xA2, 0x65, 0xD3,
+0xB6, 0x1C, 0xF8, 0xEF, 0xF8, 0xC3, 0xD2, 0xC3,		0x20, 0x61, 0x5E, 0xEC, 0x02, 0x3F, 0xB0, 0x0C,
+0x3F, 0x14, 0x8B, 0xB0, 0x38, 0x2F, 0x6C, 0xDB,		0xB8, 0x9A, 0x09, 0x02, 0x10, 0xCB, 0x8A, 0x36,
+0xA0, 0x51, 0x00, 0x6C, 0xCD, 0xC7, 0x08, 0x87,		0x6A, 0x86, 0xDF, 0x6B, 0x2E, 0x45, 0x9D, 0x68,
+0x08, 0x68, 0xD3, 0x93, 0x8D, 0x8C, 0xEF, 0xD2,		0xBD, 0x30, 0x72, 0x9B, 0x46, 0x37, 0xB0, 0x76,
+0xF4, 0x45, 0xB9, 0x5D, 0x9E, 0xFD, 0x52, 0xCD,		0x4C, 0xB7, 0x4D, 0xFB, 0x11, 0xBF, 0x76, 0x25,
+0xC4, 0x5F, 0x1D, 0x2B, 0xE8, 0x5F, 0xF4, 0x5A,		0xE4, 0x2F, 0x33, 0x1E, 0x32, 0x05, 0x03, 0xA7,
+0x97, 0x66, 0x77, 0xBD, 0xA5, 0x3A, 0x2A, 0x63,		0xE6, 0xD8, 0xF9, 0x11, 0x7E, 0xB0, 0xE1, 0x0E,
+0xE3, 0x93, 0x92, 0xBA, 0x30, 0x56, 0xB3, 0xC5,		0x4C, 0x8B, 0x0C, 0xB7, 0xD2, 0xCA, 0x86, 0xDD,
+0xF9, 0x95, 0x5F, 0xEC, 0x20, 0x0C, 0x51, 0x67,		0x01, 0xDE, 0x0A, 0x06, 0xDA, 0x32, 0xDC, 0xCF,
+0xB6, 0x1C, 0x95, 0xA2, 0x46, 0x56, 0x8A, 0xE4,		0x66, 0x7A, 0xBA, 0x19, 0x5D, 0xFB, 0xFE, 0xA1,
+0xA0, 0x80, 0x99, 0x91, 0x71, 0x09, 0xB0, 0xBF,		0xFA, 0x8F, 0xD0, 0x27, 0xFB, 0x14, 0xF1, 0xE7,
+0xF2, 0x39, 0xE2, 0x2A, 0xDC, 0x6C, 0xC4, 0x91,		0x61, 0x85, 0xBB, 0xC9, 0xEE, 0x13, 0x85, 0xD9,
+0xAA, 0x92, 0x61, 0x93, 0x0A, 0x3E, 0x39, 0x06,		0xB9, 0xD1, 0xCA, 0x32, 0x49, 0xCC, 0x1C, 0x7B,
+0x4E, 0x93, 0x0F, 0xB7, 0x37, 0x0A, 0x96, 0x63,		0x6A, 0x29, 0x83, 0x29, 0x9D, 0x9C, 0x9D, 0x98,
+0x56, 0x6C, 0xDE, 0xBE, 0x55, 0xDD, 0xE5, 0x64,		0xA8, 0x60, 0x1E, 0xA6, 0x96, 0x32, 0x8F, 0xD2,
+0xC9, 0x99, 0x87, 0x69, 0xC5, 0xE6, 0x75, 0xD4,		0xA6, 0x7B, 0x36, 0x60, 0x2C, 0xF8, 0x6B, 0xE4,
+0x2E, 0xFD, 0x1E, 0x9A, 0xA5, 0xA7, 0x45, 0x12,		0x02, 0x21, 0x53, 0x7A, 0x0A, 0x44, 0x86, 0x27,
+0x3E, 0x63, 0x22, 0xA4, 0xCD, 0x9D, 0x02, 0x91,		0xA4, 0x4F, 0xCE, 0x81, 0xC8, 0xEB, 0x9F, 0x9C,
+0x04, 0x91, 0x67, 0x49, 0xCE, 0x82, 0x08, 0x59,		0xA2, 0xD3, 0x20, 0x59, 0x3A, 0x5E, 0xCA, 0xC5,
+0x8F, 0xFB, 0x05, 0xCF, 0x54, 0x99, 0x00, 0x50,		0x2C, 0x8C, 0xE4, 0x08, 0x24, 0x5D, 0x89, 0xD4,
+0xE2, 0x45, 0x75, 0x6D, 0x8F, 0xC9, 0x41, 0xF9,		0x0D, 0x92, 0x13, 0x47, 0x02, 0xC3, 0x3F, 0x6D,
+0x0A, 0x09, 0x3B, 0xBC, 0x52, 0x0E, 0x1C, 0x32,		0x50, 0x48, 0x09, 0x60, 0x09, 0x7C, 0x4F, 0xAF,
+0x1A, 0x3B, 0xAC, 0x25, 0x7C, 0x55, 0xF0, 0xD7,		0xDE, 0xA2, 0xE5, 0x22, 0x59, 0x28, 0xFE, 0x70,
+0x13, 0xD1, 0xD0, 0xC6, 0x8E, 0x51, 0x42, 0x92,		0x70, 0x1C, 0x08, 0xCA, 0xFD, 0x65, 0xCB, 0x61,
+0x49, 0xE4, 0x1F, 0x6E, 0xDA, 0x9B, 0x42, 0x60,		0x2A, 0x61, 0x19, 0x32, 0x1C, 0x08, 0xCA, 0xBD,
+0x45, 0xCB, 0x21, 0x19, 0x8A, 0xAF, 0x6F, 0x82,		0xCD, 0x03, 0x79, 0xEF, 0x59, 0x81, 0x5A, 0xAF,
+0x24, 0x1C, 0x07, 0x82, 0x72, 0x7F, 0xD9, 0x72,		0x58, 0x12, 0xF9, 0x62, 0x30, 0xF7, 0x5D, 0x6C,
+0xBE, 0xC4, 0xEA, 0x29, 0xA2, 0x49, 0x59, 0x0E,		0x04, 0x67, 0x05, 0xE1, 0x92, 0xB9, 0x1F, 0x79,
+0x81, 0x18, 0xD0, 0xAE, 0x7A, 0xFA, 0x57, 0xC8,		0x1B, 0x16, 0x9C, 0x13, 0x72, 0x0A, 0x49, 0x08,
+0xC9, 0xDA, 0xF6, 0xCA, 0x3D, 0x00, 0x3D, 0x40,		0xBD, 0xC1, 0xFC, 0x21, 0x4E, 0xCF, 0x6B, 0xCB,
+0x58, 0x6B, 0x20, 0x4A, 0x07, 0xFC, 0x30, 0x63,		0x70, 0x30, 0xA2, 0xFB, 0x97, 0xA5, 0xFB, 0xC9,
+0x97, 0xCF, 0x3B, 0x1C, 0x8D, 0x26, 0xAC, 0xFF,		0x88, 0x74, 0x43, 0x39, 0xB0, 0x93, 0x35, 0x25,
+0x82, 0x9D, 0x1F, 0x61, 0x8A, 0xDF, 0x62, 0x36,		0x91, 0x63, 0xBF, 0x12, 0xE8, 0xC8, 0x77, 0x52,
+0x45, 0x8F, 0xAC, 0xA4, 0x3A, 0xC3, 0xB6, 0xFE,		0x66, 0x61, 0xBB, 0x68, 0xDD, 0x73, 0x28, 0xA3,
+0x1E, 0xA0, 0x4A, 0x44, 0xD5, 0x1A, 0x94, 0xAB,		0xA4, 0x0A, 0x75, 0xC0, 0x15, 0x76, 0x06, 0x2D,
+0x3C, 0xC3, 0x43, 0x8C, 0xAD, 0xA5, 0x6F, 0x95,		0x88, 0x93, 0xEF, 0x60, 0x2D, 0x49, 0xEC, 0x3A,
+0x7B, 0xC5, 0x5F, 0x12, 0x32, 0xE5, 0xC2, 0x6E,		0xF6, 0x7C, 0x13, 0xAF, 0xB8, 0x96, 0x0E, 0xBD,
+0x11, 0x3D, 0x8D, 0x8D, 0x69, 0x39, 0x96, 0x9F,		0xBA, 0x0A, 0xF3, 0x43, 0xB2, 0x80, 0xCD, 0xD6,
+0x6B, 0xC2, 0x40, 0x5C, 0xF7, 0xDB, 0x94, 0xCB,		0xC1, 0x64, 0xED, 0xA1, 0xEE, 0xF0, 0x7C, 0x7F,
+0x27, 0x75, 0x5C, 0x85, 0xE7, 0xAB, 0x92, 0x25,		0x17, 0xF5, 0x63, 0x6F, 0xD9, 0xF5, 0xEA, 0xFC,
+0x9A, 0x88, 0x74, 0x97, 0x98, 0x42, 0xD7, 0x83,		0x3E, 0x74, 0x02, 0x26, 0x95, 0x89, 0x66, 0x4D,
+0x44, 0x24, 0x09, 0xDD, 0x2C, 0x23, 0x41, 0xED,		0x3E, 0x55, 0xBC, 0xAC, 0xF3, 0xD6, 0xB3, 0x2A,
+0xE3, 0x36, 0x16, 0x4B, 0xDE, 0x30, 0xDD, 0x75,		0x5E, 0x2B, 0xBF, 0xDE, 0x54, 0x87, 0x2F, 0x6C,
+0x22, 0xA9, 0x8A, 0x2F, 0x12, 0x09, 0x6A, 0xBE,		0x88, 0x97, 0xCC, 0xDE, 0xDD, 0x17, 0x54, 0x11,
+0xB1, 0x2F, 0x44, 0x4B, 0x65, 0x64, 0x3D, 0xAF,		0x92, 0x4B, 0xD2, 0x50, 0x06, 0xC9, 0x98, 0x26,
+0x41, 0x8D, 0x88, 0xDD, 0xCB, 0x3F, 0x3B, 0xC5,		0xA9, 0x2F, 0x81, 0x45, 0xEB, 0x95, 0x6F, 0x7D,
+0x07, 0x2B, 0x9F, 0x1A, 0xCC, 0xB6, 0x84, 0x4A,		0x29, 0x31, 0xC8, 0x99, 0xF2, 0x0C, 0x7C, 0xCD,
+0xA7, 0x62, 0x96, 0x5B, 0xB9, 0x9D, 0x5A, 0x91,		0x04, 0xB9, 0xE9, 0x3F, 0xD2, 0xFD, 0x70, 0x29,
+0xE6, 0x15, 0xB0, 0xEC, 0xAD, 0x07, 0xAB, 0x80,		0xB3, 0xC4, 0x22, 0xA0, 0xB9, 0x0F, 0x28, 0x09,
+0xA7, 0xE4, 0x56, 0x12, 0xD5, 0xB5, 0xBE, 0x24,		0x92, 0x5B, 0x88, 0x92, 0x5E, 0x2B, 0x97, 0x0F,
+0x15, 0x83, 0x6D, 0x6E, 0xE5, 0xBD, 0xA6, 0xC1,		0xED, 0x11, 0x61, 0x15, 0x87, 0x74, 0x22, 0x44,
+0x79, 0x20, 0xC7, 0xBB, 0x08, 0x6F, 0x7E, 0x99,		0x92, 0xE3, 0x1E, 0xAA, 0xCB, 0x3E, 0xF3, 0xA0,
+0xCC, 0x31, 0x8F, 0x32, 0x7F, 0xC4, 0x07, 0x18,		0xB8, 0x3B, 0x05, 0xE4, 0xF0, 0x85, 0xAA, 0x73,
+0xA4, 0x24, 0xCA, 0x6E, 0x57, 0x63, 0x59, 0xBF,		0x5F, 0xFC, 0xEB, 0x5D, 0x1D, 0x44, 0x0E, 0x3F,
+0x08, 0xBD, 0x92, 0xB9, 0xA1, 0x99, 0xBB, 0x5E,		0x5C, 0x76, 0x55, 0x87, 0x92, 0xD1, 0xDF, 0x78,
+0xD2, 0xE8, 0x3D, 0xE4, 0x6A, 0x76, 0xC6, 0xF7,		0x74, 0x72, 0xEF, 0x57, 0xBE, 0x9A, 0x59, 0xE4,
+0x2F, 0xB9, 0xDF, 0x38, 0xD0, 0x3B, 0xE7, 0xBF,		0xD4, 0xFD, 0xC6, 0xF8, 0x72, 0x72, 0xE9, 0xA5,
+0xBF, 0xE4, 0xF2, 0xF2, 0xBB, 0x9D, 0xAF, 0x8F,		0x55, 0x10, 0x1F, 0xB1, 0xBF, 0xB2, 0x11, 0x08,
+0xE2, 0x2E, 0x15, 0xDF, 0xA7, 0x2E, 0xED, 0x4C,		0xE9, 0x85, 0xEB, 0x77, 0x33, 0x2D, 0xD1, 0x81,
+0x67, 0x1B, 0xB1, 0x86, 0xEB, 0xB4, 0xF4, 0x12,		0x78, 0x99, 0x71, 0xEC, 0x35, 0xF1, 0x77, 0xB3,
+0x2E, 0x55, 0x42, 0xF5, 0x72, 0x49, 0x7C, 0x7B,		0xBD, 0xCC, 0xBC, 0xF4, 0x76, 0xFB, 0xBB, 0x19,
+0x17, 0xAB, 0xA0, 0x6A, 0xDA, 0xA3, 0xC0, 0xB4,		0xC7, 0xF7, 0x37, 0xED, 0x51, 0xC5, 0x34, 0x26,
+0x0A, 0x16, 0xEF, 0x2A, 0x97, 0xDE, 0xF2, 0xEE,		0xEE, 0xBA, 0xE5, 0xDD, 0x15, 0x04, 0xC1, 0x7B,
+0xD5, 0x20, 0x48, 0x83, 0xB6, 0xB5, 0x72, 0xFA,		0x5F, 0x1D, 0x1F, 0xFF, 0x09, 0x7F, 0x31, 0x86,
+0x7C, 0x64, 0x93, 0x61, 0xD3, 0x02, 0x4E, 0xA8,		0xCE, 0x8D, 0x15, 0x04, 0x36, 0xA4, 0x9F, 0xC3,
+0x4C, 0x2F, 0x6E, 0x4F, 0x01, 0xC8, 0xC4, 0x52,		0xC6, 0xFE, 0xEC, 0x5D, 0xE6, 0x72, 0xDB, 0x87,
+0x47, 0x68, 0x3B, 0xE7, 0x62, 0x73, 0x29, 0x00,		0x1F, 0x8E, 0xD1, 0xF9, 0xBC, 0x3B, 0xCE, 0xE5,
+0x08, 0x74, 0x8F, 0x15, 0x81, 0xFC, 0x65, 0xE7,		0x72, 0x08, 0xCE, 0x8F, 0x0F, 0x02, 0xDE, 0x6D,
+0xE2, 0x06, 0x3F, 0x76, 0x0B, 0x0E, 0xE3, 0x66,		0xB0, 0xBA, 0x18, 0xEA, 0x47, 0x8E, 0x15, 0xBD,
+0xE9, 0xFB, 0x7F, 0xA8, 0xF8, 0x50, 0xA5, 0x17,		0x74, 0x6B, 0x40, 0x68, 0xA8, 0x57, 0x41, 0xE8,
+0xEE, 0xD7, 0x44, 0x28, 0xB9, 0x82, 0x5B, 0x0B,		0x40, 0xDD, 0xE3, 0x03, 0x28, 0x77, 0x9D, 0xA6,
+0x16, 0x98, 0x8E, 0x23, 0x80, 0xEF, 0x71, 0x6F,		0x88, 0x81, 0x35, 0x7B, 0xDD, 0xA3, 0xE2, 0xE5,
+0x8B, 0x0C, 0xBC, 0xDC, 0x0C, 0x59, 0x00, 0xB1,		0x2C, 0xCC, 0x62, 0xA8, 0x29, 0x05, 0x56, 0x1A,
+0xD8, 0x96, 0x09, 0x02, 0xE4, 0x71, 0x2E, 0x64,		0xB1, 0xDF, 0xEE, 0x60, 0x64, 0xAF, 0xC7, 0x4B,
+0xB2, 0x64, 0x7E, 0x91, 0xA0, 0x9C, 0x67, 0x67,		0x77, 0x50, 0xE9, 0x12, 0x9C, 0x6E, 0x91, 0xB9,
+0xE0, 0x92, 0xF1, 0x79, 0xFE, 0xA8, 0xBA, 0xE0,		0x87, 0x9B, 0x33, 0x8B, 0x3F, 0xFA, 0x11, 0xCE,
+0x4E, 0xA5, 0x67, 0xB7, 0x94, 0x80, 0xE9, 0x1E,		0x2D, 0x30, 0xC9, 0xA1, 0x0A, 0x25, 0x3C, 0xCE,
+0x8F, 0xBC, 0xA3, 0x30, 0x07, 0x0F, 0x94, 0x70,		0xA9, 0x50, 0x3B, 0xDF, 0xEF, 0x37, 0x37, 0x67,
+0x02, 0x50, 0xEE, 0x27, 0x4D, 0xB9, 0xB1, 0xE9,		0x20, 0x48, 0xC6, 0xFF, 0x9A, 0x43, 0x61, 0x37,
+0x9F, 0xFE, 0x42, 0x69, 0x1D, 0xBB, 0xF9, 0x4F,		0x44, 0x52, 0x95, 0xDD, 0xFC, 0x44, 0x82, 0xDA,
+0x6E, 0x7E, 0xFC, 0x23, 0xAB, 0xD5, 0xD6, 0xF2,		0x99, 0x7E, 0x32, 0xDA, 0x1D, 0x68, 0xDB, 0x7A,
+0xA7, 0xF6, 0xAE, 0xD2, 0x6B, 0xC5, 0x1E, 0x2A,		0xEB, 0xFA, 0xF9, 0xC3, 0x1B, 0x2A, 0xDD, 0xBE,
+0x7D, 0xA4, 0xE1, 0x31, 0x7F, 0x88, 0x42, 0x09,		0x93, 0x63, 0x0F, 0x91, 0xE9, 0xF6, 0xB3, 0x12,
+0x2C, 0xC3, 0xE3, 0xAB, 0x5E, 0x4A, 0xB6, 0x7D,		0x55, 0x60, 0xE9, 0xBC, 0x7D, 0xD5, 0x5B, 0x98,
+0x38, 0x4A, 0x4E, 0xDD, 0xBD, 0xDD, 0x24, 0x52,		0xCC, 0x63, 0xA3, 0xAD, 0x5A, 0x25, 0x24, 0x8F,
+0xB1, 0x3C, 0x66, 0xB6, 0x18, 0x6B, 0xA8, 0x8D,		0x47, 0x47, 0x92, 0xE7, 0x93, 0x1D, 0xC8, 0x14,
+0xA5, 0xCC, 0x6E, 0x65, 0x2D, 0x30, 0xBD, 0xFD,		0xB4, 0x26, 0x0D, 0x44, 0x6C, 0x3B, 0xAF, 0xBB,
+0x64, 0x37, 0x36, 0x6B, 0x41, 0xE2, 0x08, 0x27,		0x33, 0x76, 0x87, 0xB4, 0x16, 0x8C, 0x8E, 0x70,
+0xDF, 0xEC, 0xB1, 0x66, 0x8C, 0xDA, 0xC7, 0x11,		0x78, 0xB2, 0xB7, 0x0B, 0xA6, 0x70, 0x89, 0x0D,
+0x5A, 0x53, 0x05, 0xA2, 0xA3, 0xB2, 0x25, 0x65,		0x45, 0x44, 0xAA, 0x45, 0x27, 0x85, 0xA4, 0xCF,
+0x9D, 0x2A, 0x6F, 0xA5, 0x8B, 0x0E, 0xDB, 0x97,		0x9E, 0x3E, 0x54, 0x3F, 0x53, 0x1F, 0xE2, 0x9D,
+0x39, 0x27, 0xA5, 0xF0, 0xCF, 0x2C, 0x91, 0xFA,		0x2A, 0x40, 0xDA, 0x35, 0x74, 0x86, 0x93, 0xE8,
+0x2E, 0x59, 0xAE, 0xC0, 0xEB, 0xB5, 0xA8, 0x43,		0xD3, 0x0A, 0x26, 0x53, 0xBD, 0xFD, 0x0F, 0x50,
+0x4B, 0x01, 0x02, 0x1E, 0x03, 0x14, 0x00, 0x02,		0x00, 0x08, 0x00, 0x69, 0x78, 0x3A, 0x5B, 0xA8,
+0x44, 0x9E, 0x5D, 0x39, 0x0C, 0x00, 0x00, 0x6F,		0x70, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0xFF,		0x81, 0x00, 0x00, 0x00, 0x00, 0x33, 0x34, 0x30,
+0x35, 0x2E, 0x78, 0x6D, 0x6C, 0x50, 0x4B, 0x05,		0x06, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01,
+0x00, 0x36, 0x00, 0x00, 0x00, 0x5F, 0x0C, 0x00,		0x00, 0x00, 0x00 };
+
+uint8_t gencp_xml_sha1hash[] = {
+0xb7, 0xff, 0x22, 0x96, 0x95, 0x59, 0x4f, 0xaf, 0xe3, 0xd0,
+0xbb, 0x8d, 0xea, 0xd7, 0x52, 0x95, 0x7d, 0x99, 0xd5, 0x40};
+
+
+
+/* The GenCP protocol utilizes big-endian byte order, whereas the u3v protocol employs little-endian byte order.
+   Consequently, it is necessary to write these GenCP-specific functions. */
+static inline uint16_t GencpConvertEndian16(uint16_t data)
+{
+    return data;
+}
+
+static inline uint32_t GencpConvertEndian32(uint32_t data)
+{
+    return data;
+}
+
+static inline uint64_t GencpConvertEndian64(uint64_t data)
+{
+    return data;
+}
+
+uint8_t CheckGeneralXmlReg(uint32_t reg)
+{
+	for (int i = 0; i < sizeof(g_gencpGeneralXmlReg) / sizeof(g_gencpGeneralXmlReg[0]); i ++) {
+		if (reg == g_gencpGeneralXmlReg[i])
+			return 1;
+	}
+
+	return 0;
+}
+
+/* Digital Gain Conversion Function: Converts floating-point gain values to register values. */
+uint32_t ConvertDigiGainToReg(float gainValue)
+{
+    if (gainValue <= 0.0000f) {
+        return 0;
+    }
+
+    int exponent = 0;
+       float normalizedValue = gainValue;
+
+       /* Index Section */
+       if (gainValue >= 8.0000f) {
+           exponent = 3;
+           normalizedValue = gainValue / 8.0f;
+       } else if (gainValue >= 4.0000f) {
+           exponent = 2;
+           normalizedValue = gainValue / 4.0f;
+       } else if (gainValue >= 2.0000f) {
+           exponent = 1;
+           normalizedValue = gainValue / 2.0f;
+       } else {
+           exponent = 0;
+           normalizedValue = gainValue;
+       }
+
+       /* Calculate the fractional part */
+    int mantissa = (int)((normalizedValue - 1.0000f) * 16.0000f);
+    if (mantissa < 0) {
+		mantissa = 0;
+	}
+    if (mantissa > 15) {
+		mantissa = 15;
+	}
+
+    /* Combination  */
+    return (exponent << 4) | mantissa;
+}
+
+/* Digital Gain Conversion Function: Converts register values into floating-point gain values */
+float ConvertRegToDigiGain(uint32_t regValue)
+{
+    int exponent = (regValue >> 4) & 0xF;
+    int mantissa = regValue & 0xF;
+    float powerOf2 = 1.0000f;
+
+    if (exponent > 0) {
+        powerOf2 = (float)(1 << exponent);  /* 2^exponent */
+    }
+
+    return powerOf2 * (1.0000f + (float)mantissa / 16.0000f);
+}
+
+
+/*
+    pktOffset: the position of this subpacket in the packet len of fileAccessCtrl.fileAccessLength
+    data: update data of fpga or xml
+    len: the subpacket len
+*/
+int HandleUpdateData(uint32_t pktOffset, uint8_t *data, uint32_t len)
+{
+    uint32_t updateFlashBaseAddr = 0, writeAddr = 0;
+
+    if (pktOffset > g_u3vFileAccessCtrl.fileAccessLen || data == NULL || len == 0) {
+        LOG_DEBUG("param error\r\n");
+        return -1;
+    }
+
+    /* get which file, FPGA or XML, need to be updated */
+    if (g_u3vFileAccessCtrl.fileSelector == U3V_UPDATE_FILE_SELECTOR_FPGA) {
+        updateFlashBaseAddr = FLASH_SPACE_FIRMWARE_UPDATE_START_ADDR;
+    } else if (g_u3vFileAccessCtrl.fileSelector == U3V_UPDATE_FILE_SELECTOR_XML) {/* XML*/
+        /* XML upgrade file format: first 128 bytes are info, rest is XML data*/
+        /* Write from INFO area start address, not DATA area*/
+        updateFlashBaseAddr = FLASH_SPACE_GENCP_XML_INFO_START_ADDR;
+        LOG_DEBUG("file selector xml\r\n");
+    } else if (g_u3vFileAccessCtrl.fileSelector == U3V_UPDATE_FILE_SELECTOR_DPC) {
+        updateFlashBaseAddr = FLASH_SPACE_DPC_START_ADDR;
+        LOG_DEBUG("file selector DPC\r\n");
+    } else {
+    	LOG_DEBUG("file selector error\r\n");
+        return -2;
+    }
+
+    /* erase 4K flash, while get the first packet is received, ignore the condition of fileAccessLen > 4096 */
+    if (g_u3vFileAccessCtrl.fileAccessOffset == 0 && pktOffset == 0) {
+        NORFLASH_ERASE_4K_SECTOR(SPI_DEV_ID_CODE, updateFlashBaseAddr & (~(NOR_FLASH_ERASE_BLOCK_SIZE_4K - 1)));
+        DelayMs(5);
+        g_u3vFileAccessCtrl.fileTotalLen = 0; /* clear at the first packet of fpga or xml data received */
+        LOG_DEBUG("erase first block\r\n");
+    }
+
+    /* calculate the flash address according to the FileAccessOffset and pktOffset, and write data to flash */
+    writeAddr = updateFlashBaseAddr + g_u3vFileAccessCtrl.fileAccessOffset + pktOffset;
+    NorFlashWriteData(SPI_DEV_ID_CODE, writeAddr, data, len);
+
+    /* erase the next 4K block when the current block has been written. len must can devide 4K, such as 128 */
+    g_u3vFileAccessCtrl.fileTotalLen += len;
+    g_u3vFileAccessCtrl.fileOpRet += len;
+    if (((g_u3vFileAccessCtrl.fileTotalLen) & 0xFFF) == 0) {
+        NORFLASH_ERASE_4K_SECTOR(SPI_DEV_ID_CODE, updateFlashBaseAddr + g_u3vFileAccessCtrl.fileTotalLen);
+        DelayMs(5);
+        LOG_DEBUG("erase next block: 0x%x\r\n", updateFlashBaseAddr + g_u3vFileAccessCtrl.fileTotalLen);
+    }
+
+    return 0;
+}
+
+void WriteXmlFileLen(void)
+{
+    /* write xml file len to flash when update xml file finished */
+    if (g_u3vFileAccessCtrl.fileSelector == U3V_UPDATE_FILE_SELECTOR_XML &&
+		g_u3vFileAccessCtrl.fileOpSelector == U3V_UPDATE_FILE_OP_SELECTOR_CLOSE) {
+    	NorFlashWriteBuf(SPI_DEV_ID_CODE, FLASH_SPACE_GENCP_XML_INFO_START_ADDR,
+    					sizeof(g_u3vFileAccessCtrl.fileTotalLen), &g_u3vFileAccessCtrl.fileTotalLen);
+    }
+}
+
+void UpdatePayloadSize(uint32_t virtualAddr)
+{
+	if (virtualAddr >= (GENCP_XML_REG_VIRTUAL_START_ADDR + GENCP_USER_IMAGE_REG_HEIGHT) &&
+		virtualAddr <= (GENCP_XML_REG_VIRTUAL_START_ADDR + GENCP_USER_IMAGE_REG_PIXEL_FORMAT)) {
+			g_u3vStreamInterfaceRegMap.siReqPayloadSize = ReadRegByAddr(AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_PAYLOAD_SIZE);
+		}
+}
+
+void GetSeriesNum(uint32_t dstAddr, uint8_t *ackBuf)
+{
+	uint32_t seriesNum = 0;
+	uint8_t out[8];
+
+	memcpy(&seriesNum, dstAddr, sizeof(seriesNum));
+	// sprintf(ackBuf, "%d%d%d%d%s%d", (seriesNum >> 24) & 0x3F, (seriesNum >> 20) & 0xF, (seriesNum >> 18) & 0x3, (seriesNum >> 14) &0xF, "YX-000", seriesNum & 0x3FFF);
+	memset(out, 0x00, sizeof(out));
+	U32ToDecStr((seriesNum >> 24) & 0x3F, out);
+	strcat(ackBuf, out);
+	memset(out, 0x00, sizeof(out));
+	U32ToDecStr((seriesNum >> 20) & 0xF, out);
+	strcat(ackBuf, out);
+	memset(out, 0x00, sizeof(out));
+	U32ToDecStr((seriesNum >> 18) & 0x3, out);
+	strcat(ackBuf, out);
+	memset(out, 0x00, sizeof(out));
+	U32ToDecStr((seriesNum >> 14) & 0xF, out);
+	strcat(ackBuf, out);
+	strcat(ackBuf, "YX-000");
+	memset(out, 0x00, sizeof(out));
+	U32ToDecStr(seriesNum & 0x3FFF, out);
+	strcat(ackBuf, out);
+}
+
+/* buf points to the start of ccd */
+uint16_t ParseGencpCcdCmdReadMem(uint8_t *buf, uint8_t *ackBuf, uint16_t *ackLen)
+{
+    GencpScdReadMemCmd *scd = NULL;
+    uint16_t len = 0;
+    uint64_t dstAddr = 0, readAddr = 0;
+    uint32_t flashAddr = 0;
+
+    scd = (GencpScdReadMemCmd *)(buf + sizeof(GencpCcdCmd));
+    memset(g_xmlBuf, 0x00, sizeof(g_xmlBuf));
+
+#ifndef ENDOSCOPE
+    if ((scd->regAddr & 0x03) != 0) {
+        return GENCP_ACK_BAD_ALIGNMENT; /* the address must aligned with 4 Bytes */
+    }
+#endif
+
+    len = GencpConvertEndian16(scd->readLen);
+    readAddr = GencpConvertEndian64(scd->regAddr);
+
+    /* check regAddr range, map virtual address from host to physical address of device */
+    for (int i = 0; i < GENCP_REG_MAP_ZONE_TOTAL_NUM; i ++) {
+        if (readAddr < g_gencpRegMapZone.zone[i].cmdStartAddr || readAddr >= g_gencpRegMapZone.zone[i].cmdEndAddr) {
+            continue;
+        }
+
+        if (i == GENCP_REG_MAP_ZONE_XML_FILE) {
+        	// LOG_DEBUG("Read xml from flash\r\n");
+            /* xml file need to read flash */
+            flashAddr = FLASH_SPACE_GENCP_XML_DATA_START_ADDR + readAddr - g_gencpRegMapZone.zone[i].cmdStartAddr;
+            flashAddr &= (~(NOR_FLASH_RW_MAX_SIZE - 1)); /* align to NOR_FLASH_RW_MAX_SIZE */
+            NorFlashRead(SPI_DEV_ID_CODE, flashAddr, sizeof(g_xmlBuf), g_xmlBuf);
+            dstAddr = (uint64_t)(uintptr_t)g_xmlBuf + (readAddr & (NOR_FLASH_RW_MAX_SIZE - 1));
+        } else {
+        	dstAddr = readAddr - g_gencpRegMapZone.zone[i].cmdStartAddr + g_gencpRegMapZone.zone[i].devStartAddr;
+			break;
+        }
+    }
+
+    if (dstAddr == 0) {
+    	return GENCP_ACK_INVALID_ADDRESS;
+    }
+
+#ifdef ENDOSCOPE
+    uint32_t regValue = 0;
+	if (readAddr >= g_gencpRegMapZone.zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].cmdStartAddr &&
+		readAddr < g_gencpRegMapZone.zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].cmdEndAddr) {
+
+		if (CheckGeneralXmlReg(dstAddr) == 1) {
+			/* general xml reg */
+			regValue = *(volatile uint32_t *)(AXI_BASE_ADDR + (uint32_t)dstAddr);
+			if (len == 16 && readAddr == 0x30A00) {
+               	/* Edition StringReg - use AXI interface */
+				uint32_t physAddr = AXI_BASE_ADDR + (dstAddr & 0xFFFF);
+				for (int i = 0; i < 16; i += 4) {
+					 uint32_t regValue = *(volatile uint32_t *)(physAddr + i);
+					 memcpy(ackBuf + i, &regValue, 4);
+				}
+			}
+		} else {
+			/* oah428 registers */
+			regValue = ReadRegOah428(dstAddr);
+		}
+		memcpy(ackBuf, &regValue, sizeof(regValue));
+	} else {
+		/* other registers */
+		memcpy(ackBuf, (uint8_t *)dstAddr, len);
+	}
+	LOG_DEBUG("gencp read reg, addr: 0x%x, dstAddr: 0x%x, value: 0x%x\r\n", (uint32_t)readAddr, (uint32_t)dstAddr, regValue);
+#else
+	if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_CMD_SELECT_ARG_MODE) {
+		memcpy(ackBuf, &g_globalParams.argMode, sizeof(g_globalParams.argMode));
+	} else if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_CMD_MB_VERSION) {
+		strcat((char *)ackBuf, BOARD);
+		strcat((char *)ackBuf, VERSION);
+		LOG_DEBUG("ver: %s\r\n", ackBuf);
+#ifdef CAM2929
+	} else if (dstAddr == AXI_BASE_ADDR + GENCP_USER_SENSOR_DIGI_GAIN) {
+		uint32_t regValue = *(volatile uint32_t *)dstAddr;
+		float gainValue = ConvertRegToDigiGain(regValue);
+		memcpy(ackBuf, &gainValue, sizeof(gainValue));
+		LOG_DEBUG("DIGI_GAIN read: reg=0x%x, float=%.2f\r\n", regValue, gainValue);
+#endif
+	} else if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_CMD_SERIES_NUM) {
+		GetSeriesNum(dstAddr, ackBuf);
+		LOG_DEBUG("serial num: %s\r\n", ackBuf);
+	} else if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_TEMPERATURE) {
+		memcpy(ackBuf, &g_gencpPeriodData.temp, sizeof(g_gencpPeriodData.temp));
+	} else if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_TEMPE_BIAS) {
+		memcpy(ackBuf, &g_globalParams.deviceTempBias[g_globalParams.argMode], sizeof(g_globalParams.deviceTempBias[g_globalParams.argMode]));
+	} else {
+		memcpy(ackBuf, (uint8_t *)dstAddr, len);
+	}
+	LOG_DEBUG("gencp read reg, addr: 0x%x, dstAddr: 0x%x, value: 0x%x, len: %d\r\n", (uint32_t)readAddr, (uint32_t)dstAddr, *(uint32_t*)(uint32_t)dstAddr, len);
+#endif
+
+    *ackLen = len;
+
+    return GENCP_ACK_SUCCESS;
+}
+
+uint16_t ParseGencpCcdCmdWriteMem(uint8_t *buf, uint8_t *ackBuf, uint16_t *ackLen)
+{
+    GencpCcdCmd *ccd = NULL;
+    GencpScdWriteMemCmd *scd = NULL;
+    GencpScdWriteMemAck scdAck;
+    uint8_t *dataBuf = NULL;
+    int len = 0;
+    uint32_t addr = 0, dstAddr = 0, i = 0;
+    uint8_t addrFlag = 0;
+    int ret = 0;
+
+    memset(&scdAck, 0x00, sizeof(scdAck));
+    ccd = (GencpCcdCmd *)buf;
+    scd = (GencpScdWriteMemCmd *)(buf + sizeof(GencpCcdCmd));
+    dataBuf = (uint8_t *)(buf + sizeof(GencpCcdCmd) + sizeof(scd->regAddr));
+
+#ifndef ENDOSCOPE
+    if ((scd->regAddr & 0x03) != 0) {
+        /* the address must aligned with 4 Bytes */
+        return GENCP_ACK_BAD_ALIGNMENT;
+    }
+#endif
+
+    addr = (uint32_t)GencpConvertEndian64(scd->regAddr);
+
+    /* check regAddr range, map virtual address from host to physical address of device */
+    for (int i = 0; i < GENCP_REG_MAP_ZONE_TOTAL_NUM; i ++) {
+        if (addr < g_gencpRegMapZone.zone[i].cmdStartAddr || addr >= g_gencpRegMapZone.zone[i].cmdEndAddr) {
+            continue;
+        }
+
+    	dstAddr = addr - g_gencpRegMapZone.zone[i].cmdStartAddr + g_gencpRegMapZone.zone[i].devStartAddr;
+
+        addrFlag = 1;
+        break;
+    }
+
+    if (addrFlag == 0) {
+        /* address is not in any reg map zone */
+        LOG_DEBUG("invalid input address: 0x%x\r\n", addr);
+    	return GENCP_ACK_INVALID_ADDRESS;
+    }
+
+    len = GencpConvertEndian16(ccd->len) - sizeof(scd->regAddr);
+
+#if defined(LINESCAN)
+    /* for FPGA and U3V */
+    if (dstAddr == g_gencpRegMapZone.zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].devStartAddr + GENCP_USER_IMAGE_REG_START_EN) {
+        DelayMs(500);
+        LOG_DEBUG("delay 500ms when start streaming\r\n");
+    }
+
+    if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_CMD_FFC_DARK_CALIB) {
+    	/* run ffc dark calibration */
+    	FfcCalibrateDark();
+    } else if (dstAddr == g_gencpRegMapZone.zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].devStartAddr + GENCP_USER_IMAGE_CMD_FFC_BRIGHT_CALIB) {
+    	/* run ffc bright calibration */
+    	FfcCalibrateBright();
+    } else if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_CMD_SELECT_ARG_MODE) {
+        /* select arg mode command */
+    	if (*(uint32_t *)dataBuf < ARG_MODE_MAX) {
+    		g_globalParams.argMode = *(uint32_t *)dataBuf;
+    	}
+    } else if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_CMD_SAVE_ARG) {
+        /* save args command, write args to specified flash address */
+        SaveArgsToFlash(g_globalParams.argMode);
+    } else if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_CMD_LOAD_ARG) {
+        /* load args command, read args from specified flash address and write value to FPGA */
+        LoadArgsFromFlash(g_globalParams.argMode);
+    } else if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_RESERVED) {
+    	; // do nothing
+	} else if (dstAddr == AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_TEMPE_BIAS) {
+        g_globalParams.deviceTempBias[g_globalParams.argMode] = *(uint32_t *)dataBuf;
+    } else if (addr >= GENCP_UPDATE_FILE_BUF_VIRTUAL_START_ADDR && addr < GENCP_UPDATE_FILE_BUF_VIRTUAL_END_ADDR) {
+        HandleUpdateData(dstAddr, dataBuf, len); /* update data */
+    } else {
+        WriteRegByAddr(dstAddr, *(uint32_t *)dataBuf); /* use little endian in xml */
+
+        if (addr == FILE_SELECTOR_REG_ADDR) {
+        	/* clear fileOpRet when receives fileSelector cmd of each packet */
+        	g_u3vFileAccessCtrl.fileOpRet = 0;
+        }
+
+#ifdef LINESCAN
+        /* check linescan regs */
+        for (i = 0; i < REG_LIST_TOTAL_NUM; i ++) {
+            if (dstAddr == g_saveRegs[i].addr) {
+            	g_saveRegs[i].value = *(uint32_t *)dataBuf;
+            }
+        }
+
+        if (dstAddr == AXI_BASE_ADDR + HDR_MODE_ADDR) {
+        	/* update pixel format */
+        	uint32_t pixelFormatValue = *(uint32_t *)dataBuf == 0 ? GENCP_PIXEL_FORMAT_MONO16 : GENCP_PIXEL_FORMAT_MONO12;
+        	WriteRegByAddr(AXI_BASE_ADDR + PIXEL_FORMAT_ADDR, pixelFormatValue);
+        }
+#endif
+
+        /* these sentences should be behind WriteRegByAddr, so that the data has been written in reg */
+        UpdatePayloadSize(addr);
+    }
+    LOG_DEBUG("-- gencp ccd write cmd, a: 0x%X, wd: 0x%x, rd: 0x%X, len: %d, dstAddr: 0x%x\r\n", addr, *(uint32_t *)dataBuf, *(uint32_t *)dstAddr, len, dstAddr);
+
+#elif defined(ENDOSCOPE)
+
+    if (addr >= GENCP_UPDATE_FILE_BUF_VIRTUAL_START_ADDR && addr < GENCP_UPDATE_FILE_BUF_VIRTUAL_END_ADDR) {
+        HandleUpdateData(dstAddr, dataBuf, len);
+    } else if (addr == g_gencpRegMapZone.zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].cmdStartAddr + GENCP_USER_IMAGE_REG_START_EN) {
+    	/* acquistion start */
+    	DelayMs(500);
+    	WriteRegByAddr(AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_START_EN, *(uint32_t *)dataBuf);
+    	LOG_DEBUG("acquistion start, v: 0x%x\r\n", *(uint32_t *)dataBuf);
+    } else if (addr >= g_gencpRegMapZone.zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].cmdStartAddr &&
+		addr < g_gencpRegMapZone.zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].cmdEndAddr) {
+    	if (CheckGeneralXmlReg(dstAddr) == 1) {
+    		WriteRegByAddr(AXI_BASE_ADDR + dstAddr, *(uint32_t *)dataBuf);
+    	    UpdatePayloadSize(addr);
+    		LOG_DEBUG("write reg, a: 0x%x, v: 0x%x\r\n", AXI_BASE_ADDR + dstAddr, *(uint32_t *)dataBuf);
+    	} else {
+    		/* oah428 registers */
+			WriteRegOah428(dstAddr, *(uint32_t *)dataBuf); /* only reg in endoscope xml can be written */
+    	}
+	} else {
+		/* other registers */
+		WriteRegByAddr(dstAddr, *(uint32_t *)dataBuf); /* use little endian in xml */
+		if (addr == FILE_SELECTOR_REG_ADDR){
+			g_u3vFileAccessCtrl.fileOpRet = 0;
+	   	}
+	}
+#else
+    if (addr >= GENCP_UPDATE_FILE_BUF_VIRTUAL_START_ADDR && addr < GENCP_UPDATE_FILE_BUF_VIRTUAL_END_ADDR) {
+		HandleUpdateData(dstAddr, dataBuf, len);
+	} else {
+#ifdef CAM2929
+        if (dstAddr == AXI_BASE_ADDR + GENCP_USER_SENSOR_DIGI_GAIN) {
+            float gainValue = *(float *)dataBuf;
+            uint32_t regValue = ConvertDigiGainToReg(gainValue);
+            WriteRegByAddr(dstAddr, regValue);
+            LOG_DEBUG("DIGI_GAIN: float=%.2f, reg=0x%x\r\n", gainValue, regValue);
+        } else {
+            WriteRegByAddr(dstAddr, *(uint32_t *)dataBuf); /* use little endian in xml */
+        }
+#else
+        WriteRegByAddr(dstAddr, *(uint32_t *)dataBuf); /* use little endian in xml */
+#endif
+		if (addr == FILE_SELECTOR_REG_ADDR) {
+			g_u3vFileAccessCtrl.fileOpRet = 0;
+	   	}
+    }
+    /* these sentences should be behind WriteRegByAddr, so that the data has been written in reg */
+    UpdatePayloadSize(addr);
+    LOG_DEBUG("-- gencp ccd write cmd, a: 0x%X, d: 0x%X, len: %d, dstAddr: 0x%x\r\n", addr, *(uint32_t *)dstAddr, len, dstAddr);
+#endif
+
+    scdAck.writeLen = len;
+    /* ackLen only can be 0 or 4 depending on whether len is 0 */
+    *ackLen = sizeof(scdAck);
+    memcpy(ackBuf, &scdAck, sizeof(scdAck));
+
+    return GENCP_ACK_SUCCESS;
+}
+
+uint16_t ParseGencpCcdCmdReadMemStack(uint8_t *buf, uint8_t *ackBuf, uint16_t *ackLen)
+{
+    GencpCcdCmd *ccd = NULL;
+    GencpScdReadMemStackCmd *scd = NULL;
+    int i = 0;
+
+    ccd = (GencpCcdCmd *)buf;
+    scd = (GencpScdReadMemStackCmd *)(buf + sizeof(GencpCcdCmd));
+    *ackLen = 0;
+
+    if (ccd->len % sizeof(GencpCcdCmd) != 0) {
+        return GENCP_ACK_INVALID_PARAMETER;
+    }
+
+    for (i = 0; i < ccd->len / sizeof(GencpScdReadMemStackCmd); i++) {
+#ifndef ENDOSCOPE
+    	if ((scd[i].regAddr & 0x03) != 0) {
+            return GENCP_ACK_BAD_ALIGNMENT;
+        }
+#endif
+
+        memcpy(ackBuf + *ackLen, scd[i].regAddr, scd[i].readLen);
+        *ackLen += scd[i].readLen;
+    }
+
+    return GENCP_ACK_SUCCESS;
+}
+
+uint16_t ParseGencpCcdCmdWriteMemStack(uint8_t *buf, uint8_t *ackBuf, uint16_t *ackLen)
+{
+    GencpCcdCmd *ccd = NULL;
+    GencpScdWriteMemStackCmd *scd;
+    GencpScdWriteMemStackAck ack;
+    int len = 0;
+
+    ccd = (GencpCcdCmd *)buf;
+
+    while (len < ccd->len) {
+        scd = (GencpScdWriteMemStackCmd *)(buf + sizeof(GencpCcdCmd) + len);
+#ifndef ENDOSCOPE
+        if ((scd->regAddr & 0x03) != 0) {
+            return GENCP_ACK_BAD_ALIGNMENT;
+        }
+#endif
+
+        /* TODO: check if the address is valid and can be written */
+        memcpy((void *)scd->regAddr, scd + sizeof(GencpScdWriteMemStackCmd), scd->writeLen);
+        len += sizeof(GencpScdWriteMemStackCmd) + scd->writeLen;
+
+        /* handle with ack */
+        ack.len = scd->writeLen;
+        memcpy(ackBuf + *ackLen, &ack, sizeof(GencpScdWriteMemStackAck));
+        *ackLen += ack.len;
+    }
+
+    return GENCP_ACK_SUCCESS;
+}
+
+uint16_t ParseGencpCcdCmdEvent(uint8_t *buf, uint8_t *ackBuf, uint16_t *ackLen)
+{
+    /* TODO */
+    LOG_DEBUG("func: %s", __FUNCTION__);
+
+    return GENCP_ACK_SUCCESS;
+}
+
+uint16_t ParseGencpCcdCmdWriteReg(uint8_t *buf, uint8_t *ackBuf, uint16_t *ackLen)
+{
+    /* TODO */
+    LOG_DEBUG("func: %s", __FUNCTION__);
+
+    return GENCP_ACK_SUCCESS;
+}
+
+static GencpCmdCb gencpStandardCmd[GENCP_CCD_STANDARD_CMD_NUM] = {
+    /* standard */
+    {GENCP_READMEM_CMD, ParseGencpCcdCmdReadMem},
+    {GENCP_WRITEMEM_CMD, ParseGencpCcdCmdWriteMem},
+    {GENCP_READMEM_STACKED_CMD, ParseGencpCcdCmdReadMemStack},
+    {GENCP_WRITEMEM_STACKED_CMD, ParseGencpCcdCmdWriteMemStack},
+    {GENCP_EVENT_CMD, ParseGencpCcdCmdEvent},
+    /* custom */
+    {GENCP_WRITE_REG_CMD, ParseGencpCcdCmdWriteReg}
+};
+
+static inline void GencpSend(const uint8_t *buf, uint16_t len)
+{
+    UartSend(UART_CMD, buf, len);
+}
+
+#if 0
+void MakeGencpAckPacket(uint8_t *buf, uint8_t *scdAckBuf, uint16_t scdAckLen, uint16_t ret)
+{
+    GencpPrefix *prefix = NULL;
+    GencpCcdCmd *ccd = NULL;
+    GencpPrefix prefixAck;
+    GencpCcdAck ccdAck;
+    uint8_t gencpAckBuf[GENCP_DAT_LEN_MAX] = { 0 }; /* FIXME: decrease the size of buf */
+    uint16_t reqAck = 0;
+
+    prefix = (GencpPrefix *)buf;
+    prefixAck.preamble = prefix->preamble;
+    prefixAck.chnId = prefix->chnId;
+
+    ccd = (GencpCcdCmd *)(buf + sizeof(GencpPrefix));
+    /* check ack flags */
+    ccd->cmdFlag.flagDat = GencpConvertEndian16(ccd->cmdFlag.flagDat);
+    reqAck = ccd->cmdFlag.flag.reqAck;
+    if (reqAck == 0) {
+        return; /* do not need a ack */
+    }
+
+    ccdAck.staCode.codeDat = GencpConvertEndian16(ret);
+    ccdAck.cmdId.idDat = GencpConvertEndian16(ccd->cmdId.idDat);
+    ccdAck.cmdId.id.ackFlag = 1;
+    ccdAck.cmdId.idDat = GencpConvertEndian16(ccdAck.cmdId.idDat);
+    ccdAck.len = GencpConvertEndian16(scdAckLen);
+    ccdAck.reqId = ccd->reqId;
+    /* copy ccd ack */
+    memcpy(gencpAckBuf + sizeof(GencpPrefix), (uint8_t *)&ccdAck, sizeof(GencpCcdAck));
+    /* copy scd ack */
+    memcpy(gencpAckBuf + sizeof(GencpPrefix) + sizeof(GencpCcdAck), scdAckBuf, scdAckLen);
+    /* calculate ccd crc16 */
+    prefixAck.ccdCrc16 = GencpCrc16(gencpAckBuf + sizeof(GencpPrefix) - sizeof(prefix->chnId), sizeof(prefix->chnId) + sizeof(GencpCcdAck));
+    prefixAck.ccdCrc16 = GencpConvertEndian16(prefixAck.ccdCrc16);
+    /* calculate scd crc16 */
+    prefixAck.scdCrc16 = GencpCrc16(gencpAckBuf + sizeof(GencpPrefix) - sizeof(prefix->chnId), sizeof(prefix->chnId) + sizeof(GencpCcdAck) + scdAckLen);
+    prefixAck.scdCrc16 = GencpConvertEndian16(prefixAck.scdCrc16);
+    /* copy prefix ack */
+    memcpy(gencpAckBuf, &prefixAck, sizeof(prefixAck));
+
+    /* send gencp ack buf */
+    GencpSend(gencpAckBuf, sizeof(GencpPrefix) + sizeof(GencpCcdAck) + scdAckLen);
+}
+#else
+void MakeGencpAckPacket(uint8_t *buf, uint8_t *scdAckBuf, uint16_t scdAckLen, uint16_t ret)
+{
+    GencpPrefix *prefix = NULL;
+    GencpCcdCmd *ccd = NULL;
+    GencpPrefix prefixAck;
+    GencpCcdAck ccdAck;
+    uint8_t gencpAckBuf[GENCP_DAT_LEN_MAX] = { 0 }; /* FIXME: decrease the size of buf */
+    uint16_t reqAck = 0;
+
+    prefix = (GencpPrefix *)buf;
+    prefixAck.preamble = prefix->preamble;
+
+    ccd = (GencpCcdCmd *)(buf + sizeof(GencpPrefix));
+    /* check ack flags */
+    /* ccd->cmdFlag.flagDat = GencpConvertEndian16(ccd->cmdFlag.flagDat);*/
+    reqAck = ccd->cmdFlag.flag.reqAck;
+    if (reqAck == 0) {
+        return; /* do not need a ack */
+    }
+
+#if 1
+    ccdAck.staCode.codeDat = GencpConvertEndian16(ret);
+    ccdAck.cmdId.idDat = GencpConvertEndian16(ccd->cmdId.idDat);
+    ccdAck.cmdId.id.ackFlag = 1;
+    ccdAck.cmdId.idDat = GencpConvertEndian16(ccdAck.cmdId.idDat);
+    ccdAck.len = GencpConvertEndian16(scdAckLen);
+    ccdAck.reqId = ccd->reqId;
+#else
+    ccdAck.staCode.codeDat = ret;
+    ccdAck.cmdId.idDat = ccd->cmdId.idDat;
+    ccdAck.cmdId.id.ackFlag = 1;
+    ccdAck.cmdId.idDat = ccdAck.cmdId.idDat;
+    ccdAck.len = scdAckLen;
+    ccdAck.reqId = ccd->reqId;
+#endif
+
+    /* copy ccd ack */
+    memcpy(gencpAckBuf + sizeof(GencpPrefix), (uint8_t *)&ccdAck, sizeof(GencpCcdAck));
+    /* copy scd ack */
+    memcpy(gencpAckBuf + sizeof(GencpPrefix) + sizeof(GencpCcdAck), scdAckBuf, scdAckLen);
+    /* calculate ccd crc16 */
+    /* calculate scd crc16 */
+    /* copy prefix ack */
+    memcpy(gencpAckBuf, &prefixAck, sizeof(prefixAck));
+
+    /* send gencp ack buf */
+    /* PrintBuf(gencpAckBuf, sizeof(GencpPrefix) + sizeof(GencpCcdAck) + scdAckLen, "gencp ack buf");*/
+    GencpSend(gencpAckBuf, sizeof(GencpPrefix) + sizeof(GencpCcdAck) + scdAckLen);
+}
+#endif
+
+/* buf points to the start address of ccd */
+uint16_t ParseGencpCcdCmd(uint8_t *buf, uint8_t *ackBuf, uint16_t *ackLen)
+{
+    GencpCcdCmd *ccd = NULL;
+    uint16_t cmdValue = 0, ret = 0;
+    int flag = 0, i = 0;
+
+    /* handle with cmd id */
+    ccd = (GencpCcdCmd *)buf;
+    cmdValue = (uint16_t)ccd->cmdId.id.cmdValue;
+    for (i = 0; i < GENCP_CCD_STANDARD_CMD_NUM; i++) {
+        if ((cmdValue << 1) == gencpStandardCmd[i].cmdId) {
+            /* execute cmd */
+            ret = gencpStandardCmd[i].func(buf, ackBuf, ackLen);
+            if (ret != GENCP_ACK_SUCCESS) {
+                return ret;
+            }
+            flag = 1;
+            break;
+        }
+    }
+
+    if (flag != 1) {
+        return GENCP_ACK_NOT_IMPLEMENTED;
+    }
+
+    return GENCP_ACK_SUCCESS;
+}
+
+/* parse received gencp package */
+#if 0
+int ParseGencpRecvPkg(uint8_t *buf, uint32_t len)
+{
+    GencpPrefix *prefix = NULL;
+    GencpCcdCmd *ccd = NULL;
+    uint16_t crc = 0;
+    uint16_t scdLen = 0;
+    uint8_t scdAckBuf[GENCP_DAT_LEN_MAX] = { 0 };
+    uint16_t scdAckLen = 0;
+    uint16_t ret = 0;
+
+    PrintBuf(buf, len, "gencp data");
+
+    /* guarantee buf is not NULL and len > prefix + ccd */
+    if (buf == NULL || len < sizeof(GencpPrefix) + sizeof(GencpCcdCmd)) {
+        return GENCP_CHK_PARA_ERR;
+    }
+
+    /* check head */
+    prefix = (GencpPrefix *)buf;
+    if (GencpConvertEndian16(prefix->preamble) != GENCP_PREFIX_PREAMBLE) {
+        return GENCP_CHK_PREAMBLE_ERR;
+    }
+
+    /* check crc */
+    ccd = (GencpCcdCmd *)(buf + sizeof(GencpPrefix));
+    /* CRC-16 build from the channel_id and CCD */
+    crc = GencpCrc16(buf + sizeof(GencpPrefix) - sizeof(prefix->chnId), sizeof(prefix->chnId) + sizeof(GencpCcdCmd));
+    if (GencpConvertEndian16(crc) != prefix->ccdCrc16) {
+        return GENCP_CHK_CCD_CRC_ERR;
+    }
+
+    scdLen = GencpConvertEndian16(ccd->len);
+    crc = GencpCrc16(buf + sizeof(GencpPrefix) - sizeof(prefix->chnId), sizeof(prefix->chnId) + sizeof(GencpCcdCmd) + scdLen);
+    if (GencpConvertEndian16(crc) != prefix->scdCrc16) {
+        return GENCP_CHK_SCD_CRC_ERR;
+    }
+
+    /* parse cmd, received cmd flag must indicates that this is a cmd */
+    if (ccd->cmdId.id.ackFlag != GENCP_CCD_CMDID_CMD) {
+        return GENCP_CHK_ACK_FLAG_ERR;
+    }
+
+    ret = ParseGencpCcdCmd(buf + sizeof(GencpPrefix), scdAckBuf, &scdAckLen);
+    /* handle with ack and make ack packet */
+    MakeGencpAckPacket(buf, scdAckBuf, scdAckLen, ret);
+
+    return OK;
+}
+#else
+int ParseGencpRecvPkg(uint8_t *buf, uint32_t len)
+{
+    GencpPrefix *prefix = NULL;
+    GencpCcdCmd *ccd = NULL;
+    // uint16_t scdLen = 0;
+    uint8_t scdAckBuf[GENCP_DAT_LEN_MAX] = { 0 };
+    uint16_t scdAckLen = 0;
+    uint16_t ret = 0;
+
+    /* guarantee buf is not NULL and len > prefix + ccd */
+    if (buf == NULL || len < sizeof(GencpPrefix) + sizeof(GencpCcdCmd)) {
+        return GENCP_CHK_PARA_ERR;
+    }
+
+    // PrintBuf(buf, len, "gencp recv buf");
+
+    /* check head */
+    prefix = (GencpPrefix *)buf;
+    if (prefix->preamble != GENCP_PREFIX_PREAMBLE) {
+        return GENCP_CHK_PREAMBLE_ERR;
+    }
+
+    /* check crc */
+    ccd = (GencpCcdCmd *)(buf + sizeof(GencpPrefix));
+    /* CRC-16 build from the channel_id and CCD */
+
+    /* scdLen = GencpConvertEndian16(ccd->len);*/
+
+    /* parse cmd, received cmd flag must indicates that this is a cmd */
+    if (ccd->cmdId.id.ackFlag != GENCP_CCD_CMDID_CMD) {
+        return GENCP_CHK_ACK_FLAG_ERR;
+    }
+
+    ret = ParseGencpCcdCmd(buf + sizeof(GencpPrefix), scdAckBuf, &scdAckLen);
+    /* handle with ack and make ack packet */
+    MakeGencpAckPacket(buf, scdAckBuf, scdAckLen, ret);
+
+    return OK;
+}
+#endif
+
+static inline void WriteXmlToNorFlash(uint8_t *buf, uint32_t addr, uint16_t len)
+{
+    if (buf == NULL || len == 0)
+        return;
+
+    NorFlashWriteDataWithoutReadback(SPI_DEV_ID_CODE, addr, buf, len);
+}
+
+int HasXmlInFlash(void)
+{
+    uint32_t xmlLen = 0;
+    uint8_t xmlInfo[24];
+
+    NorFlashReadBuf(SPI_DEV_ID_CODE, FLASH_SPACE_GENCP_XML_INFO_START_ADDR,
+                    sizeof(xmlInfo), xmlInfo);
+
+    memcpy(&xmlLen, xmlInfo, sizeof(xmlLen));
+    xmlLen = GencpConvertEndian32(xmlLen);
+
+    if (xmlLen > 0 && xmlLen != 0xFFFFFFFF && xmlLen < (1024 * 1024)) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+void GencpWriteXmlFromArray(void)
+{
+	uint32_t xmlLen = 0;
+	uint8_t head[128] = {0};
+
+	/* erase 1MB flash for xml */
+	for (int i = 0; i < 1024 / 4; i ++) {
+		NORFLASH_ERASE_4K_SECTOR(SPI_DEV_ID_CODE, FLASH_SPACE_GENCP_XML_INFO_START_ADDR + i * 4096);
+		DelayMs(2);
+	}
+
+	xmlLen = sizeof(gencp_xml_file);
+	memset(head, 0x00, sizeof(head));
+	memcpy(head, &xmlLen, sizeof(xmlLen));
+	memcpy(head + 4, gencp_xml_sha1hash, sizeof(gencp_xml_sha1hash));
+	/* write head info into flash */
+	NorFlashWriteBuf(SPI_DEV_ID_CODE, FLASH_SPACE_GENCP_XML_INFO_START_ADDR, sizeof(head), head);
+
+	WriteXmlToNorFlash(gencp_xml_file, FLASH_SPACE_GENCP_XML_INFO_START_ADDR + sizeof(head), sizeof(gencp_xml_file));
+
+	/* read flash to check */
+	LOG_DEBUG("xml len: %d, 0x%x\r\n", xmlLen, xmlLen);
+	NorFlashReadBuf(SPI_DEV_ID_CODE, FLASH_SPACE_GENCP_XML_INFO_START_ADDR, sizeof(head), head);
+	PrintBuf(head, sizeof(head), "xml head");
+	NorFlashReadBuf(SPI_DEV_ID_CODE, FLASH_SPACE_GENCP_XML_INFO_START_ADDR + sizeof(head), sizeof(head), head);
+	PrintBuf(head, sizeof(head), "xml first 128B");
+}
+
+int ParseGencpXmlRecvPkg(uint8_t *buf, uint32_t len)
+{
+    if (buf == NULL || len == 0)
+        return GENCP_XML_CHK_PARA_ERR;
+
+    Pack *pkt = NULL;
+    uint32_t flashAddr = 0, fileSize = 0;
+    uint16_t crc = 0, dataLen = 0, seq = 0;
+    uint8_t *data = NULL;
+    uint8_t ackBuf[5] = {0};
+    uint32_t errCode = 0;
+
+    memset(ackBuf, 0x00, sizeof(ackBuf));
+
+    flashAddr = FLASH_SPACE_GENCP_XML_INFO_START_ADDR;
+    pkt = (Pack *)buf;
+    dataLen = GencpConvertEndian16(pkt->dataLen);
+    seq = GencpConvertEndian16(pkt->seqNum);
+    data = pkt->dataPayload;
+
+    memcpy(&crc, buf + 7 + dataLen, sizeof(crc));
+    crc = GencpConvertEndian16(crc);
+
+    /* check crc */
+    if (!CheckCrc16(buf, len - 2, crc)) {
+        ackBuf[0] = 0x02;
+        errCode = 0x01;
+        memcpy(ackBuf + 1, &errCode, sizeof(errCode));
+        SendPacket(UART_GENCP, PACKET_TYPE_GENCP_XML_REPLY, ackBuf, sizeof(ackBuf), seq);
+
+        return GENCP_XML_CHK_CRC_ERR;
+    }
+
+    /* erase xml flash space when first package is received */
+    if (seq == 1) {
+        memcpy(&fileSize, data, sizeof(fileSize));
+        fileSize = GencpConvertEndian32(fileSize);
+        LOG_DEBUG("erase xml flash\r\n");
+        NorFlashEraseBySector(SPI_DEV_ID_CODE, flashAddr, fileSize);
+        LOG_DEBUG("filesize: %u\r\n", fileSize);
+    }
+
+    /* write flash including length and sha2-hash */
+    WriteXmlToNorFlash(data, flashAddr + (seq - 1) * PACKET_DATA_MAX_LENGTH, dataLen);
+
+    ackBuf[0] = 0x01;
+    SendPacket(UART_GENCP, PACKET_TYPE_GENCP_XML_REPLY, ackBuf, sizeof(ackBuf), seq);
+
+    return OK;
+}
+
+void GencpGetPeriodData(void)
+{
+	uint32_t temp = 0;
+
+	/* according FPGA, we need reading temperature twice to get the real data */
+	temp = ReadRegByAddr(AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_TEMPERATURE);
+	DelayMs(1);
+	temp = ReadRegByAddr(AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_TEMPERATURE);
+
+	g_gencpPeriodData.temp = (int)((float)temp * 0.4848 - 334 + 0.5) + g_globalParams.deviceTempBias[g_globalParams.argMode];
+}
+
+/* map:
+0 ~ sizeof(g_gencpRegMap): gencp reg map in gencp V1.3
+sizeof(g_gencpRegMap) ~ sizeof(g_gencpRegMap) + sizeof(g_gencpCustomRegMap): user specified reg map
+0x0800 ~ 0x09A4: user specified reg map in xml
+0x1000 ~ 0x1000 + sizeof(g_gencpSbrm): sbrm, points to baudrate
+0x2000 ~ 0x2000 + sizeof(g_gencpManifestTable): manifest table, points to xml
+0x3000 ~ 0x3000 + sizeof(g_u3vStreamInterfaceRegMap): sirm, points to the first Streaming Interface Register Map
+0x020000 ~ 0x020000 + sizeof(xml): gencp xml
+0x030000 ~ 0x03A000: reg map in xml for common reg
+0x03A000 ~ 0x03E000: reg map in xml of file access control for update
+0x03E000 ~ 0x040000: reg map in xml for file access buffer
+*/
+void InitRegMapZone(GencpRegMapZone *zone)
+{
+    zone->zone[GENCP_REG_MAP_ZONE_PROTOCOL].cmdStartAddr = 0;
+    zone->zone[GENCP_REG_MAP_ZONE_PROTOCOL].cmdEndAddr = (uint64_t)sizeof(GencpRegMap);
+    zone->zone[GENCP_REG_MAP_ZONE_PROTOCOL].devStartAddr = (uint64_t)(uintptr_t)&g_gencpRegMap;
+
+    zone->zone[GENCP_REG_MAP_ZONE_CUSTOM].cmdStartAddr = sizeof(GencpRegMap);
+    zone->zone[GENCP_REG_MAP_ZONE_CUSTOM].cmdEndAddr = (uint64_t)(sizeof(GencpRegMap) + sizeof(GencpCustomRegMap));
+    zone->zone[GENCP_REG_MAP_ZONE_CUSTOM].devStartAddr = (uint64_t)(uintptr_t)&g_gencpCustomRegMap;
+
+    zone->zone[GENCP_REG_MAP_ZONE_USER_XML_REG].cmdStartAddr = GENCP_USER_REG_START_ADDR;
+    zone->zone[GENCP_REG_MAP_ZONE_USER_XML_REG].cmdEndAddr = (uint64_t)GENCP_USER_REG_END_ADDR;
+    zone->zone[GENCP_REG_MAP_ZONE_USER_XML_REG].devStartAddr = AXI_BASE_ADDR;
+
+    zone->zone[GENCP_REG_MAP_ZONE_SBRM].cmdStartAddr = GENCP_SBRM_VIRTUAL_ADDR;
+    zone->zone[GENCP_REG_MAP_ZONE_SBRM].cmdEndAddr = (uint64_t)(GENCP_SBRM_VIRTUAL_ADDR + sizeof(GencpSpecifyBootstrapRegMap));
+    zone->zone[GENCP_REG_MAP_ZONE_SBRM].devStartAddr = (uint64_t)(uintptr_t)&g_gencpSbrm;
+
+    zone->zone[GENCP_REG_MAP_ZONE_MANIFEST_TABLE].cmdStartAddr = GENCP_MANIFEST_TABLE_VIRTUAL_ADDR;
+    zone->zone[GENCP_REG_MAP_ZONE_MANIFEST_TABLE].cmdEndAddr = (uint64_t)(GENCP_MANIFEST_TABLE_VIRTUAL_ADDR + sizeof(GencpManifestTable));
+    zone->zone[GENCP_REG_MAP_ZONE_MANIFEST_TABLE].devStartAddr = (uint64_t)(uintptr_t)&g_gencpManifestTable;
+
+    zone->zone[GENCP_REG_MAP_ZONE_SIRM].cmdStartAddr = GENCP_SIRM_VIRTUAL_ADDR;
+    zone->zone[GENCP_REG_MAP_ZONE_SIRM].cmdEndAddr = (uint64_t)(GENCP_SIRM_VIRTUAL_ADDR + sizeof(U3vStreamInterfaceRegMap));
+    zone->zone[GENCP_REG_MAP_ZONE_SIRM].devStartAddr = (uint64_t)(uintptr_t)&g_u3vStreamInterfaceRegMap;
+
+    zone->zone[GENCP_REG_MAP_ZONE_XML_FILE].cmdStartAddr = GENCP_XML_VIRTUAL_START_ADDR;
+    zone->zone[GENCP_REG_MAP_ZONE_XML_FILE].cmdEndAddr = (uint64_t)(GENCP_XML_VIRTUAL_START_ADDR + g_gencpXmlFile.len);
+    zone->zone[GENCP_REG_MAP_ZONE_XML_FILE].devStartAddr = (uint64_t)(uintptr_t)g_xmlBuf;
+    LOG_DEBUG("XML ZONE END ADDR: 0x%08X\r\n", zone->zone[GENCP_REG_MAP_ZONE_XML_FILE].cmdEndAddr);
+    // zone->zone[GENCP_REG_MAP_ZONE_XML_FILE].devStartAddr = &g_gencpXmlFile.xmlFile; /* malloc space when read xml cmd is received */
+
+    zone->zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].cmdStartAddr = GENCP_XML_REG_VIRTUAL_START_ADDR;
+    zone->zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].cmdEndAddr = GENCP_XML_UPDATE_REG_VIRTUAL_START_ADDR;
+#ifdef ENDOSCOPE
+    zone->zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].devStartAddr = 0;
+#else
+    zone->zone[GENCP_REG_MAP_ZONE_CAMERA_CONFIG].devStartAddr = AXI_BASE_ADDR;
+#endif
+
+    zone->zone[GENCP_REG_MAP_ZONE_UPDATE_REG].cmdStartAddr = GENCP_XML_UPDATE_REG_VIRTUAL_START_ADDR;
+	zone->zone[GENCP_REG_MAP_ZONE_UPDATE_REG].cmdEndAddr = GENCP_XML_UPDATE_REG_VIRTUAL_END_ADDR;
+	zone->zone[GENCP_REG_MAP_ZONE_UPDATE_REG].devStartAddr = (uint64_t)(uintptr_t)&g_u3vFileAccessCtrl; /* TODO: SNFC variable */
+
+	zone->zone[GENCP_REG_MAP_ZONE_UPDATE_DATA].cmdStartAddr = GENCP_UPDATE_FILE_BUF_VIRTUAL_START_ADDR;
+	zone->zone[GENCP_REG_MAP_ZONE_UPDATE_DATA].cmdEndAddr = GENCP_UPDATE_FILE_BUF_VIRTUAL_END_ADDR;
+	zone->zone[GENCP_REG_MAP_ZONE_UPDATE_DATA].devStartAddr = 0;
+
+    for (int i = 0; i < GENCP_REG_MAP_ZONE_TOTAL_NUM; i ++) {
+    	LOG_DEBUG("start: 0x%x, end: 0x%x, dev: 0x%x\r\n",
+    			  (uint32_t)zone->zone[i].cmdStartAddr, (uint32_t)zone->zone[i].cmdEndAddr, (uint32_t)zone->zone[i].devStartAddr);
+    }
+}
+
+void InitGencpXmlFile(void)
+{
+    uint32_t addr = 0, infoLen = 0;
+    uint8_t info[NOR_FLASH_RW_MAX_SIZE];
+
+    memset(info, 0x00, sizeof(info));
+    /* First 128B is used to storage the 4B xml file size and 20B sha1-hash */
+    infoLen = sizeof(g_gencpXmlFile.len) + sizeof(g_gencpXmlFile.hashSha1);
+
+    addr = FLASH_SPACE_GENCP_XML_INFO_START_ADDR;
+    NorFlashReadBuf(SPI_DEV_ID_CODE, addr, infoLen, info);
+    memcpy(&g_gencpXmlFile, info, infoLen);
+    g_gencpXmlFile.len = GencpConvertEndian32(g_gencpXmlFile.len);
+
+    LOG_DEBUG("xml len: %u\r\n", g_gencpXmlFile.len);
+}
+
+static int GetPixelSize(void)
+{
+	uint32_t pixelFormat = 0;
+
+	pixelFormat = ReadRegByAddr(AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_PIXEL_FORMAT);
+
+	if (pixelFormat == GENCP_PIXEL_FORMAT_MONO8) {
+		return 1; /* 1Byte */
+	}
+
+	return 2; /* 2Bytes */
+}
+
+static inline uint32_t GetImageWidth(void)
+{
+	return ReadRegByAddr(AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_WIDTH);
+}
+
+static inline uint32_t GetImageHeight(void)
+{
+	return ReadRegByAddr(AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_HEIGHT);
+}
+
+void InitU3vStreamInterfaceRegMap(void)
+{
+    g_u3vStreamInterfaceRegMap.siInfo.payloadSizeAlign = 0;
+    g_u3vStreamInterfaceRegMap.siCtrl.streamEnable = 1;
+#if defined(LINESCAN)
+    g_u3vStreamInterfaceRegMap.siReqPayloadSize = ReadRegByAddr(AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_PAYLOAD_SIZE); /* e.g 2048*1024*2;*/
+#elif defined(ENDOSCOPE)
+    g_u3vStreamInterfaceRegMap.siReqPayloadSize = 160000; /* 400*400*1;*/
+#elif defined(CAM2929)
+    g_u3vStreamInterfaceRegMap.siReqPayloadSize = ReadRegByAddr(AXI_BASE_ADDR + GENCP_USER_IMAGE_REG_PAYLOAD_SIZE); /* 2448*2048*1;*/
+#endif
+    LOG_DEBUG("InitU3vStreamInterfaceRegMap: siReqPayloadSize = %llu\r\n",
+                 g_u3vStreamInterfaceRegMap.siReqPayloadSize);
+    g_u3vStreamInterfaceRegMap.siReqLeaderSize = 52;
+    g_u3vStreamInterfaceRegMap.siReqTrailerSize = 32;
+    g_u3vStreamInterfaceRegMap.siMaxLeaderSize = 1024;
+    g_u3vStreamInterfaceRegMap.siPayloadTransferSize = 1024;
+    g_u3vStreamInterfaceRegMap.siPayloadTransferCnt = 1024;
+    g_u3vStreamInterfaceRegMap.siPayloadfinalTransfer1Size = 1024;
+    g_u3vStreamInterfaceRegMap.siPayloadfinalTransfer2Size = 1024;
+    g_u3vStreamInterfaceRegMap.siMaxTrailerSize = 1024;
+}
+
+void InitGencpBootstrapRegMap(void)
+{
+#if 0
+	/* GENCP */
+    g_gencpSbrm.supportBaudrate = GencpConvertEndian32(GENCP_BAUDRATE_230400);
+    g_gencpSbrm.currentBaudrate = GencpConvertEndian32(GENCP_BAUDRATE_230400);
+#else
+	/* U3V */
+    g_gencpSbrm.u3vVersion = 0x00010001;
+    g_gencpSbrm.u3vcpCapabilityReg = 0x1; /* only support SIRM */
+    g_gencpSbrm.u3vcpConfigReg = 0;
+    g_gencpSbrm.maxCmdTransferLen = U3V_MAX_TRANSFER_LEN;
+	g_gencpSbrm.maxAckTransferLen = U3V_MAX_TRANSFER_LEN;
+    g_gencpSbrm.streamChannelNum = 1;
+    /* g_gencpSbrm.sirmAddr = &g_u3vStreamInterfaceRegMap;*/
+    g_gencpSbrm.sirmAddr = GencpConvertEndian64(GENCP_SIRM_VIRTUAL_ADDR);
+    g_gencpSbrm.sirmLen = sizeof(U3vStreamInterfaceRegMap);
+    g_gencpSbrm.eirmAddr = 0; /* not used */
+    g_gencpSbrm.eirmLen = 0; /* not used */
+    g_gencpSbrm.iidc2Addr = 0; /* not used */
+    g_gencpSbrm.currentSpeed = 4;
+#endif
+}
+
+void InitU3vFileAccessCtrl(void)
+{
+    g_u3vFileAccessCtrl.fileSelector = 0;
+    g_u3vFileAccessCtrl.fileOpSelector = 0;
+    g_u3vFileAccessCtrl.fileOpenMode = 0;
+    g_u3vFileAccessCtrl.fileOpExec = 0;
+    /* g_u3vFileAccessCtrl.fileAccessBuf = GENCP_UPDATE_FILE_BUF_VIRTUAL_START_ADDR;*/
+    g_u3vFileAccessCtrl.fileAccessBuf = GENCP_UPDATE_FILE_BUF_VIRTUAL_START_ADDR;
+    g_u3vFileAccessCtrl.fileAccessOffset = 0;
+    g_u3vFileAccessCtrl.fileAccessLen = 1024;
+    g_u3vFileAccessCtrl.fileOpStatus = 0;
+    g_u3vFileAccessCtrl.fileOpRet = 0;
+    g_u3vFileAccessCtrl.fileSize = 0;
+
+#if defined(LINESCAN)
+	uint8_t *devModelName = "LBW-GMAX1402-U3V";
+#else
+    uint8_t *devModelName = "GXS1508-DEV";
+#endif
+    /* uint8_t *devModelName = "LBW-GMAX3412S-U3V";*/
+    memcpy(g_u3vFileAccessCtrl.deviceModelName, devModelName, strlen(devModelName));
+    g_u3vFileAccessCtrl.deviceModelName[strlen(devModelName)] = '\0';
+    LOG_DEBUG("dev model name: %s\r\n", g_u3vFileAccessCtrl.deviceModelName);
+}
+
+void InitGencp(void)
+{
+    int cnt = 0;
+
+    /* init gencp */
+    InitGencpXmlFile();
+
+    sprintf((char *)g_gencpCustomRegMap.devCtrl.deviceModelName, "%s", GENCP_REG_MAP_USER_DEFINED_NAME);
+    sprintf((char *)g_gencpCustomRegMap.devCtrl.deviceSerialNumber, "%s", "1.0.0");
+
+    /* init bootstrap register map */
+    InitGencpBootstrapRegMap();
+    InitU3vStreamInterfaceRegMap();
+    InitU3vFileAccessCtrl();
+
+    /* init register map */
+    g_gencpRegMap.gencpVersion.minor = GencpConvertEndian16(GENCP_VERSION_MINOR);
+    g_gencpRegMap.gencpVersion.major = GencpConvertEndian16(GENCP_VERSION_MAJOR);
+
+    sprintf((char *)g_gencpRegMap.manufacturerName, "%s", GENCP_REG_MAP_MANUFACTURE_NAME);
+    sprintf((char *)g_gencpRegMap.modelName, "%s", GENCP_REG_MAP_MODEL_NAME);
+    sprintf((char *)g_gencpRegMap.familyName, "%s", GENCP_REG_MAP_FAMILY_NAME);
+    sprintf((char *)g_gencpRegMap.deviceVersion, "%s", GENCP_REG_MAP_DEV_VER);
+    sprintf((char *)g_gencpRegMap.manufacturerInfo, "%s", GENCP_REG_MAP_MANUFACTURE_INFO);
+    sprintf((char *)g_gencpRegMap.serialNumber, "%s", GENCP_REG_MAP_SERIAL_NUM);
+    sprintf((char *)g_gencpRegMap.userDefinedName, "%s", GENCP_REG_MAP_USER_DEFINED_NAME);
+
+    /* set device capability */
+    g_gencpRegMap.deviceCapability.userDefinedNameSupport = SUPPORTED;
+    g_gencpRegMap.deviceCapability.accessPrivilegeSupport = NOT_SUPPORTED;
+    g_gencpRegMap.deviceCapability.msgChnSupport = NOT_SUPPORTED;
+    g_gencpRegMap.deviceCapability.timestampSupport = SUPPORTED;
+    g_gencpRegMap.deviceCapability.stringEncode = GENCP_STRING_ENCODE_ASCII;
+    g_gencpRegMap.deviceCapability.familyNameSupport = SUPPORTED;
+    g_gencpRegMap.deviceCapability.sbrmSupport = SUPPORTED; /* Specific Bootstrap Register Map */
+    g_gencpRegMap.deviceCapability.endianessRegSupport = SUPPORTED;
+    g_gencpRegMap.deviceCapability.writtenLenFieldSupport = SUPPORTED;
+    g_gencpRegMap.deviceCapability.multiEventSupport = NOT_SUPPORTED;
+    g_gencpRegMap.deviceCapability.stackCmdSupport = SUPPORTED;
+    g_gencpRegMap.deviceCapability.devSoftInterfaceVerSupport = SUPPORTED;
+
+    g_gencpRegMap.maxDeviceResponseTime = GencpConvertEndian32(GENCP_DEV_RESPONSE_TIMEOUT); /* not exceed 300, unit: ms */
+    g_gencpRegMap.manifestTableAddr = GencpConvertEndian64(GENCP_MANIFEST_TABLE_VIRTUAL_ADDR);
+    g_gencpRegMap.sbrmAddr = GencpConvertEndian64(GENCP_SBRM_VIRTUAL_ADDR);
+
+    g_gencpRegMap.deviceConfig.heartbeatEnable = DISABLE;
+    g_gencpRegMap.deviceConfig.multiEventEnable = DISABLE;
+
+    g_gencpRegMap.heartbeatTimeout = GencpConvertEndian32(GENCP_HEARTBEAT_TIMEOUT);
+    g_gencpRegMap.messageChnId = 0;
+    /* TODO: need calibrate time with upper computer */
+    g_gencpRegMap.timestamp = 0; /* unit: ns */
+    g_gencpRegMap.timestampLatch = 0;
+    g_gencpRegMap.timestampIncrement = 0;
+    g_gencpRegMap.accessPrivilege = GENCP_ACCESS_PRIVILEGE_OPEN;
+    g_gencpRegMap.protocolEndianess = 0; /* deprecated, ignored */
+    g_gencpRegMap.implementEndianess = GENCP_IMPLEMENT_ENDIAN_LITTLE;
+    sprintf((char *)g_gencpRegMap.devSoftInterfaceVersion, "%s", GENCP_REG_MAP_DEV_SOFT_IF_VER);
+
+    /* initial manifest */
+    g_gencpManifestTable.mtEntryCount = GencpConvertEndian64(GENCP_MANIFEST_ENTRY_NUM);
+    /* file version 0.0.0 */
+    g_gencpManifestTable.entry[0].fileVersion.genicamFileVersionSubMinor = 0;
+    g_gencpManifestTable.entry[0].fileVersion.genicamFileVersionMinor = 0;
+    g_gencpManifestTable.entry[0].fileVersion.genicamFileVersionMajor = 1;
+    g_gencpManifestTable.entry[0].fileVersionDat = GencpConvertEndian32(g_gencpManifestTable.entry[0].fileVersionDat);
+
+    g_gencpManifestTable.entry[0].fileFormat.fileType = GENCP_MANIFEST_FILE_TYPE_DEV_XML;
+    g_gencpManifestTable.entry[0].fileFormat.reserved0 = 0;
+    g_gencpManifestTable.entry[0].fileFormat.fileFormat = GENCP_MANIFEST_FILE_FORMAT_ZIP;
+    g_gencpManifestTable.entry[0].fileFormat.schemaVersionMinor = 0;
+    g_gencpManifestTable.entry[0].fileFormat.schemaVersionMajor = 0;
+#ifndef DALSA
+    g_gencpManifestTable.entry[0].fileFormatDat = GencpConvertEndian32(g_gencpManifestTable.entry[0].fileFormatDat);
+#endif
+
+    g_gencpManifestTable.entry[0].registerAddress = GencpConvertEndian64(GENCP_XML_VIRTUAL_START_ADDR);
+
+    /* g_gencpManifestTable.entry[0].fileSize = GencpConvertEndian64(GENCP_MANIFEST_TABLE_XML_SIZE);*/
+    /* g_gencpManifestTable.entry[0].fileSize = ((GencpConvertEndian64(GENCP_MANIFEST_TABLE_XML_SIZE) << 32) | (GencpConvertEndian64(GENCP_MANIFEST_TABLE_XML_SIZE) >> 32));*/
+    /* g_gencpManifestTable.entry[0].fileSize = ConvertEndian64(GENCP_MANIFEST_TABLE_XML_SIZE);*/
+    g_gencpManifestTable.entry[0].fileSize = GENCP_MANIFEST_TABLE_XML_SIZE;
+    memcpy(g_gencpManifestTable.entry[0].hashSha1, g_gencpXmlFile.hashSha1, sizeof(g_gencpXmlFile.hashSha1));
+
+    for (cnt = 1; cnt < GENCP_MANIFEST_ENTRY_NUM; cnt++) {
+        memcpy(&g_gencpManifestTable.entry[cnt], &g_gencpManifestTable.entry[0], sizeof(g_gencpManifestTable.entry[0]));
+    }
+
+    InitRegMapZone(&g_gencpRegMapZone);
+}
+
+#endif /* MODULE_GENCP */
