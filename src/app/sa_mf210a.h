@@ -9,9 +9,13 @@
 /* -------------------------------------------------------------------------- */
 /* Protocol constants                                                         */
 /* -------------------------------------------------------------------------- */
+
+/* Uart number */
+#define UART_CUSTOM         UART_0
+
 /* Protocol header and tail */
-#define PROTOCOL_HEADER     0xDDu
-#define PROTOCOL_TAIL       0xFFu
+#define PROTOCOL_HEADER     0xDDDDu
+#define PROTOCOL_TAIL       0xFFFFu
 
 /* Protocol fixed length */
 #define PROTOCOL_FIXED_LENGTH  11u
@@ -32,6 +36,7 @@ enum {
     CMD_NONE            = 0x00,  /* No command */
     CMD_START_DETECTION = 0x01,  /* Start detection cycle */
     CMD_SET_THRESHOLD   = 0x02,  /* Set detection threshold */
+	CMD_SET_REG         = 0x03,  /* Set register value */
 	CMD_NUM_MAX
 };
 
@@ -84,14 +89,14 @@ typedef struct __attribute__((packed)) {
 } ThresholdInfo;
 
 typedef struct __attribute__((packed)) {
-    uint8_t  header[2];     /* 0xDD 0xDD */
+    uint16_t  header;     /* 0xDD 0xDD */
     uint16_t length;        /* total frame length, little-endian */
     uint8_t  dataType;
     uint8_t  functionCode;
     uint8_t  commandCode;
     uint8_t  data[FRAME_DATA_MAX_LENGTH];
     uint16_t crc16;
-    uint8_t  tail[2];      /* 0xFF 0xFF */
+    uint16_t  tail;      /* 0xFF 0xFF */
 } FramePacket;
 
 /* ========================================================================== */
@@ -107,12 +112,13 @@ void SendThresholdModifyResultFrame(int uartNum, uint8_t dataType, uint8_t thres
 /* ========================================================================== */
 int HandleStartDetectionFrame(SerialData *recvData);
 int HandleSetThresholdFrame(SerialData *recvData);
+int HandleSetRegisterFrame(SerialData *recvData);
 
 /* ========================================================================== */
 /* Freertos task create                                                       */
 /* ========================================================================== */
 
-#ifdef MOUDULE_SA_MF210A
+#ifdef MODULE_SA_MF210A
 
 void Sa_Mf210a_Task(void *unused);
 

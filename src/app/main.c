@@ -57,17 +57,25 @@ void TaskGenCP(void *unused)
 
     while (1) {
         if (xQueueReceive(g_queueUart[QUEUE_UART_GENCP].queue, &receivedData, pdMS_TO_TICKS(10))) {
-            ret = ParseGencpRecvPkg(receivedData.data, receivedData.size);
+            ret = ParseGencpRecvPkg(receivedData.uartNum, receivedData.data, receivedData.size);
+		#ifdef FUNC_PASSTHROUGH
+			if (receivedData.uartNum == UART_0) {
+				UartSend(UART_1, receivedData.data, receivedData.size);
+			} else if (receivedData.uartNum == UART_1) {
+				UartSend(UART_0, receivedData.data, receivedData.size);
+			}
+		#else
+			ret = ParseGencpRecvPkg(receivedData.uartNum, receivedData.data, receivedData.size);
+		#endif
 
             /* TODO: handle with ret */
         }
 #if 0
         } else if (xQueueReceive(g_queueUart[QUEUE_UART_GENCP_XML].queue, &receivedData, pdMS_TO_TICKS(10))) {
-            ret = ParseGencpXmlRecvPkg(receivedData.data, receivedData.size);
+            ret = ParseGencpXmlRecvPkg(receivedData.uartNum, receivedData.data, receivedData.size);
             /* TODO: handle with ret */
         }
 #endif
-
         if (((cnt ++) % 100) == 0) {
         	GencpGetPeriodData();
         	cnt = 0;
@@ -144,10 +152,7 @@ void UartSendVersion(void)
     uint8_t buf[32] = {0};
     strcat((char *)buf, BOARD);
     strcat((char *)buf, VERSION);
-    UartSend(UART_CMD, buf, (int)strlen(buf));
-    if (UART_CMD != UART_UPDATE) {
-        UartSend(UART_UPDATE, buf, (int)strlen(buf));
-    }
+    UartSend(UART_0, buf, (int)strlen(buf));
 }
 #else
 void UartSendVersion(void){}
@@ -203,16 +208,13 @@ void SendVersion(void)
 	memset(buf, 0x00, sizeof(buf));
 	memcpy(buf, FPGA_VERSION_START_ADDR, FPGA_VERSION_LEN);
 	LOG_DEBUG("fpga version: %s\r\n", buf);
-	UartSend(UART_CMD, buf, FPGA_VERSION_LEN);
+	UartSend(UART_0, buf, FPGA_VERSION_LEN);
 
 	/* microblaze version */
 	memset(buf, 0x00, sizeof(buf));
 	strcat(buf, BOARD);
 	strcat(buf, VERSION);
-	UartSend(UART_CMD, buf, (int)strlen(buf));
-	if (UART_CMD != UART_UPDATE) {
-		UartSend(UART_UPDATE, buf, (int)strlen(buf));
-	}
+	UartSend(UART_0, buf, (int)strlen(buf));
 }
 #endif
 
@@ -230,8 +232,8 @@ void FreertosInitTask(void *unused)
     };
 #elif UART_NUM_MAX == 2
     int uartIrqIntr[UART_NUM_MAX] = {
-            XPAR_AXI_INTC_UART_CMD_IRQ_INTR ,
-            XPAR_AXI_INTC_UART_UPDATE_IRQ_INTR
+            XPAR_AXI_INTC_UART_0_IRQ_INTR ,
+            XPAR_AXI_INTC_UART_1_IRQ_INTR
     };
 
     /* uart */
@@ -369,17 +371,44 @@ void FreertosInitTask(void *unused)
     SendVersion();
 #endif
 
-#ifdef MOUDULE_SA_MF210A
+#ifdef MODULE_SA_MF210A
     /* TODO */
     // to do Power-on initialization
 
     /* debug */
     DelayMs(1000);
     uint8_t dataType = 0x00;
+    Reg device_status = {
+    	.addr = 0x00000A24,
+    	.value = 0x01,
+    	.delay = 10
+    };
+    Reg card_status = {
+		.addr = 0x00000A28,
+		.value = 0x01,
+		.delay = 10
+	};
+    WriteReg(&device_status);
+    WriteReg(&card_status);
+    Reg rx1 = {
+		.addr = 0x00000A24,
+		.value = 0x00,
+		.delay = 10
+	};
+	Reg rx2 = {
+		.addr = 0x00000A28,
+		.value = 0x00,
+		.delay = 10
+	};
+	ReadReg(&rx1);
+	ReadReg(&rx2);
+
 	uint8_t falutCode = DEVICE_STATUS_PENDING;
+	falutCode = rx1.value;
     SendInitPowerOnFrame(UART_CUSTOM, dataType, falutCode);
     DelayMs(1000);
 	uint8_t cardStatus = STATUS_CARD_ABSENT;
+	cardStatus = rx2.value;
     SendCardStatusFrame(UART_CUSTOM, dataType, cardStatus);
     /* debug */
 
@@ -420,7 +449,7 @@ void CreateFreertosTask(void)
 #endif
 #endif
 
-#ifdef MOUDULE_SA_MF210A
+#ifdef MODULE_SA_MF210A
     xTaskCreate(Sa_Mf210a_Task, "sa_mf210a", configMINIMAL_STACK_SIZE * 4, NULL, configMAX_PRIORITIES - 3, NULL);
 #endif
 
@@ -461,5 +490,6 @@ int main(void)
     while (1) {
         ;
     }
+
     return 0;
 }

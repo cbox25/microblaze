@@ -798,9 +798,9 @@ static GencpCmdCb gencpStandardCmd[GENCP_CCD_STANDARD_CMD_NUM] = {
     {GENCP_WRITE_REG_CMD, ParseGencpCcdCmdWriteReg}
 };
 
-static inline void GencpSend(const uint8_t *buf, uint16_t len)
+static inline void GencpSend(uint8_t uartNum, const uint8_t *buf, uint16_t len)
 {
-    UartSend(UART_CMD, buf, len);
+    UartSend(uartNum, buf, len);
 }
 
 #if 0
@@ -848,7 +848,7 @@ void MakeGencpAckPacket(uint8_t *buf, uint8_t *scdAckBuf, uint16_t scdAckLen, ui
     GencpSend(gencpAckBuf, sizeof(GencpPrefix) + sizeof(GencpCcdAck) + scdAckLen);
 }
 #else
-void MakeGencpAckPacket(uint8_t *buf, uint8_t *scdAckBuf, uint16_t scdAckLen, uint16_t ret)
+void MakeGencpAckPacket(uint8_t uartNum, uint8_t *buf, uint8_t *scdAckBuf, uint16_t scdAckLen, uint16_t ret)
 {
     GencpPrefix *prefix = NULL;
     GencpCcdCmd *ccd = NULL;
@@ -895,7 +895,7 @@ void MakeGencpAckPacket(uint8_t *buf, uint8_t *scdAckBuf, uint16_t scdAckLen, ui
 
     /* send gencp ack buf */
     /* PrintBuf(gencpAckBuf, sizeof(GencpPrefix) + sizeof(GencpCcdAck) + scdAckLen, "gencp ack buf");*/
-    GencpSend(gencpAckBuf, sizeof(GencpPrefix) + sizeof(GencpCcdAck) + scdAckLen);
+    GencpSend(uartNum, gencpAckBuf, sizeof(GencpPrefix) + sizeof(GencpCcdAck) + scdAckLen);
 }
 #endif
 
@@ -979,7 +979,7 @@ int ParseGencpRecvPkg(uint8_t *buf, uint32_t len)
     return OK;
 }
 #else
-int ParseGencpRecvPkg(uint8_t *buf, uint32_t len)
+int ParseGencpRecvPkg(uint8_t uartNum, uint8_t *buf, uint32_t len)
 {
     GencpPrefix *prefix = NULL;
     GencpCcdCmd *ccd = NULL;
@@ -1014,7 +1014,7 @@ int ParseGencpRecvPkg(uint8_t *buf, uint32_t len)
 
     ret = ParseGencpCcdCmd(buf + sizeof(GencpPrefix), scdAckBuf, &scdAckLen);
     /* handle with ack and make ack packet */
-    MakeGencpAckPacket(buf, scdAckBuf, scdAckLen, ret);
+    MakeGencpAckPacket(uartNum, buf, scdAckBuf, scdAckLen, ret);
 
     return OK;
 }
@@ -1074,7 +1074,7 @@ void GencpWriteXmlFromArray(void)
 	PrintBuf(head, sizeof(head), "xml first 128B");
 }
 
-int ParseGencpXmlRecvPkg(uint8_t *buf, uint32_t len)
+int ParseGencpXmlRecvPkg(uint8_t uartNum, uint8_t *buf, uint32_t len)
 {
     if (buf == NULL || len == 0)
         return GENCP_XML_CHK_PARA_ERR;
@@ -1102,7 +1102,7 @@ int ParseGencpXmlRecvPkg(uint8_t *buf, uint32_t len)
         ackBuf[0] = 0x02;
         errCode = 0x01;
         memcpy(ackBuf + 1, &errCode, sizeof(errCode));
-        SendPacket(UART_GENCP, PACKET_TYPE_GENCP_XML_REPLY, ackBuf, sizeof(ackBuf), seq);
+        SendPacket(uartNum, PACKET_TYPE_GENCP_XML_REPLY, ackBuf, sizeof(ackBuf), seq);
 
         return GENCP_XML_CHK_CRC_ERR;
     }
@@ -1120,7 +1120,7 @@ int ParseGencpXmlRecvPkg(uint8_t *buf, uint32_t len)
     WriteXmlToNorFlash(data, flashAddr + (seq - 1) * PACKET_DATA_MAX_LENGTH, dataLen);
 
     ackBuf[0] = 0x01;
-    SendPacket(UART_GENCP, PACKET_TYPE_GENCP_XML_REPLY, ackBuf, sizeof(ackBuf), seq);
+    SendPacket(uartNum, PACKET_TYPE_GENCP_XML_REPLY, ackBuf, sizeof(ackBuf), seq);
 
     return OK;
 }

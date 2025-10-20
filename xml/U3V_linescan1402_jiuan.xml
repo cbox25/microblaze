@@ -1,0 +1,2046 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<?oxygen SCHSchema="http://www.genicam.org/GenApi/SFNC_Device_Validator_ErrWarn_Version_2_6_0_Schema_1_1.sch"?>
+<?oxygen SCHSchema="http://www.genicam.org/GenApi/GenApiSchemaExtensions.sch"?>
+<!--************************************************************************
+   * TLRemoteDeviceNodemapExtEz.xml
+   ***************************************************************************
+   *
+   * Project:      General EzCapture Framework Based on GenTL
+   * Author(s):    LZH
+   * Description:  GenICam nodemap of the "simulated" remote device of CUSTOM GenTL Producer
+   * License:      This file is published under a modified BSD license.
+   *               A text file describing the legal terms is included in the
+   *               project directory as LICENSE.txt.
+   *
+   * (c) 2024 by Senhor Developer & LZH.
+   *
+   **************************************************************************-->
+
+
+<RegisterDescription xmlns="http://www.genicam.org/GenApi/Version_1_1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.genicam.org/GenApi/Version_1_1 http://www.genicam.org/GenApi/GenApiSchema_Version_1_1.xsd" ModelName="Ez" VendorName="Ez" ToolTip="Ez" StandardNameSpace="None" SchemaMajorVersion="1" SchemaMinorVersion="1" SchemaSubMinorVersion="0" MajorVersion="1" MinorVersion="0" SubMinorVersion="0" ProductGuid="11111111-2222-3333-4444-555555555555" VersionGuid="AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE">
+	<!-- ***************************************** -->
+	<!-- RootCategory extension -->
+	<!-- ***************************************** -->
+    <Group Comment="RootCategory">
+        <Category Name="Root" NameSpace="Standard">
+            <?tlcore-merge-features?>
+            <Visibility>Beginner</Visibility>
+            <pFeature>Version</pFeature>
+            <pFeature>ImageFormatControl</pFeature>
+            <pFeature>AcquisitionControl</pFeature>
+            <pFeature>TransportLayerControl</pFeature>
+            <pFeature>FileAccessControl</pFeature>
+            <pFeature>DeviceControl</pFeature>
+            <pFeature>Trigger</pFeature>
+            <pFeature>Gain</pFeature>
+            <pFeature>HDR</pFeature>
+            <pFeature>PGA</pFeature>
+            <pFeature>DPC</pFeature>
+            <pFeature>FFC</pFeature>
+            <pFeature>BLC</pFeature>
+            <pFeature>BitShift</pFeature>
+            <pFeature>JiuAn</pFeature>
+        </Category>
+    </Group>
+    <Category Name="ImageFormatControl" NameSpace="Standard">
+        <ToolTip>Image format control.</ToolTip>
+        <Description>Image format control.</Description>
+        <DisplayName>ImageFormatControl</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pFeature>Width</pFeature>
+        <pFeature>Height</pFeature>
+        <pFeature>PixelFormat</pFeature>
+    </Category>
+    <Category Name="AcquisitionControl" NameSpace="Standard">
+        <ToolTip>Acquisition control.</ToolTip>
+        <Description>Acquisition control.</Description>
+        <DisplayName>AcquisitionControl</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pFeature>AcquisitionStart</pFeature>
+        <pFeature>AcquisitionStop</pFeature>
+        <pFeature>RefreshTemperature</pFeature>
+        <pFeature>DeviceTemperature</pFeature>
+        <pFeature>DeviceTemperatureBias</pFeature>
+        <pFeature>TestPattern</pFeature>
+        <pFeature>ReverseX</pFeature>
+        <pFeature>AcquisitionMode</pFeature>
+        <pFeature>Fx3Mode0</pFeature>
+    </Category>
+    <Category Name="TransportLayerControl" NameSpace="Standard">
+        <ToolTip>Category that contains the transport Layer control features.</ToolTip>
+        <Description>Category that contains the transport Layer control features.</Description>
+        <DisplayName>TransportLayerControl</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pFeature>PayloadSize</pFeature>
+        <pFeature>TLParamsLocked</pFeature>
+    </Category>
+    <Category Name="Version" NameSpace="Custom">
+        <DisplayName>Version</DisplayName>
+        <Visibility>Beginner</Visibility>
+        <pFeature>DeviceVersion</pFeature>
+        <pFeature>DeviceFirmwareVersion</pFeature>
+        <pFeature>SensorSeriesNumber</pFeature>
+    </Category>
+    <Category Name="Trigger" NameSpace="Custom">
+        <ToolTip>Category that contains the trigger features.</ToolTip>
+        <Description>Category that contains the trigger features.</Description>
+        <DisplayName>Trigger</DisplayName>
+        <pFeature>TriggerMode</pFeature>
+        <pFeature>WaveDelay</pFeature>
+        <pFeature>JitterTime</pFeature>
+        <pFeature>PulseWidth</pFeature>
+        <pFeature>ExternalFrameFrequency</pFeature>
+        <pFeature>InternalFrameFrequency</pFeature>
+        <pFeature>InternalExposureTime</pFeature>
+        <pFeature>ExternalTriggerMode</pFeature>
+    </Category>
+    <Category Name="Gain" NameSpace="Custom">
+        <DisplayName>Gain</DisplayName>
+        <pFeature>SensorModeSelect</pFeature>
+        <pFeature>HighGainCoarse</pFeature>
+        <pFeature>HighGainFine</pFeature>
+        <pFeature>LowGainCoarse</pFeature>
+        <pFeature>LowGainFine</pFeature>
+        <pFeature>CMOS_GainCoarse</pFeature>
+        <pFeature>CMOS_GainFine</pFeature>
+    </Category>
+    <Category Name="HDR" NameSpace="Custom">
+        <DisplayName>HDR</DisplayName>
+        <pFeature>HDR_Mode</pFeature>
+        <pFeature>HDR_Threshold</pFeature>
+        <pFeature>HDR_K</pFeature>
+        <pFeature>HDR_B</pFeature>
+    </Category>
+    <Category Name="PGA" NameSpace="Custom">
+        <DisplayName>PGA</DisplayName>
+        <pFeature>SetPgaEn</pFeature>
+        <pFeature>SetPga</pFeature>
+    </Category>
+    <Category Name="DPC" NameSpace="Custom">
+        <DisplayName>DPC</DisplayName>
+        <pFeature>DPC_Enable</pFeature>
+        <pFeature>DPC_Remark</pFeature>
+        <pFeature>DPC_MarkWriteData</pFeature>
+        <pFeature>DPC_MarkNumber</pFeature>
+    </Category>
+    <Category Name="FFC" NameSpace="Custom">
+        <DisplayName>FFC</DisplayName>
+        <pFeature>FFC_HDR_Mode</pFeature>
+        <pFeature>FFC_Enable</pFeature>
+        <pFeature>FFC_Recalibrate</pFeature>
+        <pFeature>FFC_Target</pFeature>
+        <pFeature>FFC_Mode</pFeature>
+        <pFeature>FPN_CalibrateEnable</pFeature>
+        <pFeature>BrightCalibrateEnable</pFeature>
+        <pFeature>PrnuConfigEnable</pFeature>
+        <pFeature>FFC_DarkCalibrate</pFeature>
+        <pFeature>FFC_BrightCalibrate</pFeature>
+    </Category>
+    <Category Name="BLC" NameSpace="Custom">
+        <DisplayName>BLC</DisplayName>
+        <pFeature>BLC_StandardEnable</pFeature>
+        <pFeature>BLC_StandardWriteData</pFeature>
+        <pFeature>HDR_BLC_HighGainEnable</pFeature>
+        <pFeature>HDR_BLC_HighGainWriteData</pFeature>
+        <pFeature>HDR_BLC_LowGainEnable</pFeature>
+        <pFeature>HDR_BLC_LowGainWriteData</pFeature>
+        <pFeature>BLC_HighGainNegative</pFeature>
+        <pFeature>BLC_HighGainPositive</pFeature>
+        <pFeature>BLC_LowGainNegative</pFeature>
+        <pFeature>BLC_LowGainPositive</pFeature>
+    </Category>
+    <Category Name="BitShift" NameSpace="Custom">
+        <DisplayName>BitShift</DisplayName>
+        <pFeature>BitShiftEnable</pFeature>
+        <pFeature>BitShiftSelect</pFeature>
+    </Category>
+    <Category Name="FileAccessControl">
+        <ToolTip>Category that contains the File Access control features.</ToolTip>
+        <Description>Category that contains the File Access control features.</Description>
+        <DisplayName>FileAccessControl</DisplayName>
+        <Visibility>Guru</Visibility>
+        <ImposedAccessMode>RO</ImposedAccessMode>
+        <pFeature>FileSelector</pFeature>
+        <pFeature>FileOperationSelector</pFeature>
+        <pFeature>FileOpenMode</pFeature>
+        <pFeature>FileOperationExecute</pFeature>
+        <pFeature>FileAccessBuffer</pFeature>
+        <pFeature>FileAccessOffset</pFeature>
+        <pFeature>FileAccessLength</pFeature>
+        <pFeature>FileOperationStatus</pFeature>
+        <pFeature>FileOperationResult</pFeature>
+        <pFeature>FileSize</pFeature>
+    </Category>
+    <Category Name="DeviceControl">
+        <ToolTip>Category that contains the device control features.</ToolTip>
+        <Description>Category that contains the device control features.</Description>
+        <DisplayName>DeviceControl</DisplayName>
+        <Visibility>Guru</Visibility>
+        <ImposedAccessMode>RW</ImposedAccessMode>
+        <pFeature>WorkMode</pFeature>
+        <pFeature>SelectArgumentMode</pFeature>
+        <pFeature>SaveArguments</pFeature>
+        <pFeature>LoadArguments</pFeature>
+        <pFeature>DeviceModelName</pFeature>
+        <pFeature>DeviceSerialNumber</pFeature>
+        <pFeature>DeviceUserID</pFeature>
+    </Category>
+    <Category Name="JiuAn" NameSpace="Custom">
+        <DisplayName>JiuAn</DisplayName>
+        <pFeature>JiuAnTriggerControl</pFeature>
+        <pFeature>JiuAnImageMode</pFeature>
+        <pFeature>JiuAnInternalFrameRate</pFeature>
+        <pFeature>JiuAnInternalExposureTime</pFeature>
+    </Category>
+    <Group Comment="AllFeatures">
+        <Group Comment="ImageFormatControl">
+            <Integer Name="Width" NameSpace="Standard">
+                <ToolTip>Image width.</ToolTip>
+                <Description>Image width.</Description>
+                <DisplayName>Width</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>RO</ImposedAccessMode>
+                <pValue>Width_Val</pValue>
+            </Integer>
+            <Integer Name="Height" NameSpace="Standard">
+                <ToolTip>Image height.</ToolTip>
+                <Description>Image width.</Description>
+                <DisplayName>Height</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <pValue>Height_Val</pValue>
+            </Integer>
+            <Enumeration Name="PixelFormat" NameSpace="Standard">
+                <ToolTip>Format of the pixels provided by the device.</ToolTip>
+                <Description>CommonFeature.Format of the pixels provided by the device.</Description>
+                <DisplayName>PixelFormat</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <EnumEntry Name="Mono8" NameSpace="Standard">
+                    <ToolTip>Mono8.</ToolTip>
+                    <Description>Mono8.</Description>
+                    <DisplayName>Mono8</DisplayName>
+                    <Value>0x01080001</Value>
+                </EnumEntry>
+                <EnumEntry Name="Mono10" NameSpace="Standard">
+                    <ToolTip>Mono10.</ToolTip>
+                    <Description>Mono10.</Description>
+                    <DisplayName>Mono10</DisplayName>
+                    <Value>0x01100003</Value>
+                </EnumEntry>
+                <EnumEntry Name="Mono12" NameSpace="Standard">
+                    <ToolTip>Mono12.</ToolTip>
+                    <Description>Mono12.</Description>
+                    <DisplayName>Mono12</DisplayName>
+                    <Value>0x01100005</Value>
+                </EnumEntry>
+                <EnumEntry Name="Mono14" NameSpace="Standard">
+                    <ToolTip>Mono14.</ToolTip>
+                    <Description>Mono14.</Description>
+                    <DisplayName>Mono14</DisplayName>
+                    <Value>0x01100025</Value>
+                </EnumEntry>
+                <EnumEntry Name="Mono16" NameSpace="Standard">
+                    <ToolTip>Mono16.</ToolTip>
+                    <Description>Mono16.</Description>
+                    <DisplayName>Mono16</DisplayName>
+                    <Value>0x01100007</Value>
+                </EnumEntry>
+                <pValue>PixelFormat_Val</pValue>
+            </Enumeration>
+        </Group>
+        <Group Comment="AcquisitionControl">
+            <Command Name="AcquisitionStart" NameSpace="Standard">
+                <ToolTip>Start Acquisition.</ToolTip>
+                <Description>Start Acquisition.</Description>
+                <DisplayName>AcquisitionStart</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>WO</ImposedAccessMode>
+                <pValue>AcquisitionStart_Val</pValue>
+                <CommandValue>1</CommandValue>
+            </Command>
+            <Command Name="AcquisitionStop" NameSpace="Standard">
+                <ToolTip>Stop Acquisition.</ToolTip>
+                <Description>Stop Acquisition.</Description>
+                <DisplayName>AcquisitionStop</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>WO</ImposedAccessMode>
+                <pValue>AcquisitionStop_Val</pValue>
+                <CommandValue>0</CommandValue>
+            </Command>
+            <Command Name="RefreshTemperature" NameSpace="Standard">
+                <ToolTip>Refresh Temperature.</ToolTip>
+                <Description>Refresh Temperature.</Description>
+                <DisplayName>RefreshTemperature</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>WO</ImposedAccessMode>
+                <pValue>RefreshTemperature_Val</pValue>
+                <CommandValue>1</CommandValue>
+            </Command>
+            <Integer Name="DeviceTemperature">
+                <DisplayName>DeviceTemperature</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pTEMPERATUREReg</pValue>
+            </Integer>
+            <Integer Name="DeviceTemperatureBias">
+                <DisplayName>DeviceTemperatureBias</DisplayName>
+                <Visibility>Expert</Visibility>
+                <pValue>pTEMPERATURE_BIASReg</pValue>
+            </Integer>
+            <Integer Name="TestPattern">
+                <DisplayName>TestPattern</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pTEST_IMAGEReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="ReverseX">
+                <DisplayName>ReverseX</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pX_MIRRORReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="AcquisitionMode">
+                <DisplayName>AcquisitionMode</DisplayName>
+                <Visibility>Expert</Visibility>
+                <pValue>pACQ_MODEReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="Fx3Mode0">
+                <DisplayName>Fx3Mode0</DisplayName>
+                <Visibility>Expert</Visibility>
+                <pValue>pFX3_MODEReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+        </Group>
+        <Group Comment="TransportLayerControl">
+            <Integer Name="PayloadSize" NameSpace="Standard">
+                <ToolTip>Provides the number of bytes transferred for each image or chunk on the stream channel.</ToolTip>
+                <Description>Provides the number of bytes transferred for each image or chunk on the stream channel. This includes any end-of-line, end-of-frame statistics or other stamp data. This is the total size of data payload for a data block.</Description>
+                <DisplayName>PayloadSize</DisplayName>
+                <Visibility>Expert</Visibility>
+                <ImposedAccessMode>RO</ImposedAccessMode>
+                <pValue>PayloadSize_Val</pValue>
+                <Unit>B</Unit>
+            </Integer>
+            <Integer Name="TLParamsLocked" NameSpace="Standard">
+                <Visibility>Invisible</Visibility>
+                <Value>0</Value>
+            </Integer>
+        </Group>
+        <Group Comment="Version">
+            <String Name="DeviceVersion">
+                <DisplayName>DeviceVersion</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pEDIT0_ADDRReg</pValue>
+            </String>
+            <String Name="DeviceFirmwareVersion">
+                <DisplayName>DeviceFirmwareVersion</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pDeviceFirmwareVersionReg</pValue>
+            </String>
+            <String Name="SensorSeriesNumber">
+                <DisplayName>SensorSeriesNumber</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pSensorSeriesNumberReg</pValue>
+            </String>
+            <StringReg Name="pEDIT0_ADDRReg">
+                <Address>0x30A00</Address>
+                <Length>16</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+            </StringReg>
+            <StringReg Name="pDeviceFirmwareVersionReg">
+                <Address>0x30A10</Address>
+                <Length>32</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+            </StringReg>
+            <StringReg Name="pSensorSeriesNumberReg">
+                <Address>0x30A30</Address>
+                <Length>32</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+            </StringReg>
+        </Group>
+        <Group Comment="Trigger">
+            <Enumeration Name="TriggerMode" NameSpace="Standard">
+                <ToolTip>Trigger mode select.</ToolTip>
+                <Description>Trigger mode select.</Description>
+                <DisplayName>TriggerMode</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <EnumEntry Name="External" NameSpace="Standard">
+                    <ToolTip>Trigger External Mode.</ToolTip>
+                    <Description>Trigger External Mode.</Description>
+                    <DisplayName>External</DisplayName>
+                    <Value>0</Value>
+                </EnumEntry>
+                <EnumEntry Name="Internal" NameSpace="Standard">
+                    <ToolTip>Trigger Internal Mode.</ToolTip>
+                    <Description>Trigger Internal Mode.</Description>
+                    <DisplayName>Internal</DisplayName>
+                    <Value>1</Value>
+                </EnumEntry>
+                <pValue>pINTER_EXTE_FLAGReg</pValue>
+            </Enumeration>
+            <Converter Name="WaveDelay">
+                <ToolTip>External trigger delay time, unit: us, step: 0.1us</ToolTip>
+                <Description>External trigger delay time, unit: us, step: 0.1us</Description>
+                <pVariable Name="PERIOD">PeriodTime</pVariable>
+                <FormulaTo> FROM * PERIOD </FormulaTo>
+                <FormulaFrom> TO / PERIOD </FormulaFrom>
+                <pValue>WAVE_DLY_DATA</pValue>
+                <!-- Slope>Increasing</Slope -->
+                <Unit>us</Unit>
+            </Converter>
+            <Integer Name="WAVE_DLY_DATA">
+                <DisplayName>WaveDelay</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pWAVE_DLYReg</pValue>
+                <Min>0</Min>
+                <Max>171718691</Max>
+            </Integer>
+            <Converter Name="JitterTime">
+                <ToolTip>External trigger jitter time, unit: us, step: 0.1us</ToolTip>
+                <Description>External trigger jitter time, unit: us, step: 0.1us</Description>
+                <pVariable Name="PERIOD">PeriodTime</pVariable>
+                <FormulaTo> FROM * PERIOD </FormulaTo>
+                <FormulaFrom> TO / PERIOD </FormulaFrom>
+                <pValue>JITTER_TIME_DATA</pValue>
+                <!-- Slope>Increasing</Slope -->
+                <Unit>us</Unit>
+            </Converter>
+            <Integer Name="JITTER_TIME_DATA">
+                <DisplayName>JitterTime</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pJITTER_TIMEReg</pValue>
+                <Min>0</Min>
+                <Max>171718691</Max>
+            </Integer>
+            <Converter Name="PulseWidth">
+                <ToolTip>External trigger pulse width. Only works when ExternalTriggerMode is 0, unit: us, step: 0.1us</ToolTip>
+                <Description>External trigger pulse width. Only works when ExternalTriggerMode is 0, unit: us, step: 0.1us</Description>
+                <pVariable Name="PERIOD">PeriodTime</pVariable>
+                <FormulaTo> FROM * PERIOD </FormulaTo>
+                <FormulaFrom> TO / PERIOD </FormulaFrom>
+                <pValue>PULSE_WIDTH_DATA</pValue>
+                <!-- Slope>Increasing</Slope -->
+                <Unit>us</Unit>
+            </Converter>
+            <Integer Name="PULSE_WIDTH_DATA">
+                <DisplayName>PulseWidth</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pPULSE_WIDTHReg</pValue>
+                <Min>10</Min>
+                <Max>171718691</Max>
+            </Integer>
+            <Converter Name="ExternalFrameFrequency">
+                <ToolTip>External trigger frame frequency.</ToolTip>
+                <Description>External trigger frame frequency.</Description>
+                <pVariable Name="NUMERATOR">FPS_NUMERATOR</pVariable>
+                <FormulaTo> NUMERATOR / FROM </FormulaTo>
+                <FormulaFrom> NUMERATOR / TO </FormulaFrom>
+                <pValue>EXTER_FRAME_FREQ_DATA</pValue>
+                <Unit>Hz</Unit>
+            </Converter>
+            <Integer Name="EXTER_FRAME_FREQ_DATA">
+                <DisplayName>ExternalFrameFrequency</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pEXTER_FRAME_FREQReg</pValue>
+                <Min>1</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Converter Name="InternalFrameFrequency">
+                <ToolTip>Internal frame frequency, only works when ExternalTriggerMode is 0.</ToolTip>
+                <Description>Internal frame frequency, only works when ExternalTriggerMode is 0.</Description>
+                <pVariable Name="NUMERATOR">FPS_NUMERATOR</pVariable>
+                <FormulaTo> NUMERATOR / FROM </FormulaTo>
+                <FormulaFrom> NUMERATOR / TO </FormulaFrom>
+                <pValue>INTER_FRAME_FREQ_DATA</pValue>
+                <Unit>Hz</Unit>
+            </Converter>
+            <Integer Name="INTER_FRAME_FREQ_DATA">
+                <DisplayName>InternalFrameFrequency</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pINTER_FRAME_FREQReg</pValue>
+                <Min>1</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Converter Name="InternalExposureTime">
+                <ToolTip>Internal exposure time, only works when ExternalTriggerMode is 0, unit: us, step: 0.1us.</ToolTip>
+                <Description>Internal exposure time, only works when ExternalTriggerMode is 0, unit: us, step: 0.1us.</Description>
+                <pVariable Name="PERIOD">PeriodTime</pVariable>
+                <FormulaTo> FROM * PERIOD </FormulaTo>
+                <FormulaFrom> TO / PERIOD </FormulaFrom>
+                <pValue>INTER_EXP_TIME_SET_DATA</pValue>
+                <!-- Slope>Increasing</Slope -->
+                <Unit>us</Unit>
+            </Converter>
+            <Integer Name="INTER_EXP_TIME_SET_DATA">
+                <DisplayName>InternalExposureTime</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pINTER_EXP_TIME_SETReg</pValue>
+                <Min>0</Min>
+                <Max>171718691</Max>
+            </Integer>
+            <Integer Name="ExternalTriggerMode">
+                <ToolTip>External trigger mode, 0: setting pulse width, 1: follow external pulse width.</ToolTip>
+                <Description>External trigger mode, 0: setting pulse width, 1: follow external pulse width.</Description>
+                <DisplayName>ExternalTriggerMode</DisplayName>
+                <Visibility>Expert</Visibility>
+                <pValue>pEXT_TRIG_MODEReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="PeriodTime">
+                <Value>40</Value>
+            </Integer>
+            <Integer Name="FPS_NUMERATOR">
+                <Value>40000000</Value>
+            </Integer>
+        </Group>
+        <Group Comment="Gain">
+            <Integer Name="SensorModeSelect">
+                <DisplayName>SensorModeSelect</DisplayName>
+                <Visibility>Invisible</Visibility>
+                <pValue>pSENSOR_MODE_CHOOSEReg</pValue>
+                <Min>0</Min>
+                <Max>3</Max>
+            </Integer>
+            <Integer Name="HighGainCoarse">
+                <DisplayName>HighGainCoarse</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pHG_COARSE_GAINReg</pValue>
+                <Min>0</Min>
+                <Max>3</Max>
+            </Integer>
+            <Integer Name="HighGainFine">
+                <DisplayName>HighGainFine</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pHG_FINE_GAINReg</pValue>
+                <Min>0</Min>
+                <Max>127</Max>
+            </Integer>
+            <Integer Name="LowGainCoarse">
+                <DisplayName>LowGainCoarse</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pLG_COARSE_GAINReg</pValue>
+                <Min>0</Min>
+                <Max>3</Max>
+            </Integer>
+            <Integer Name="LowGainFine">
+                <DisplayName>LowGainFine</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pLG_FINE_GAINReg</pValue>
+                <Min>0</Min>
+                <Max>127</Max>
+            </Integer>
+            <Integer Name="CMOS_GainCoarse">
+                <DisplayName>CMOS_GainCoarse</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pCMOS_COARSE_GAINReg</pValue>
+                <Min>0</Min>
+                <Max>3</Max>
+            </Integer>
+            <Integer Name="CMOS_GainFine">
+                <DisplayName>CMOS_GainFine</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pCMOS_FINE_GAINReg</pValue>
+                <Min>0</Min>
+                <Max>127</Max>
+            </Integer>
+        </Group>
+        <Group Comment="HDR">
+            <Enumeration Name="HDR_Mode" NameSpace="Standard">
+                <ToolTip>Hdr mode select.</ToolTip>
+                <Description>Hdr mode select.</Description>
+                <DisplayName>HDR_Mode</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <EnumEntry Name="HDR" NameSpace="Standard">
+                    <ToolTip>HDR.</ToolTip>
+                    <Description>HDR.</Description>
+                    <DisplayName>HDR</DisplayName>
+                    <Value>0</Value>
+                </EnumEntry>
+                <EnumEntry Name="HIGH_GAIN" NameSpace="Standard">
+                    <ToolTip>HIGH_GAIN.</ToolTip>
+                    <Description>HIGH_GAIN.</Description>
+                    <DisplayName>HIGH_GAIN</DisplayName>
+                    <Value>1</Value>
+                </EnumEntry>
+                <EnumEntry Name="LOW_GAIN" NameSpace="Standard">
+                    <ToolTip>LOW_GAIN.</ToolTip>
+                    <Description>LOW_GAIN.</Description>
+                    <DisplayName>LOW_GAIN</DisplayName>
+                    <Value>2</Value>
+                </EnumEntry>
+                <pValue>pHDR_MODEReg</pValue>
+            </Enumeration>
+            <Integer Name="HDR_Threshold">
+                <DisplayName>HDR_Threshold</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pHDR_THRReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="HDR_K">
+                <DisplayName>HDR_K</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pHDR_KReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="HDR_B">
+                <DisplayName>HDR_B</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pHDR_BReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+        </Group>
+        <Group Comment="PGA">
+            <Integer Name="SetPgaEn">
+                <DisplayName>SetPgaEn</DisplayName>
+                <Visibility>Invisible</Visibility>
+                <pValue>pSET_PGA_ENReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="SetPga">
+                <DisplayName>SetPga</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pSET_PGAReg</pValue>
+                <Min>0</Min>
+                <Max>3</Max>
+            </Integer>
+        </Group>
+        <Group Comment="DPC">
+            <Integer Name="DPC_Enable">
+                <DisplayName>DPC_Enable</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pDPC_ENReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="DPC_Remark">
+                <DisplayName>DPC_Remark</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pDPC_REMARKReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="DPC_MarkWriteData">
+                <DisplayName>DPC_MarkWriteData</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pDPC_MARK_WRDATAReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="DPC_MarkNumber">
+                <DisplayName>DPC_MarkNumber</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pDPC_MARK_NUMReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+        </Group>
+        <Group Comment="FFC">
+            <Enumeration Name="FFC_HDR_Mode" NameSpace="Standard">
+                <ToolTip>ffc hdr mode select.</ToolTip>
+                <Description>ffc hdr mode select.</Description>
+                <DisplayName>FFC_HDR_Mode</DisplayName>
+                <Visibility>Expert</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <EnumEntry Name="LOW_GAIN" NameSpace="Standard">
+                    <ToolTip>LOW_GAIN.</ToolTip>
+                    <Description>LOW_GAIN.</Description>
+                    <DisplayName>LOW_GAIN</DisplayName>
+                    <Value>0</Value>
+                </EnumEntry>
+                <EnumEntry Name="HIGH_GAIN" NameSpace="Standard">
+                    <ToolTip>HIGH_GAIN.</ToolTip>
+                    <Description>HIGH_GAIN.</Description>
+                    <DisplayName>HIGH_GAIN</DisplayName>
+                    <Value>1</Value>
+                </EnumEntry>
+                <EnumEntry Name="STD_GAIN" NameSpace="Standard">
+                    <ToolTip>STD_GAIN.</ToolTip>
+                    <Description>STD_GAIN.</Description>
+                    <DisplayName>STD_GAIN</DisplayName>
+                    <Value>2</Value>
+                </EnumEntry>
+                <pValue>FfcHdrMode_Val</pValue>
+            </Enumeration>
+            <Integer Name="FFC_Enable">
+                <DisplayName>FFC_Enable</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pFFC_ENReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="FFC_Recalibrate">
+                <DisplayName>FFC_Recalibrate</DisplayName>
+                <Visibility>Invisible</Visibility>
+                <pValue>pFFC_RECALIBReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="FFC_Target">
+                <DisplayName>FFC_Target</DisplayName>
+                <Visibility>Invisible</Visibility>
+                <pValue>pFFC_TARGETReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="FFC_Mode">
+                <DisplayName>FFC_Mode</DisplayName>
+                <Visibility>Invisible</Visibility>
+                <pValue>pFFC_MODEReg</pValue>
+                <Min>0</Min>
+                <Max>3</Max>
+            </Integer>
+            <Integer Name="FPN_CalibrateEnable">
+                <DisplayName>FPN_CalibrateEnable</DisplayName>
+                <Visibility>Invisible</Visibility>
+                <pValue>pFPN_CALIB_ENReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="BrightCalibrateEnable">
+                <DisplayName>BrightCalibrateEnable</DisplayName>
+                <Visibility>Invisible</Visibility>
+                <pValue>pBRIGHT_CALIB_ENReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="PrnuConfigEnable">
+                <DisplayName>PrnuConfigEnable</DisplayName>
+                <Visibility>Invisible</Visibility>
+                <pValue>pPRNU_CFG_ENReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Command Name="FFC_DarkCalibrate" NameSpace="Standard">
+                <ToolTip>FFC_DarkCalibrate</ToolTip>
+                <Description>FFC_DarkCalibrate</Description>
+                <DisplayName>FFC_DarkCalibrate</DisplayName>
+                <Visibility>Expert</Visibility>
+                <ImposedAccessMode>WO</ImposedAccessMode>
+                <pValue>FfcDarkCalibrate_Val</pValue>
+                <CommandValue>1</CommandValue>
+            </Command>
+            <Command Name="FFC_BrightCalibrate" NameSpace="Standard">
+                <ToolTip>FFC_BrightCalibrate</ToolTip>
+                <Description>FFC_BrightCalibrate</Description>
+                <DisplayName>FFC_BrightCalibrate</DisplayName>
+                <Visibility>Expert</Visibility>
+                <ImposedAccessMode>WO</ImposedAccessMode>
+                <pValue>FfcBrightCalibrate_Val</pValue>
+                <CommandValue>1</CommandValue>
+            </Command>
+        </Group>
+        <Group Comment="BLC">
+            <Integer Name="BLC_StandardEnable">
+                <DisplayName>BLC_StandardEnable</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pSTD_BLC_ENReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="BLC_StandardWriteData">
+                <DisplayName>BLC_StandardWriteData</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pSTD_BLC_WRITE_DATAReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="HDR_BLC_HighGainEnable">
+                <DisplayName>HDR_BLC_HighGainEnable</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pHDR_HG_BLC_ENReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="HDR_BLC_HighGainWriteData">
+                <DisplayName>HDR_BLC_HighGainWriteData</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pHDR_HG_BLC_WRITE_DATAReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="HDR_BLC_LowGainEnable">
+                <DisplayName>HDR_BLC_LowGainEnable</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pHDR_LG_BLC_ENReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Integer Name="HDR_BLC_LowGainWriteData">
+                <DisplayName>HDR_BLC_LowGainWriteData</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pHDR_LG_BLC_WRITE_DATAReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="BLC_HighGainNegative">
+                <DisplayName>BLC_HighGainNegative</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pBLC_HG_NReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="BLC_HighGainPositive">
+                <DisplayName>BLC_HighGainPositive</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pBLC_HG_PReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="BLC_LowGainNegative">
+                <DisplayName>BLC_LowGainNegative</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pBLC_LG_NReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+            <Integer Name="BLC_LowGainPositive">
+                <DisplayName>BLC_LowGainPositive</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pBLC_LG_PReg</pValue>
+                <Min>0</Min>
+                <Max>4294967295</Max>
+            </Integer>
+        </Group>
+        <Group Comment="BitShift">
+            <Integer Name="BitShiftEnable">
+                <DisplayName>BitShiftEnable</DisplayName>
+                <Visibility>Invisible</Visibility>
+                <pValue>pBIT_SHIFT_ENReg</pValue>
+                <Min>0</Min>
+                <Max>1</Max>
+            </Integer>
+            <Enumeration Name="BitShiftSelect" NameSpace="Standard">
+                <ToolTip>bit shift choose provided by the device.</ToolTip>
+                <Description>bit shift choose provided by the device.</Description>
+                <DisplayName>BitShiftSelect</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <EnumEntry Name="BitShiftSelect0" NameSpace="Standard">
+                    <ToolTip>BitShiftSelect0.</ToolTip>
+                    <Description>BitShiftSelect0.</Description>
+                    <DisplayName>BitShiftSelect0</DisplayName>
+                    <Value>0x0</Value>
+                </EnumEntry>
+                <EnumEntry Name="BitShiftSelect1" NameSpace="Standard">
+                    <ToolTip>BitShiftSelect1.</ToolTip>
+                    <Description>BitShiftSelect1.</Description>
+                    <DisplayName>BitShiftSelect1</DisplayName>
+                    <Value>0x1</Value>
+                </EnumEntry>
+                <EnumEntry Name="BitShiftSelect2" NameSpace="Standard">
+                    <ToolTip>BitShiftSelect2.</ToolTip>
+                    <Description>BitShiftSelect2.</Description>
+                    <DisplayName>BitShiftSelect2</DisplayName>
+                    <Value>0x2</Value>
+                </EnumEntry>
+                <EnumEntry Name="BitShiftSelect3" NameSpace="Standard">
+                    <ToolTip>BitShiftSelect3.</ToolTip>
+                    <Description>BitShiftSelect3.</Description>
+                    <DisplayName>BitShiftSelect3</DisplayName>
+                    <Value>0x3</Value>
+                </EnumEntry>
+                <EnumEntry Name="BitShiftSelect4" NameSpace="Standard">
+                    <ToolTip>BitShiftSelect4.</ToolTip>
+                    <Description>BitShiftSelect4.</Description>
+                    <DisplayName>BitShiftSelect4</DisplayName>
+                    <Value>0x4</Value>
+                </EnumEntry>
+                <EnumEntry Name="BitShiftSelect5" NameSpace="Standard">
+                    <ToolTip>BitShiftSelect5.</ToolTip>
+                    <Description>BitShiftSelect5.</Description>
+                    <DisplayName>BitShiftSelect5</DisplayName>
+                    <Value>0x5</Value>
+                </EnumEntry>
+                <EnumEntry Name="BitShiftSelect6" NameSpace="Standard">
+                    <ToolTip>BitShiftSelect6.</ToolTip>
+                    <Description>BitShiftSelect6.</Description>
+                    <DisplayName>BitShiftSelect6</DisplayName>
+                    <Value>0x6</Value>
+                </EnumEntry>
+                <EnumEntry Name="BitShiftSelect7" NameSpace="Standard">
+                    <ToolTip>BitShiftSelect7.</ToolTip>
+                    <Description>BitShiftSelect7.</Description>
+                    <DisplayName>BitShiftSelect7</DisplayName>
+                    <Value>0x7</Value>
+                </EnumEntry>
+                <pValue>BitShiftSelect_Val</pValue>
+            </Enumeration>
+        </Group>
+        <Group Comment="JiuAnControl">
+            <Enumeration Name="JiuAnTriggerControl" NameSpace="Custom">
+                <ToolTip>JiuAn trigger control.</ToolTip>
+                <Description>JiuAn trigger control.</Description>
+                <DisplayName>JiuAnTriggerControl</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <EnumEntry Name="InternalTrigger" NameSpace="Standard">
+                    <ToolTip>InternalTrigger.</ToolTip>
+                    <Description>InternalTrigger.</Description>
+                    <DisplayName>InternalTrigger</DisplayName>
+                    <Value>0x0</Value>
+                </EnumEntry>
+                <EnumEntry Name="ExternalTrigger" NameSpace="Standard">
+                    <ToolTip>ExternalTrigger.</ToolTip>
+                    <Description>ExternalTrigger.</Description>
+                    <DisplayName>ExternalTrigger</DisplayName>
+                    <Value>0x1</Value>
+                </EnumEntry>
+                <pValue>JiuAnTriggerControl_Val</pValue>
+            </Enumeration>
+            <Enumeration Name="JiuAnImageMode" NameSpace="Custom">
+                <ToolTip>JiuAn image mode.</ToolTip>
+                <Description>JiuAn image mode.</Description>
+                <DisplayName>JiuAnImageMode</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <EnumEntry Name="LiveImage" NameSpace="Standard">
+                    <ToolTip>LiveImage.</ToolTip>
+                    <Description>LiveImage.</Description>
+                    <DisplayName>LiveImage</DisplayName>
+                    <Value>0x0</Value>
+                </EnumEntry>
+                <EnumEntry Name="TestImage" NameSpace="Standard">
+                    <ToolTip>TestImage.</ToolTip>
+                    <Description>TestImage.</Description>
+                    <DisplayName>TestImage</DisplayName>
+                    <Value>0x1</Value>
+                </EnumEntry>
+                <pValue>JiuAnImageMode_Val</pValue>
+            </Enumeration>
+            <Converter Name="JiuAnInternalFrameRate">
+                <ToolTip>JiuAn internal frame rate.</ToolTip>
+                <Description>JiuAn internal frame rate.</Description>
+                <pVariable Name="NUMERATOR">JIUAN_FPS_NUMERATOR</pVariable>
+                <FormulaTo> NUMERATOR / FROM </FormulaTo>
+                <FormulaFrom> NUMERATOR / TO </FormulaFrom>
+                <pValue>JIUAN_INTERNAL_FRAME_RATE</pValue>
+                <Unit>Hz</Unit>
+            </Converter>
+            <Integer Name="JIUAN_INTERNAL_FRAME_RATE">
+                <DisplayName>JiuAnInternalFrameRate</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pJiuAnInternalFrameRateQReg</pValue>
+                <Min>1</Min>
+                <Max>50</Max>
+            </Integer>
+            <Converter Name="JiuAnInternalExposureTime">
+                <ToolTip>JiuAn internal exposure time, unit: ns</ToolTip>
+                <Description>JiuAn internal exposure  time, unit: ns</Description>
+                <pVariable Name="PERIOD">JiuAnPeriodTime</pVariable>
+                <FormulaTo> FROM * PERIOD </FormulaTo>
+                <FormulaFrom> TO / PERIOD </FormulaFrom>
+                <pValue>JIUAN_INTERNAL_EXPO_TIME</pValue>
+                <Unit>ns</Unit>
+            </Converter>
+            <Integer Name="JIUAN_INTERNAL_EXPO_TIME">
+                <DisplayName>JiuAnInternalExposureTime</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pJiuAnInternalExpoTimeReg</pValue>
+                <Min>4000</Min>
+                <Max>1000000000</Max>
+            </Integer>
+            <Integer Name="JIUAN_FPS_NUMERATOR">
+                <Value>80000000</Value>
+            </Integer>
+            <Integer Name="JiuAnPeriodTime">
+                <Value>80</Value>
+            </Integer>
+        </Group>
+    </Group>
+    <Group Comment="AllFeaturesRegisters">
+        <Group Comment="ImageFormatControl">
+            <IntReg Name="Width_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30C04</Address>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="Height_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30C00</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="PixelFormat_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30C08</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <pInvalidator>HDR_Mode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="AcquisitionControl">
+            <IntReg Name="AcquisitionStart_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30BC0</Address>
+                <Length>4</Length>
+                <AccessMode>WO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="AcquisitionStop_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30BC0</Address>
+                <Length>4</Length>
+                <AccessMode>WO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="RefreshTemperature_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30A3C</Address>
+                <Length>4</Length>
+                <AccessMode>WO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pTEMPERATUREReg">
+                <Address>0x30BC4</Address>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <pInvalidator>RefreshTemperature</pInvalidator>
+                <pInvalidator>DeviceTemperatureBias</pInvalidator>
+                <Sign>Signed</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pTEMPERATURE_BIASReg">
+                <Address>0x30BD8</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Signed</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pTEST_IMAGEReg">
+                <Address>0x30BC8</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pX_MIRRORReg">
+                <Address>0x30BCC</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pACQ_MODEReg">
+                <Address>0x30BD0</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pFX3_MODEReg">
+                <Address>0x30BD4</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="TransportLayerControl">
+            <IntReg Name="PayloadSize_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30C40</Address>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <pInvalidator>PixelFormat_Val</pInvalidator>
+                <pInvalidator>Width_Val</pInvalidator>
+                <pInvalidator>Height_Val</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="Trigger">
+            <IntReg Name="pINTER_EXTE_FLAGReg">
+                <Address>0x30A40</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pWAVE_DLYReg">
+                <Address>0x30A44</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pJITTER_TIMEReg">
+                <Address>0x30A48</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pPULSE_WIDTHReg">
+                <Address>0x30A4C</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pEXTER_FRAME_FREQReg">
+                <Address>0x30A50</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pINTER_FRAME_FREQReg">
+                <Address>0x30A54</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pINTER_EXP_TIME_SETReg">
+                <Address>0x30A58</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pEXT_TRIG_MODEReg">
+                <Address>0x30A5C</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="Gain">
+            <IntReg Name="pSENSOR_MODE_CHOOSEReg">
+                <Address>0x30A80</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pHG_COARSE_GAINReg">
+                <Address>0x30A84</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pHG_FINE_GAINReg">
+                <Address>0x30A88</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pLG_COARSE_GAINReg">
+                <Address>0x30A8C</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pLG_FINE_GAINReg">
+                <Address>0x30A90</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pCMOS_COARSE_GAINReg">
+                <Address>0x30A94</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pCMOS_FINE_GAINReg">
+                <Address>0x30A98</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="HDR">
+            <IntReg Name="pHDR_MODEReg">
+                <Address>0x30AC0</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pHDR_THRReg">
+                <Address>0x30AC4</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pHDR_KReg">
+                <Address>0x30AC8</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pHDR_BReg">
+                <Address>0x30ACC</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="PGA">
+            <IntReg Name="pSET_PGA_ENReg">
+                <Address>0x30B00</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pSET_PGAReg">
+                <Address>0x30B04</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="DPC">
+            <IntReg Name="pDPC_ENReg">
+                <Address>0x30B40</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pDPC_REMARKReg">
+                <Address>0x30B44</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pDPC_MARK_WRDATAReg">
+                <Address>0x30B48</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pDPC_MARK_NUMReg">
+                <Address>0x30B4C</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="FFC">
+            <IntReg Name="FfcHdrMode_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30B80</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pFFC_ENReg">
+                <Address>0x30B84</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pFFC_RECALIBReg">
+                <Address>0x30B88</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pFFC_TARGETReg">
+                <Address>0x30B8C</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pFFC_MODEReg">
+                <Address>0x30B90</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pFPN_CALIB_ENReg">
+                <Address>0x30B94</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pBRIGHT_CALIB_ENReg">
+                <Address>0x30B98</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pPRNU_CFG_ENReg">
+                <Address>0x30B9C</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="FfcDarkCalibrate_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30B94</Address>
+                <Length>4</Length>
+                <AccessMode>WO</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="FfcBrightCalibrate_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30B98</Address>
+                <Length>4</Length>
+                <AccessMode>WO</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>LoadArguments</pInvalidator>
+                <pInvalidator>SelectArgumentMode</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="BLC">
+            <IntReg Name="pSTD_BLC_ENReg">
+                <Address>0x30CC0</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pSTD_BLC_WRITE_DATAReg">
+                <Address>0x30CC4</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pHDR_HG_BLC_ENReg">
+                <Address>0x30CC8</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pHDR_HG_BLC_WRITE_DATAReg">
+                <Address>0x30CCC</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pHDR_LG_BLC_ENReg">
+                <Address>0x30CD0</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pHDR_LG_BLC_WRITE_DATAReg">
+                <Address>0x30CD4</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pBLC_HG_NReg">
+                <Address>0x30CD8</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pBLC_HG_PReg">
+                <Address>0x30CDC</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pBLC_LG_NReg">
+                <Address>0x30CE0</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pBLC_LG_PReg">
+                <Address>0x30CE4</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="BitShift">
+            <IntReg Name="pBIT_SHIFT_ENReg">
+                <Address>0x30D00</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="BitShiftSelect_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30D04</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="DeviceControl">
+            <Enumeration Name="WorkMode" NameSpace="Custom">
+                <ToolTip>Camera work mode, 0: standard mode, 1: HDR mode.</ToolTip>
+                <Description>Camera work mode, 0: standard mode, 1: HDR mode.</Description>
+                <DisplayName>WorkMode</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>RO</ImposedAccessMode>
+                <EnumEntry Name="STD_MODE" NameSpace="Custom">
+                    <ToolTip>STD_MODE.</ToolTip>
+                    <Description>STD_MODE.</Description>
+                    <DisplayName>STD_MODE</DisplayName>
+                    <Value>0</Value>
+                </EnumEntry>
+                <EnumEntry Name="HDR_MODE" NameSpace="Custom">
+                    <ToolTip>HDR_MODE.</ToolTip>
+                    <Description>HDR_MODE.</Description>
+                    <DisplayName>HDR_MODE</DisplayName>
+                    <Value>1</Value>
+                </EnumEntry>
+                <pValue>pWorkMode_Reg</pValue>
+            </Enumeration>
+            <Enumeration Name="SelectArgumentMode" NameSpace="Custom">
+                <ToolTip>Selects the argument mode in the device.</ToolTip>
+                <Description>Selects the argument mode in the device.</Description>
+                <DisplayName>SelectArgumentMode</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <EnumEntry Name="ArgumentMode1" NameSpace="Custom">
+                    <ToolTip>Argument_Mode_1.</ToolTip>
+                    <Description>Argument_Mode_1.</Description>
+                    <DisplayName>Mode_1</DisplayName>
+                    <Value>0</Value>
+                </EnumEntry>
+                <EnumEntry Name="ArgumentMode2" NameSpace="Custom">
+                    <ToolTip>Argument_Mode_2.</ToolTip>
+                    <Description>Argument_Mode_2.</Description>
+                    <DisplayName>Mode_2</DisplayName>
+                    <Value>1</Value>
+                </EnumEntry>
+                <EnumEntry Name="ArgumentMode3" NameSpace="Custom">
+                    <ToolTip>Argument_Mode_3.</ToolTip>
+                    <Description>Argument_Mode_3.</Description>
+                    <DisplayName>Mode_3</DisplayName>
+                    <Value>2</Value>
+                </EnumEntry>
+                <pValue>SelectArgumentMode_Reg</pValue>
+            </Enumeration>
+            <Command Name="SaveArguments">
+                <!-- Recommended element -->
+                <ToolTip>Save Device Arguments.</ToolTip>
+                <Description>Save Device Arguments.</Description>
+                <DisplayName>SaveArguments</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>WO</ImposedAccessMode>
+                <pValue>SaveArguments_Val</pValue>
+                <CommandValue>1</CommandValue>
+            </Command>
+            <Command Name="LoadArguments">
+                <!-- Recommended element -->
+                <ToolTip>Load Device Arguments.</ToolTip>
+                <Description>Load Device Arguments.</Description>
+                <DisplayName>LoadArguments</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <ImposedAccessMode>WO</ImposedAccessMode>
+                <pValue>LoadArguments_Val</pValue>
+                <CommandValue>1</CommandValue>
+            </Command>
+            <String Name="DeviceModelName">
+                <DisplayName>DeviceModelName</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pDeviceModelNameReg</pValue>
+            </String>
+            <String Name="DeviceSerialNumber">
+                <DisplayName>DeviceSerialNumber</DisplayName>
+                <Visibility>Expert</Visibility>
+                <pValue>pDeviceSerialNumberReg</pValue>
+            </String>
+            <String Name="DeviceUserID">
+                <DisplayName>DeviceUserID</DisplayName>
+                <Visibility>Beginner</Visibility>
+                <pValue>pDeviceUserIDReg</pValue>
+            </String>
+            <IntReg Name="SelectArgumentMode_Reg">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30D40</Address>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="SaveArguments_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30D44</Address>
+                <Length>4</Length>
+                <AccessMode>WO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="LoadArguments_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30D48</Address>
+                <Length>4</Length>
+                <AccessMode>WO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <StringReg Name="pDeviceModelNameReg" NameSpace="Standard">
+                <Address>0x30D4C</Address>
+                <Length>32</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+            </StringReg>
+            <StringReg Name="pDeviceSerialNumberReg" NameSpace="Standard">
+                <Address>0x30D50</Address>
+                <Length>32</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+            </StringReg>
+            <StringReg Name="pDeviceUserIDReg" NameSpace="Standard">
+                <Address>0x30D54</Address>
+                <Length>32</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+            </StringReg>
+            <IntReg Name="pWorkMode_Reg">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30D58</Address>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="FileUpdate">
+            <!-- items -->
+            <Enumeration Name="FileSelector" NameSpace="Standard">
+                <!-- Recommended element -->
+                <ToolTip>Selects the target file in the device.</ToolTip>
+                <Description>Selects the target file in the device.</Description>
+                <DisplayName>FileSelector</DisplayName>
+                <Visibility>Guru</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <Streamable>Yes</Streamable>
+                <EnumEntry Name="FPGA_Program" NameSpace="Custom">
+                    <ToolTip>FPGA_Program.</ToolTip>
+                    <Description>FPGA_Program.</Description>
+                    <DisplayName>FPGA_Program</DisplayName>
+                    <Value>0</Value>
+                </EnumEntry>
+                <EnumEntry Name="XML" NameSpace="Custom">
+                    <ToolTip>XML.</ToolTip>
+                    <Description>XML.</Description>
+                    <DisplayName>XML</DisplayName>
+                    <Value>1</Value>
+                </EnumEntry>
+                <EnumEntry Name="DPC" NameSpace="Custom">
+                    <ToolTip>DPC.</ToolTip>
+                    <Description>DPC.</Description>
+                    <DisplayName>DPC</DisplayName>
+                    <Value>2</Value>
+                </EnumEntry>
+                <pValue>FileSelector_Reg</pValue>
+                <pSelected>FileOperationSelector</pSelected>
+                <pSelected>FileOperationExecute</pSelected>
+                <pSelected>FileOpenMode</pSelected>
+                <pSelected>FileAccessOffset</pSelected>
+                <pSelected>FileAccessLength</pSelected>
+                <pSelected>FileOperationStatus</pSelected>
+                <pSelected>FileOperationResult</pSelected>
+                <pSelected>FileSize</pSelected>
+            </Enumeration>
+            <Enumeration Name="FileOperationSelector" NameSpace="Standard">
+                <!-- Recommended element -->
+                <ToolTip>Selects the target operation for the selected file in the device. </ToolTip>
+                <Description>Selects the target operation for the selected file in the device. </Description>
+                <DisplayName>FileOperationSelector</DisplayName>
+                <Visibility>Guru</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <Streamable>Yes</Streamable>
+                <EnumEntry Name="Open" NameSpace="Standard">
+                    <ToolTip>Opens the file selected by FileSelector in the device. </ToolTip>
+                    <Description>Opens the file selected by FileSelector in the device. </Description>
+                    <DisplayName>Open</DisplayName>
+                    <Value>0</Value>
+                </EnumEntry>
+                <EnumEntry Name="Close" NameSpace="Standard">
+                    <ToolTip>Closes the file selected by FileSelector in the device. </ToolTip>
+                    <Description>Closes the file selected by FileSelector in the device. </Description>
+                    <DisplayName>Close</DisplayName>
+                    <Value>1</Value>
+                </EnumEntry>
+                <EnumEntry Name="Read" NameSpace="Standard">
+                    <ToolTip>Reads the file selected by FileSelector in the device. </ToolTip>
+                    <Description>Reads the file selected by FileSelector in the device. </Description>
+                    <DisplayName>Read</DisplayName>
+                    <Value>2</Value>
+                </EnumEntry>
+                <EnumEntry Name="Write" NameSpace="Standard">
+                    <ToolTip>Writes the file selected by FileSelector in the device. </ToolTip>
+                    <Description>Writes the file selected by FileSelector in the device. </Description>
+                    <DisplayName>Write</DisplayName>
+                    <Value>3</Value>
+                </EnumEntry>
+                <EnumEntry Name="Delete" NameSpace="Standard">
+                    <ToolTip>Deletes the file selected by FileSelector in the device. </ToolTip>
+                    <Description>Deletes the file selected by FileSelector in the device. </Description>
+                    <DisplayName>Delete</DisplayName>
+                    <Value>4</Value>
+                </EnumEntry>
+                <pValue>FileOperationSelector_Reg</pValue>
+            </Enumeration>
+            <Enumeration Name="FileOpenMode" NameSpace="Standard">
+                <!-- Recommended element -->
+                <ToolTip>Selects the access mode in which a file is opened in the device.</ToolTip>
+                <Description>Selects the access mode in which a file is opened in the device.</Description>
+                <DisplayName>FileOpenMode</DisplayName>
+                <Visibility>Guru</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <Streamable>Yes</Streamable>
+                <EnumEntry Name="Read" NameSpace="Standard">
+                    <ToolTip>This mode selects read-only open mode.</ToolTip>
+                    <Description>This mode selects read-only open mode.</Description>
+                    <DisplayName>Read</DisplayName>
+                    <Value>0</Value>
+                </EnumEntry>
+                <EnumEntry Name="Write" NameSpace="Standard">
+                    <ToolTip>This mode selects write-only open mode.</ToolTip>
+                    <Description>This mode selects write-only open mode.</Description>
+                    <DisplayName>Write</DisplayName>
+                    <Value>1</Value>
+                </EnumEntry>
+                <EnumEntry Name="ReadWrite" NameSpace="Standard">
+                    <ToolTip>This mode selects read and write open mode.</ToolTip>
+                    <Description>This mode selects read and write open mode.</Description>
+                    <DisplayName>Read/Write</DisplayName>
+                    <Value>2</Value>
+                </EnumEntry>
+                <pValue>FileOpenMode_Reg</pValue>
+            </Enumeration>
+            <Command Name="FileOperationExecute" NameSpace="Standard">
+                <!-- Recommended element -->
+                <ToolTip>Executes the operation selected by FileOperationSelector on the selected file.</ToolTip>
+                <Description>Executes the operation selected by FileOperationSelector on the selected file.</Description>
+                <DisplayName>FileOperationExcute</DisplayName>
+                <Visibility>Guru</Visibility>
+                <ImposedAccessMode>WO</ImposedAccessMode>
+                <pValue>FileOperationExecute_Reg</pValue>
+                <CommandValue>1</CommandValue>
+            </Command>
+            <Integer Name="FileAccessOffset" NameSpace="Standard">
+                <ToolTip>Represents the file access offset.</ToolTip>
+                <Description>Represents the file access offset.</Description>
+                <DisplayName>FileAccessOffset</DisplayName>
+                <Visibility>Guru</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <pValue>FileAccessOffset_Reg</pValue>
+            </Integer>
+            <Integer Name="FileAccessLength" NameSpace="Standard">
+                <ToolTip>Represents the file access length.</ToolTip>
+                <Description>Represents the file access length.</Description>
+                <DisplayName>FileAccessLength</DisplayName>
+                <Visibility>Guru</Visibility>
+                <ImposedAccessMode>RW</ImposedAccessMode>
+                <pValue>FileAccessLength_Reg</pValue>
+            </Integer>
+            <Enumeration Name="FileOperationStatus" NameSpace="Standard">
+                <!-- Recommended element -->
+                <ToolTip>Represents the file operation execution status.</ToolTip>
+                <Description>Represents the file operation execution status.</Description>
+                <DisplayName>FileOperationStatus</DisplayName>
+                <Visibility>Guru</Visibility>
+                <ImposedAccessMode>RO</ImposedAccessMode>
+                <EnumEntry Name="Success" NameSpace="Standard">
+                    <ToolTip>File Operation was sucessful.</ToolTip>
+                    <Description>File Operation was sucessful.</Description>
+                    <DisplayName>Success</DisplayName>
+                    <Value>0</Value>
+                </EnumEntry>
+                <EnumEntry Name="Failure" NameSpace="Standard">
+                    <ToolTip>File Operation failed.</ToolTip>
+                    <Description>File Operation failed.</Description>
+                    <DisplayName>Failure</DisplayName>
+                    <Value>1</Value>
+                </EnumEntry>
+                <pValue>FileOperationStatus_Reg</pValue>
+            </Enumeration>
+            <Integer Name="FileOperationResult" NameSpace="Standard">
+                <ToolTip>Represents the file operation result.</ToolTip>
+                <Description>Represents the file operation result.</Description>
+                <DisplayName>FileOperationResult</DisplayName>
+                <Visibility>Guru</Visibility>
+                <ImposedAccessMode>RO</ImposedAccessMode>
+                <pValue>FileOperationResult_Reg</pValue>
+            </Integer>
+            <Integer Name="FileSize" NameSpace="Standard">
+                <ToolTip>Represents the size of the selected file in bytes.</ToolTip>
+                <Description>Represents the size of the selected file in bytes.</Description>
+                <DisplayName>FileSize(B)</DisplayName>
+                <Visibility>Guru</Visibility>
+                <ImposedAccessMode>RO</ImposedAccessMode>
+                <pValue>FileSize_Reg</pValue>
+            </Integer>
+            <IntReg Name="FileSelector_Reg" NameSpace="Custom">
+                <pAddress>FileSelector_RegAddr</pAddress>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="FileOperationSelector_Reg" NameSpace="Custom">
+                <pAddress>FileOperationSelector_RegAddr</pAddress>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="FileOpenMode_Reg" NameSpace="Custom">
+                <pAddress>FileOpenMode_RegAddr</pAddress>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="FileOperationExecute_Reg" NameSpace="Custom">
+                <pAddress>FileOperationExecute_RegAddr</pAddress>
+                <Length>4</Length>
+                <AccessMode>WO</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>FileSelector</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <Register Name="FileAccessBuffer" NameSpace="Standard">
+                <ToolTip>Represents the file access buffer.</ToolTip>
+                <Description>Represents the file access buffer.</Description>
+                <DisplayName>FileAccessBuffer</DisplayName>
+                <Visibility>Guru</Visibility>
+                <pAddress>FileAccessBuffer_RegAddr</pAddress>
+                <Length>1024</Length>
+                <AccessMode>WO</AccessMode>
+                <pPort>Device</pPort>
+            </Register>
+            <IntReg Name="FileAccessOffset_Reg" NameSpace="Custom">
+                <pAddress>FileAccessOffset_RegAddr</pAddress>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="FileAccessLength_Reg" NameSpace="Custom">
+                <pAddress>FileAccessLength_RegAddr</pAddress>
+                <Length>4</Length>
+                <AccessMode>RW</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="FileOperationStatus_Reg" NameSpace="Custom">
+                <pAddress>FileOperationStatus_RegAddr</pAddress>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="FileOperationResult_Reg" NameSpace="Custom">
+                <pAddress>FileOperationResult_RegAddr</pAddress>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <pInvalidator>FileOperationExecute_Reg</pInvalidator>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="FileSize_Reg" NameSpace="Custom">
+                <pAddress>FileSize_RegAddr</pAddress>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+        <Group Comment="JiuAnControl">
+            <IntReg Name="JiuAnTriggerControl_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30D80</Address>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="JiuAnImageMode_Val">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30D84</Address>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pJiuAnInternalFrameRateQReg">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30D88</Address>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+            <IntReg Name="pJiuAnInternalExpoTimeReg">
+                <Visibility>Invisible</Visibility>
+                <Address>0x30D8C</Address>
+                <Length>4</Length>
+                <AccessMode>RO</AccessMode>
+                <pPort>Device</pPort>
+                <Sign>Unsigned</Sign>
+                <Endianess>LittleEndian</Endianess>
+            </IntReg>
+        </Group>
+    </Group>
+    <Group Comment="RegAddr">
+        <Integer Name="FileSelector_RegAddr">
+            <Value>0x3A000</Value>
+        </Integer>
+        <Integer Name="FileOperationSelector_RegAddr">
+            <Value>0x3A004</Value>
+        </Integer>
+        <Integer Name="FileOpenMode_RegAddr">
+            <Value>0x3A008</Value>
+        </Integer>
+        <Integer Name="FileOperationExecute_RegAddr">
+            <Value>0x3A00C</Value>
+        </Integer>
+        <Integer Name="FileAccessOffset_RegAddr">
+            <Value>0x3A014</Value>
+        </Integer>
+        <Integer Name="FileAccessLength_RegAddr">
+            <Value>0x3A018</Value>
+        </Integer>
+        <Integer Name="FileOperationStatus_RegAddr">
+            <Value>0x3A01C</Value>
+        </Integer>
+        <Integer Name="FileOperationResult_RegAddr">
+            <Value>0x3A020</Value>
+        </Integer>
+        <Integer Name="FileSize_RegAddr">
+            <Value>0x3A024</Value>
+        </Integer>
+        <Integer Name="FileAccessBuffer_RegAddr">
+            <Value>0x3E000</Value>
+        </Integer>
+    </Group>
+    <!--	***************************************** -->
+    <!--	SpecialFeatures -->
+    <!--	***************************************** -->
+    <Group Comment="SpecialFeatures">
+        <Port Name="Device" NameSpace="Standard">
+            <?tlcore-skip?>
+            <ToolTip>The GenICam port through which the Device module is accessed.</ToolTip>
+            <Description>The GenICam port through which the Device module is accessed.</Description>
+            <Visibility>Invisible</Visibility>
+        </Port>
+    </Group>
+</RegisterDescription>

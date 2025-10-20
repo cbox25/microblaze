@@ -610,7 +610,7 @@ void HandleSetUartBaudrate(SerialData *recvData)
     if (baudrate > BAUD_460800_VALUE)
         return;
 
-    UartInit(UART_UPDATE, &g_uart[UART_UPDATE], &g_uartConfig[UART_UPDATE], baudrate);
+    UartInit(UART_0, &g_uart[UART_0], &g_uartConfig[UART_0], baudrate);
 }
 #else
 void HandleSetUartBaudrate(SerialData *recvData){}
@@ -636,14 +636,14 @@ void HandleSaveCsv(SerialData *recvData)
     if (!CheckCrc16(recvData->data, recvData->size - 2, crc)) {
         parse.cmdStatus = HANDLE_CSV_CRC_ERROR;
         LOG_DEBUG("check crc error in HandleSaveCsv\r\n");
-        SendPacket(UART_CMD, PACKET_TYPE_CMD_REPLY, (uint8_t *)&parse, CSV_SAVEMESSAGE_LENGTH, 0);
+        SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, (uint8_t *)&parse, CSV_SAVEMESSAGE_LENGTH, 0);
         return;
     }
     /* Handle information Packet*/
     if (seqNum == 0) {
         LOG_DEBUG("save csv messege successful\r\n");
         parse.cmdStatus = HANDLE_CSV_FINISH;
-        SendPacket(UART_CMD, PACKET_TYPE_CMD_REPLY, (uint8_t *)&parse, CSV_SAVEMESSAGE_LENGTH, 0);
+        SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, (uint8_t *)&parse, CSV_SAVEMESSAGE_LENGTH, 0);
         NORFLASH_ERASE_4K_SECTOR(SPI_DEV_ID_ARG, blockStartAddr);
         DelayMs(5);
         NORFLASH_ERASE_4K_SECTOR(SPI_DEV_ID_ARG, blockStartAddr + 0x1000);
@@ -656,13 +656,13 @@ void HandleSaveCsv(SerialData *recvData)
     if (dataLen <= 0){
         parse.cmdStatus = HANDLE_CSV_LENGTH_ERROR;
         LOG_DEBUG("Check dataLen error in HandleSaveCsv\r\n");
-        SendPacket(UART_CMD, PACKET_TYPE_CMD_REPLY, (uint8_t *)&parse, CSV_SAVEMESSAGE_LENGTH, 0);
+        SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, (uint8_t *)&parse, CSV_SAVEMESSAGE_LENGTH, 0);
         return;
     }
     NorFlashWriteData(SPI_DEV_ID_ARG, currentAddress, data, dataLen);
     LOG_DEBUG("HandleSaveCSv test successful\r\n");
     parse.cmdStatus = HANDLE_CSV_FINISH;
-    SendPacket(UART_CMD, PACKET_TYPE_CMD_REPLY, (uint8_t *)&parse, CSV_SAVEMESSAGE_LENGTH, 0);
+    SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, (uint8_t *)&parse, CSV_SAVEMESSAGE_LENGTH, 0);
 }
 void HandleSendCsv(SerialData *recvData)
 {
@@ -691,7 +691,7 @@ void HandleSendCsv(SerialData *recvData)
         LOG_DEBUG("Check CRC Error in HandleSendCsv\r\n");
         startReply.cmdType = CMD_TYPE_SEND_CSV;
         startReply.cmdStatus = HANDLE_CSV_CRC_ERROR;
-        SendPacket(UART_CMD, PACKET_TYPE_CMD_REPLY, (uint8_t *)&startReply, sizeof(startReply), 0);
+        SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, (uint8_t *)&startReply, sizeof(startReply), 0);
         return;
     }
     /*DataLen Check*/
@@ -699,7 +699,7 @@ void HandleSendCsv(SerialData *recvData)
         LOG_DEBUG("Check Data Error in HandleSendCsv\r\n");
         startReply.cmdType = CMD_TYPE_SEND_CSV;
         startReply.cmdStatus = HANDLE_CSV_LENGTH_ERROR;
-        SendPacket(UART_CMD, PACKET_TYPE_CMD_REPLY, (uint8_t *)&startReply, sizeof(startReply), 0);
+        SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, (uint8_t *)&startReply, sizeof(startReply), 0);
         return;
     }
     /* Read Size of file*/
@@ -713,7 +713,7 @@ void HandleSendCsv(SerialData *recvData)
         LOG_DEBUG("No Data in Flash in HandleSendCsv\r\n");
         startReply.cmdType = CMD_TYPE_SEND_CSV;
         startReply.cmdStatus = HANDLE_CSV_FILLSIZE_ERROR;
-        SendPacket(UART_CMD, PACKET_TYPE_CMD_REPLY, (uint8_t *)&startReply, sizeof(startReply), 0);
+        SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, (uint8_t *)&startReply, sizeof(startReply), 0);
         return;
     }
     /*distribution space of file*/
@@ -731,7 +731,7 @@ void HandleSendCsv(SerialData *recvData)
     Reply.cmdType = CMD_TYPE_SEND_CSV;
     Reply.csvStatus = HANDLE_CSV_FINISH;
     Reply.packNum  = numPackets;
-    SendPacket(UART_CMD, PACKET_TYPE_CMD_REPLY, (uint8_t *)&Reply, sizeof(Reply), 0);
+    SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, (uint8_t *)&Reply, sizeof(Reply), 0);
     LOG_DEBUG("Send Messagereply successful in HandleSendCsv\r\n");
     DelayMs(10);
     /* Send data Packet */
@@ -742,7 +742,7 @@ void HandleSendCsv(SerialData *recvData)
             packetLen = PACKET_DATA_MAX_LENGTH;
         }
         memcpy(packetData, dataBuf + offset, packetLen);
-        SendPacket(UART_CMD, PACKET_TYPE_CMD_REPLY, packetData, packetLen, i + 1);
+        SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, packetData, packetLen, i + 1);
         DelayMs(20);
     }
     free(dataBuf);
@@ -767,22 +767,19 @@ void HandleSendVersion(SerialData *recvData)
 		LOG_DEBUG("Check CRC Error in HandleSendCsv\r\n");
 		reply.cmdType = CMD_TYPE_SEND_VERSION;
 		reply.cmdStatus = HAND_SEND_VERSION_ERROR;
-		SendPacket(UART_CMD, PACKET_TYPE_CMD_REPLY, &reply, sizeof(reply), 0);
+		SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, &reply, sizeof(reply), 0);
 		return;
 	 }
 	/* microblaze version */
 	memset(&versionBuf, 0x00, sizeof(versionBuf));
 	versionBuf.cmdType = CMD_TYPE_SEND_VERSION;
 	versionBuf.cmdStatus = HAND_SEND_VERSION_FINISH;
-	strcat(&versionBuf.cmdVersion,buf);
-	strcat(&versionBuf.cmdVersion,"|");
-	NorFlashReadBuf(SPI_DEV_ID_CODE,FPGA_VERSION_START_ADDR,FPGA_VERSION_LEN, fpgabuf);
+	strcat(&versionBuf.cmdVersion, buf);
+	strcat(&versionBuf.cmdVersion, "|");
+	NorFlashReadBuf(SPI_DEV_ID_CODE, FPGA_VERSION_START_ADDR, FPGA_VERSION_LEN, fpgabuf);
 	DelayMs(2);
-	strcat(&versionBuf.cmdVersion,fpgabuf);
-	SendPacket(UART_CMD,PACKET_TYPE_CMD_REPLY,(uint8_t *)&versionBuf,sizeof(versionBuf),0);
-	if (UART_CMD != UART_UPDATE) {
-		UartSend(UART_UPDATE, &versionBuf, (int)strlen(&versionBuf));
-	}
+	strcat(&versionBuf.cmdVersion, fpgabuf);
+	SendPacket(UART_0, PACKET_TYPE_CMD_REPLY, (uint8_t *)&versionBuf, sizeof(versionBuf), 0);
 	LOG_DEBUG("fpga version: %s\r\n", versionBuf);
 }
 #ifdef MODULE_UART

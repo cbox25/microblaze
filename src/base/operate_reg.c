@@ -27,7 +27,7 @@ void ReadVideoReg(Pack *packet)
     length = GetRegData(data, packet, RW_REG_SUCCESS, SUCCESS, readData);
 
 #ifdef MODULE_UART
-    SendPacket(UART_CMD, PACKET_TYPE_REG_REPLY, data, length, 0);
+    SendPacket(UART_0, PACKET_TYPE_REG_REPLY, data, length, 0);
 #endif
 }
 
@@ -47,7 +47,7 @@ void OperateReg(SerialData *receivedData)
 		length = GetRegData(data, &packet, RW_REG_FALSE, RW_REG_LENGTH_ERROR, 0);
 
 #ifdef MODULE_UART
-		SendPacket(UART_CMD, PACKET_TYPE_REG_REPLY, data, length, 0);
+		SendPacket(UART_0, PACKET_TYPE_REG_REPLY, data, length, 0);
 #endif
         return; /* this packet data is error*/
     }
@@ -61,7 +61,7 @@ void OperateReg(SerialData *receivedData)
         length = GetRegData(data, &packet, RW_REG_FALSE, RW_REG_CRC_ERROE, 0);
 
 #ifdef MODULE_UART
-        SendPacket(UART_CMD, PACKET_TYPE_REG_REPLY, data, length, 0);
+        SendPacket(UART_0, PACKET_TYPE_REG_REPLY, data, length, 0);
 #endif
         return;
     }
@@ -89,7 +89,7 @@ void OperateReg(SerialData *receivedData)
         }
 
 #ifdef MODULE_UART
-        SendPacket(UART_CMD, PACKET_TYPE_REG_REPLY, data, length, 0);
+        SendPacket(UART_0, PACKET_TYPE_REG_REPLY, data, length, 0);
 #endif
     } else {
         /*If it's an unknown type, we'll ignore it for now and not respond.*/

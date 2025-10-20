@@ -19,6 +19,7 @@ typedef struct __attribute__((packed))
 } Pack;
 
 typedef struct {
+	uint32_t uartNum;
     uint32_t size;
     uint8_t data[PACKET_MAX_LENGTH];
 } SerialData;

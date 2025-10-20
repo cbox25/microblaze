@@ -8,9 +8,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define VERSION ("V1.25.42.04") /* year.week.num */
+#define VERSION ("V1.25.42.02") /* year.week.num */
 
-#define BOARD_3412
+#define BOARD_JIUAN
+//#define BOARD_3412
 // #define BOARD_32152
 // #define BOARD_248
 // #define BOARD_201
@@ -31,15 +32,13 @@
 // #define MODULE_GENCP
 #define MODULE_UART
 #define MODULE_SPI_FLASH
-#define MOUDULE_SA_MF210A
 
 /* UART */
 #ifdef MODULE_UART
 
-#define UART_CMD         0
-#define UART_UPDATE      0
-#define UART_CUSTOM		 0
-#define UART_NUM_MAX     (UART_UPDATE + 1)
+#define UART_0         0
+#define UART_0      0
+#define UART_NUM_MAX     (UART_0 + 1)
 
 #endif /* MODULE_UART */
 
@@ -55,6 +54,42 @@
 
 #endif /* BOARD_3412 */
 
+#ifdef BOARD_JIUAN
+/* VERSION */
+#define BOARD    ("B_JIUAN") /* board jiuan */
+
+/* FPGA */
+#define FPGA_FUDAN_MICRO
+
+/* MODULE */
+#define MODULE_GENCP
+#define MODULE_UART
+#define MODULE_SPI_FLASH
+#define MODULE_SA_MF210A
+
+/* FUNC */
+#define FUNC_PASSTHROUGH
+
+/* UART */
+#ifdef MODULE_UART
+
+#define UART_0          0
+#define UART_1			1
+#define UART_NUM_MAX    (UART_1 + 1)
+
+#endif /* MODULE_UART */
+
+/* SPI */
+#ifdef MODULE_SPI_FLASH
+
+#include "xspi.h"
+#define SPI_DEV_ID_CODE     XPAR_SPI_0_DEVICE_ID /* program */
+#define SPI_DEV_ID_ARG      XPAR_SPI_0_DEVICE_ID /* arguments */
+#define SPI_DEV_NUM_MAX     (SPI_DEV_ID_ARG + 1)
+
+#endif /* MODULE_SPI_FLASH */
+
+#endif /* BOARD_JIUAN */
 
 #ifdef BOARD_248
 /* VERSION */
@@ -72,9 +107,9 @@
 /* UART */
 #ifdef MODULE_UART
 
-#define UART_CMD         0
-#define UART_UPDATE     1
-#define UART_NUM_MAX     (UART_UPDATE + 1)
+#define UART_0         0
+#define UART_0     1
+#define UART_NUM_MAX     (UART_0 + 1)
 
 #endif /* MODULE_UART */
 
@@ -107,9 +142,9 @@
 /* UART */
 #ifdef MODULE_UART
 
-#define UART_CMD         0
-#define UART_UPDATE     0
-#define UART_NUM_MAX     (UART_UPDATE + 1)
+#define UART_0         0
+#define UART_0     0
+#define UART_NUM_MAX     (UART_0 + 1)
 
 #endif /* MODULE_UART */
 
@@ -141,9 +176,9 @@
 /* UART */
 #ifdef MODULE_UART
 
-#define UART_CMD         0
-#define UART_UPDATE     0
-#define UART_NUM_MAX     (UART_UPDATE + 1)
+#define UART_0         0
+#define UART_0     0
+#define UART_NUM_MAX     (UART_0 + 1)
 
 #endif /* MODULE_UART */
 
@@ -176,9 +211,9 @@
 /* UART */
 #ifdef MODULE_UART
 
-#define UART_CMD         0
-#define UART_UPDATE      0
-#define UART_NUM_MAX     (UART_UPDATE + 1)
+#define UART_0         0
+#define UART_0      0
+#define UART_NUM_MAX     (UART_0 + 1)
 
 #endif /* MODULE_UART */
 
@@ -212,9 +247,9 @@
 /* UART */
 #ifdef MODULE_UART
 
-#define UART_CMD         0
-#define UART_UPDATE     0
-#define UART_NUM_MAX     (UART_UPDATE + 1)
+#define UART_0         0
+#define UART_0     0
+#define UART_NUM_MAX     (UART_0 + 1)
 
 #endif /* MODULE_UART */
 
@@ -250,9 +285,9 @@
 /* UART */
 #ifdef MODULE_UART
 
-#define UART_CMD         0
-#define UART_UPDATE      0
-#define UART_NUM_MAX     (UART_UPDATE + 1)
+#define UART_0         0
+#define UART_0      0
+#define UART_NUM_MAX     (UART_0 + 1)
 
 #endif /* MODULE_UART */
 
@@ -289,9 +324,9 @@
 /* UART */
 #ifdef MODULE_UART
 
-#define UART_CMD         0
-#define UART_UPDATE      0
-#define UART_NUM_MAX     (UART_UPDATE + 1)
+#define UART_0         0
+#define UART_0      0
+#define UART_NUM_MAX     (UART_0 + 1)
 
 #endif /* MODULE_UART */
 

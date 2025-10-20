@@ -6,8 +6,6 @@
 
 #ifdef MODULE_GENCP
 
-#define UART_GENCP UART_CMD
-
 #define DALSA
 
 #define SUPPORTED     1
@@ -599,8 +597,8 @@ extern GencpXmlFile g_gencpXmlFile;
 extern uint8_t gencp_xml_file[];
 #endif
 
-int ParseGencpRecvPkg(uint8_t *buf, uint32_t len);
-int ParseGencpXmlRecvPkg(uint8_t *buf, uint32_t len);
+int ParseGencpRecvPkg(uint8_t uartNum, uint8_t *buf, uint32_t len);
+int ParseGencpXmlRecvPkg(uint8_t uartNum, uint8_t *buf, uint32_t len);
 void InitGencp(void);
 void GencpWriteXmlFromArray(void);
 int HasXmlInFlash(void);

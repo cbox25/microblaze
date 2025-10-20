@@ -79,7 +79,7 @@ int ConnectToPc(SerialData *receivedData)
     if (!CheckCrc16(receivedData->data, receivedData->size - 2, packet.crc16)) {
         /*Construct the response data portion for a handshake*/
         length = GetHandShakeData(data, HANDSHAKE_MICROBLAZE_REJECT, HANDSHAKE_CRC_ERROR);
-        SendPacket(UART_UPDATE, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
+        SendPacket(UART_0, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
         LOG_DEBUG("handshake crc err, len: %u\r\n", receivedData->size);
         return -2;
     }
@@ -87,7 +87,7 @@ int ConnectToPc(SerialData *receivedData)
     /*If not, ignore other commands when no connection has been established*/
     if (packet.dataPayload[0] == HANDSHAKE_PC_DISCONNECT) {
         length = GetHandShakeData(data, HANDSHAKE_MICROBLAZE_DISCONNECT, HANDSHAKE_PC_DISCONNECT_ACK);
-        SendPacket(UART_UPDATE, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
+        SendPacket(UART_0, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
         LOG_DEBUG("handshake disconnect err\r\n");
         return -3;
     }
@@ -95,7 +95,7 @@ int ConnectToPc(SerialData *receivedData)
     /*Send and receive handshake packets*/
     /*Construct the response data portion of a handshake*/
     length = GetHandShakeData(data, HANDSHAKE_ACCEPT, 0);
-    SendPacket(UART_UPDATE, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
+    SendPacket(UART_0, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
 
     LOG_DEBUG("handshake OK\r\n");
 
@@ -127,21 +127,21 @@ int ReceiveFile(SerialData *receivedData)
         if (!CheckCrc16(receivedData->data, receivedData->size - 2, packet.crc16)) {
             /*Construct the response data portion for a handshake*/
             length = GetHandShakeData(data, HANDSHAKE_MICROBLAZE_REJECT, HANDSHAKE_CRC_ERROR);
-            SendPacket(UART_UPDATE, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
+            SendPacket(UART_0, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
             return -1;
         }
 
         /*When we are in a connected state and the PC requests a connection again, we reject it.*/
         if (packet.dataPayload[0] == HANDSHAKE_CONNECT) {
             length = GetHandShakeData(data, HANDSHAKE_MICROBLAZE_REJECT, HANDSHAKE_MICROBLAZE_SHAKING);
-            SendPacket(UART_UPDATE, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
+            SendPacket(UART_0, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
             return -2;
         }
 
         /*If the host computer requests a disconnect, we disconnect.*/
         if (packet.dataPayload[0] == HANDSHAKE_PC_DISCONNECT) {
             length = GetHandShakeData(data, HANDSHAKE_MICROBLAZE_DISCONNECT, HANDSHAKE_PC_DISCONNECT_ACK);
-            SendPacket(UART_UPDATE, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
+            SendPacket(UART_0, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
             return PC_REQUEST_RESET;
         }
         LOG_DEBUG("handshake OK\r\n");
@@ -151,7 +151,7 @@ int ReceiveFile(SerialData *receivedData)
 		if (!CheckCrc16(receivedData->data, receivedData->size - 2, packet.crc16)) {
 			/*Construct the reply data portion of a data packet*/
 			length = GetUpgradeData(data, UPDATE_PACKET_ERROR, UPDATE_PACKET_CRC_ERROR);
-			SendPacket(UART_UPDATE, PACKET_TYPE_UPDATE_REPLY, data, length, packet.seqNum);
+			SendPacket(UART_0, PACKET_TYPE_UPDATE_REPLY, data, length, packet.seqNum);
 			return -4;
 		}
 
@@ -188,7 +188,7 @@ int ReceiveFile(SerialData *receivedData)
 
 			/* When file info packet has been handled with, send ack packet */
 			length = GetUpgradeData(data, UPDATE_PACKET_ACK, 0);
-			SendPacket(UART_UPDATE, PACKET_TYPE_UPDATE_REPLY, data, length, packet.seqNum);
+			SendPacket(UART_0, PACKET_TYPE_UPDATE_REPLY, data, length, packet.seqNum);
 			LOG_DEBUG("file info packet OK\r\n");
 		} else {
 			if (lastSeq != packet.seqNum) {
@@ -206,7 +206,7 @@ int ReceiveFile(SerialData *receivedData)
 			} else {
 				length = GetUpgradeData(data, UPDATE_PACKET_WRITE_FLASH_ERROR, ~ret);
 			}
-			SendPacket(UART_UPDATE, PACKET_TYPE_UPDATE_REPLY, data, length, packet.seqNum);
+			SendPacket(UART_0, PACKET_TYPE_UPDATE_REPLY, data, length, packet.seqNum);
 			LOG_DEBUG("seq: %u, recved: %u / %u\r\n", packet.seqNum, g_upgrade.packetCnt, g_upgrade.recvPacketNum);
 		}
 
@@ -262,7 +262,7 @@ void DoFirmwareUpgrade(SerialData *receivedData)
         g_firmwareUpdateTaskDelay = 300;
         /* Disconnect from the host computer */
         length = GetHandShakeData(data, HANDSHAKE_MICROBLAZE_DISCONNECT, HANDSHAKE_TRANSMISSION_COMPLETE);
-        SendPacket(UART_UPDATE, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
+        SendPacket(UART_0, PACKET_TYPE_HANDSHAKE_REPLY, data, length, 0);
         /* Clear the current transfer status */
         ClearUpgradeStatus(&g_upgrade);
     }
@@ -277,9 +277,9 @@ void FirmwareUpdateTask(void *unused)
         if (g_upgrade.isHandShake == 1) {
             /* if it has been more than 30s since the last received data packet,
              * restore the task delay time to be 300ms */
-            if ((xTaskGetTickCount() - lastRecvTick) > pdMS_TO_TICKS(30000) && g_uartConfig[UART_UPDATE].baudRate != 115200) {
+            if ((xTaskGetTickCount() - lastRecvTick) > pdMS_TO_TICKS(30000) && g_uartConfig[UART_0].baudRate != 115200) {
                 g_firmwareUpdateTaskDelay = 300;
-                UartInit(UART_UPDATE, &g_uart[UART_UPDATE], &g_uartConfig[UART_UPDATE], BAUD_115200_VALUE);
+                UartInit(UART_0, &g_uart[UART_0], &g_uartConfig[UART_0], BAUD_115200_VALUE);
                 ClearUpgradeStatus(&g_upgrade);
                 LOG_DEBUG("restore baudrate as 115200\r\n");
             }

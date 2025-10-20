@@ -15,12 +15,12 @@ UartConfig g_uartConfig[UART_NUM_MAX];
 
 #if UART_NUM_MAX == 1
 UartIrqCb g_uartIrqCb[UART_NUM_MAX] = {
-        UartCmdIrqHandler,
+        Uart0IrqHandler
 };
-#elif UART_NUM_MAX == 2
+#elif (UART_NUM_MAX == 2)
 UartIrqCb g_uartIrqCb[UART_NUM_MAX] = {
-        UartCmdIrqHandler,
-        UartUpdateIrqHandler
+        Uart0IrqHandler,
+        Uart1IrqHandler
 };
 #endif
 
@@ -42,7 +42,7 @@ UartConfigReg g_uartConfigReg[UART_NUM_MAX] = {
         {UART_CMD_BASE_ADDR, UART_CMD_TX_DATA_REG, UART_CMD_RX_DATA_REG,
          UART_CMD_LB_BAUD_REG, UART_CMD_INTR_ACK, UART_CMD_RX_READY_COUNT, UART_CMD_TIMER_WAIT},
 };
-#elif UART_NUM_MAX == 2
+#elif (UART_NUM_MAX == 2)
 UartConfigReg g_uartConfigReg[UART_NUM_MAX] = {
         /* uart0, cmd */
         {UART_CMD_BASE_ADDR, UART_CMD_TX_DATA_REG, UART_CMD_RX_DATA_REG,
@@ -67,23 +67,17 @@ static void HandleUartRecvData(SerialData *recvData)
     uint16_t head = *(uint16_t *)recvData->data;
 #endif
     type = recvData->data[sizeof(head)];
-#ifdef MOUDULE_SA_MF210A
-    uint8_t header[2];
-    memcpy(header, recvData->data, sizeof(header));
-    if (header[0] == PROTOCOL_HEADER && header[1] == PROTOCOL_HEADER) {
-    	type = QUEUE_UART_SA_MF210A;
-		if (xQueueIsQueueFullFromISR(g_queueUart[type].queue) == pdFALSE) {
-			xQueueSendFromISR(g_queueUart[type].queue, recvData, &taskWoken);
-		}
-	} else {
-		return;
-	}
-#endif
 
     if (head == ConvertEndian16(PACKET_START_FLAG) && type <= QUEUE_UART_NUM && type > 0) {
         if (xQueueIsQueueFullFromISR(g_queueUart[type - 1].queue) == pdFALSE) {
             xQueueSendFromISR(g_queueUart[type - 1].queue, recvData, &taskWoken);
         }
+#ifdef MODULE_SA_MF210A
+    } else if (head == PROTOCOL_HEADER) {
+		if (xQueueIsQueueFullFromISR(g_queueUart[QUEUE_UART_SA_MF210A].queue) == pdFALSE) {
+			xQueueSendFromISR(g_queueUart[QUEUE_UART_SA_MF210A].queue, recvData, &taskWoken);
+		}
+#endif
 #ifdef MODULE_GENCP
     } else if (head == GENCP_PREFIX_PREAMBLE) {
         if (xQueueIsQueueFullFromISR(g_queueUart[QUEUE_UART_GENCP].queue) == pdFALSE) {
@@ -97,33 +91,35 @@ static void HandleUartRecvData(SerialData *recvData)
     portYIELD_FROM_ISR(taskWoken);
 }
 
-void UartUpdateIrqHandler(Uart *uart)
+void Uart0IrqHandler(Uart *uart)
 {
     SerialData recvData;
 
-    ClearUartInterrupt(UART_UPDATE);
+    ClearUartInterrupt(UART_0);
 
-    recvData.size = GetUartRecvLen(UART_UPDATE);
-    UartRecv(UART_UPDATE, recvData.data, recvData.size);
+    recvData.size = GetUartRecvLen(UART_0);
+    recvData.uartNum = UART_0;
+    UartRecv(UART_0, recvData.data, recvData.size);
 
 #if 0
-    PrintBuf(recvData.data, recvData.size, "update irq");
+    PrintBuf(recvData.data, recvData.size, "uart0 irq");
 #endif
 
     HandleUartRecvData(&recvData);
 }
 
-void UartCmdIrqHandler(Uart *uart)
+void Uart1IrqHandler(Uart *uart)
 {
     SerialData recvData;
 
-    ClearUartInterrupt(UART_CMD);
+    ClearUartInterrupt(UART_1);
 
-    recvData.size = GetUartRecvLen(UART_CMD);
-    UartRecv(UART_CMD, recvData.data, recvData.size);
+    recvData.size = GetUartRecvLen(UART_1);
+    recvData.uartNum = UART_1;
+    UartRecv(UART_1, recvData.data, recvData.size);
 
 #if 0
-    PrintBuf(recvData.data, recvData.size, "cmd irq");
+    PrintBuf(recvData.data, recvData.size, "uart1 irq");
 #endif
 
     HandleUartRecvData(&recvData);
@@ -211,7 +207,6 @@ int UartInit(int uartNum, Uart *uart, UartConfig *uartConfig, uint32_t baudrate)
     if (status != XST_SUCCESS) {
         return status;
     }
-
     return status;
 }
 

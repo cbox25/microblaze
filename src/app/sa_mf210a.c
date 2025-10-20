@@ -2,13 +2,14 @@
 #include <string.h>
 #include "uart.h"
 
-#ifdef MOUDULE_SA_MF210A
+#ifdef MODULE_SA_MF210A
 typedef int (*Sa_Mf201a_Cb)(SerialData *recvData);
 
 Sa_Mf201a_Cb cmdCallBack[CMD_NUM_MAX] = {
         NULL,
 		HandleStartDetectionFrame,
 		HandleSetThresholdFrame,
+		HandleSetRegisterFrame
 };
 #endif /* MODULE_UART */
 
@@ -46,7 +47,7 @@ int CheckCrc(const FramePacket *frame)
 
 void MakeFrameFixedField(FramePacket *packet, uint8_t dataType, uint8_t funcCode, uint8_t cmdCode)
 {
-    memset(packet->header, PROTOCOL_HEADER, sizeof(packet->header)); /* 0xDD 0xDD */
+    packet->header = PROTOCOL_HEADER;      /* 0xDD 0xDD */
     packet->dataType     = dataType;
     packet->functionCode = funcCode;
     packet->commandCode  = cmdCode;
@@ -58,7 +59,7 @@ void MakeFrameVarField(FramePacket *packet, uint8_t *data, uint16_t dataLength)
 	memcpy(packet->data, data, dataLength);
 	uint16_t crc16 = CalculateCrc((const uint8_t *)packet, PROTOCOL_FIXED_LENGTH + dataLength - sizeof(packet->crc16) - sizeof(packet->tail));
     memcpy(packet->data + dataLength, &crc16, sizeof(crc16));
-    memset(packet->data + dataLength + sizeof(crc16), PROTOCOL_TAIL, sizeof(packet->tail)); /* 0xFF 0xFF */
+    memset(packet->data + dataLength + sizeof(crc16), (PROTOCOL_TAIL & 0x00FF), sizeof(packet->tail)); /* 0xFF 0xFF */
 }
 
 /* ========================================================================== */
@@ -114,7 +115,7 @@ int HandleStartDetectionFrame(SerialData *recvData)
     uint16_t frameLen = frame->length;
     memcpy((uint8_t *)frame, recvData->data, frameLen);
 
-    if (frame->header[0] != PROTOCOL_HEADER || frame->header[1] != PROTOCOL_HEADER) {
+    if (frame->header != PROTOCOL_HEADER) {
         return -1;
     }
     if (!CheckCrc(frame)) {
@@ -174,7 +175,7 @@ int HandleSetThresholdFrame(SerialData *recvData)
     uint16_t frameLen = frame->length;
     memcpy((uint8_t *)frame, recvData->data, frameLen);
 
-    if (frame->header[0] != PROTOCOL_HEADER || frame->header[1] != PROTOCOL_HEADER) {
+    if (frame->header != PROTOCOL_HEADER) {
         return -1;
     }
     if (!CheckCrc(frame)) {
@@ -204,11 +205,58 @@ int HandleSetThresholdFrame(SerialData *recvData)
     return count;
 }
 
+/**
+ * @brief Parse the set-register frame.
+ *
+ * @param[in]  recvData  Received complete frame data.
+ *
+ * @return Number of register numbers parsed; negative on error.
+ */
+int HandleSetRegisterFrame(SerialData *recvData)
+{
+	Reg opReg;
+    FramePacket *frame = (FramePacket *)recvData->data;
+    uint16_t frameLen = frame->length;
+    memcpy((uint8_t *)frame, recvData->data, frameLen);
+
+    if (frame->header != PROTOCOL_HEADER) {
+        return -1;
+    }
+    if (!CheckCrc(frame)) {
+        return -2;
+    }
+    if ((frame->length - PROTOCOL_FIXED_LENGTH) % (sizeof(opReg.addr) + sizeof(opReg.value))) {
+        return -3;
+    }
+    int count = (frame->length - PROTOCOL_FIXED_LENGTH) / (sizeof(opReg.addr) + sizeof(opReg.value));
+    if (count > 0) {
+		for (int i = 0; i < count; i++) {
+			memcpy(&opReg.addr, frame->data + i * (sizeof(opReg.addr) + sizeof(opReg.value)), sizeof(opReg.addr));
+			memcpy(&opReg.value, frame->data + i * (sizeof(opReg.addr) + sizeof(opReg.value)) + sizeof(opReg.addr), sizeof(opReg.value));
+			uint32_t opRegAddr = opReg.addr;
+			uint32_t opRegVal = opReg.value;
+			WriteReg(&opReg);
+			opReg.value = 0;
+			ReadReg(&opReg);
+			if (opRegVal == opReg.value){
+				LOG_DEBUG("write reg OK\r\n");
+				LOG_DEBUG("w/r  : a: 0x%08X, v: 0x%08X\r\n", opReg.addr, opReg.value);
+			} else{
+				LOG_DEBUG("write reg error\r\n");
+				LOG_DEBUG("write: a: 0x%08X, v: 0x%08X\r\n", opRegAddr, opRegVal);
+				LOG_DEBUG("read : a: 0x%08X, v: 0x%08X\r\n", opReg.addr, opReg.value);
+			}
+		}
+	}
+    UartSend(UART_CUSTOM, &count, sizeof(count));
+    return count;
+}
+
 /* ========================================================================== */
 /* Freertos task create                                                       */
 /* ========================================================================== */
 
-#ifdef MOUDULE_SA_MF210A
+#ifdef MODULE_SA_MF210A
 
 void Sa_Mf210a_Task(void *unused)
 {
